@@ -20,6 +20,17 @@ public class SoundManager : MonoBehaviour
     {
         get
         {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<SoundManager>();
+
+                if (instance == null)
+                {
+                    GameObject singletonObject = new GameObject("SoundManager");
+                    instance = singletonObject.AddComponent<SoundManager>();
+                }
+            }
+
             return instance;
         }
     }

@@ -37,6 +37,9 @@ public class JsonManager : MonoBehaviour
 
     GenericLoader _genericLoader = new GenericLoader("Json/GenericConfig.JSON");
     public GenericLoader GetGenericLoader { get { return _genericLoader; } }
+
+    QuestionLoader _questionLoader = new QuestionLoader("Json/QuestionConfig.json");
+    public QuestionLoader GetQuestionLoader { get { return _questionLoader; } }
     void Awake()
     {
         if (instance == null)
@@ -88,6 +91,8 @@ public class JsonManager : MonoBehaviour
 
         // _genericLoader.Load();
 
+        _questionLoader.Load();
+
 
 
         // Text[] tempText = FindObjectsOfType<Text>();
@@ -121,6 +126,12 @@ public class JsonManager : MonoBehaviour
         // {
         //     _genericLoader.Register(((Component)t).gameObject.name, t);
         // }
+        var tempGenericTargets = FindObjectsOfType<MonoBehaviour>().OfType<IQuestionTarget>();
+        foreach (IQuestionTarget t in tempGenericTargets)
+        {
+            _questionLoader.Register(((Component)t).gameObject.name, t);
+        }
+
 
     }
 

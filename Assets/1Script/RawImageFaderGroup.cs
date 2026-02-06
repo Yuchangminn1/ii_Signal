@@ -47,17 +47,24 @@ public class RawImageFaderGroup : MonoBehaviour
         FadeManager.Instance.TargetFade(_rawImages[index], 0f, 0.5f);
     }
 
-    public void LEDOnOnly(int index)
+    public void LEDOnOnly(List<int> index)
     {
-        int count = 0;
-        foreach (var img in _rawImages)
-        {
-            if (count != index)
-                FadeManager.Instance.TargetFade(img, 0f, 0.5f);
-            count++;
+        index.Sort();
 
+        int count = 0;
+
+        for (int i = 0; i < index.Count; i++)
+        {
+            if (index[count] != i)
+            {
+                LEDOff(i);
+            }
+            else
+            {
+                LEDOn(i);
+                count++;
+            }
         }
-        FadeManager.Instance.TargetFade(_rawImages[index], 1f, 0.5f);
     }
 
 

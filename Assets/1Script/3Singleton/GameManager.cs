@@ -46,9 +46,7 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
     public GameMode CurrentGameMode { get { return _currentGameMode; } set { _currentGameMode = value; } }
 
 
-    // WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
-
-    // WaitForSeconds startDelay = new WaitForSeconds(2f);
+    PlayerPageController[] _pageControllers;
 
     //todo 제너릭 제이슨 만들어서 뺴기 
     float _resetTime = 45f;
@@ -64,7 +62,7 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
 
     bool isStart = false;
 
-    public bool IsStarted { get { return isStart; } set { isStart = value; } }
+    public bool IsStarted { get { return isStart; } }
 
     public void SetGameModePlay()
     {
@@ -75,7 +73,12 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
         _currentGameMode = GameMode.Stop;
     }
 
-    IEnumerator ResetPage()
+    public void SetGameStarted()
+    {
+        isStart = true;
+    }
+
+    IEnumerator GoToIdleCoroutine()
     {
         if (resetDelay == null)
         {
@@ -83,11 +86,24 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
         }
         //Debug.Log("Resetting Page in " + _resetTime + " seconds...");
         yield return resetDelay;
-        if (PageController.Instance.CurrentPage != 0 || PageController.Instance.GetCurrentPage().currentindex != 0)
+
+        bool isIdle = true;
+        foreach (var pageController in _pageControllers)
         {
-            PageController.Instance.PageReset();
-            Debug.Log("Page Reset");
+            if (PageController.Instance.IsIdle() == false)
+            {
+                isIdle = false;
+                break;
+            }
         }
+        if (isIdle == false)
+        {
+            foreach (var pageController in _pageControllers)
+            {
+                pageController.PageReset();
+            }
+        }
+
         resetCoroutine = null;
     }
 
@@ -117,6 +133,8 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
         Apply(startHidden);
         Debug.Log("연결된 모니터 수: " + Display.displays.Length);
 
+        _pageControllers = FindObjectsByType<PlayerPageController>(FindObjectsSortMode.None);
+
         // Display 1은 기본 활성화
         // Display 2 이상을 활성화하려면 Activate() 호출
         for (int i = 1; i < Display.displays.Length; i++)
@@ -138,7 +156,7 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
     {
         if (Input.GetMouseButtonUp(0))
         {
-            ResetCoroutine();
+            GoToIdleCoroutine();
         }
         if (Input.GetKeyDown(CursorToggleKey))
         {
@@ -151,13 +169,13 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
         }
     }
 
-    public void ResetCoroutine()
+    public void GoToIdleCheck()
     {
         if (resetCoroutine != null)
         {
             StopCoroutine(resetCoroutine);
         }
-        resetCoroutine = StartCoroutine(ResetPage());
+        resetCoroutine = StartCoroutine(GoToIdleCoroutine());
     }
 
     private void Apply(bool show)
@@ -167,6 +185,7 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
 
     IEnumerator ProgramStart()
     {
+        yield return CoroutineReturnManager.GetWaitForSeconds(5f);//시작 대기 시간
         while (queueStartCreate.Count > 0)
             yield return StartCoroutine(queueStartCreate.Dequeue());
 
