@@ -31,13 +31,6 @@ public class QuestionSelectTextContainer : MonoBehaviour
         selectOptions = GetComponentsInChildren<SelectOption>();
     }
 
-    void Start()
-    {
-        // for (int i = 0; i < selectOptions.Length; i++)
-        // {
-        //     selectOptions[i].Initialize(currentQuestions[i]);
-        // }
-    }
 
     public void SetSelectedOption(string[] options)
     {
@@ -47,19 +40,12 @@ public class QuestionSelectTextContainer : MonoBehaviour
         }
     }
 
-    public string Select(int index)
+    public void SetTextColor()
     {
+        int index = MorseTranslator.CurrentDataIndex;
         if (index < 0 || index >= selectOptions.Length)
-            return "";
-
+            return;
         selectOptions[index].Select();
-        return selectOptions[index]._morseValue;
-
-    }
-
-    public int GetOptionCount()
-    {
-        return selectOptions.Length;
     }
 
     public void Reset()

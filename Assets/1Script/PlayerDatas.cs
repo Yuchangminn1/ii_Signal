@@ -21,9 +21,21 @@ public class Player
     int _score = 0;
 
     int _playedContentCount = 0;
+
+    string passCode;
+
     PlayDirection _direction;
 
     #region Properties
+
+    public string PassCode
+    {
+        get { return passCode; }
+        set { passCode = value; }
+    }
+
+    public Queue<string> QuestionAnswerData = new Queue<string>();
+
     public string Name
     {
         get { return _name; }
@@ -120,7 +132,7 @@ public class PlayerDatas : MonoBehaviour
             return instance;
         }
     }
-    Player[] players = new Player[2];
+    Player player;
 
 
     public List<Pair> GoalIndexint = new List<Pair>();
@@ -135,42 +147,7 @@ public class PlayerDatas : MonoBehaviour
             GoalIndexint.Add(new Pair(first, second));
         }
     }
-    public void AddLedPair()
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            int first = Random.Range(0, 6);
-            int second = Random.Range(6, 12);
-            GoalIndexint.Add(new Pair(first, second));
-        }
-    }
-    // public Pair GetPlayerLEDPair(int playerIndex)
-    // {
-    //     if (playerIndex == 0 && GoalIndexint.Count == 0)
-    //     {
-    //         SetLedPair();
-    //     }
-    //     if (players[playerIndex].LedTagIndex + 1 >= GoalIndexint.Count)
-    //     {
-    //         Debug.Log("사용 다 해서 다시 생성");
-    //         AddLedPair();
-    //     }
-    //     Debug.Log($"플레이어 {playerIndex}의 현재 LED 태그 인덱스: {players[playerIndex].LedTagIndex} / {GoalIndexint.Count}");
-    //     return GoalIndexint[players[playerIndex].LedTagIndex];
-    // }
 
-    public void AddPlayerLEDIndex()
-    {
-        foreach (var player in players)
-        {
-            if (player != null)
-            {
-                player.LedTagIndex++;
-            }
-        }
-
-
-    }
     private void Awake()
     {
         if (instance == null)
@@ -184,96 +161,36 @@ public class PlayerDatas : MonoBehaviour
 
     }
 
-    void Player1ScoreUp()
-    {
-        if (players[1] != null)
-        {
-            players[1].Score++;
-            players[1].LedTagIndex++;
-        }
-    }
-    void Player0ScoreUp()
-    {
-        if (players[0] != null)
-        {
-            players[0].Score++;
-            players[0].LedTagIndex++;
-        }
-    }
-    void ResetPlayer0Score()
-    {
-        players[0].Score = 0;
-
-    }
-    void ResetPlayer1Score()
-    {
-        players[1].Score = 0;
-
-    }
-
-
-
-
     public void Reset()
     {
-        players[0] = null;
-        players[1] = null;
+        player = null;
     }
 
-
-    void FixedUpdate()
+    void Update()
     {
-        if (Input.GetKey(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             TestKey();
         }
     }
 
-
-
     public void TestKey()
     {
         Reset();
         SetPlayers("아영");
-        SetPlayers("길동");
     }
-
     public void SetPlayers(string Name)
     {
         Debug.Log($"플레이어 추가 요청: {Name}");
-        if (players[0] == null)
+        if (player == null)
         {
-            players[0] = new Player(Name, PlayDirection.Left);
+            player = new Player(Name, PlayDirection.Left);
         }
-        else if (players[1] == null)
-        {
-            players[1] = new Player(Name, PlayDirection.Right);
-        }
-        else
-        {
-            Debug.LogError("플레이어가 이미 모두 설정되어 있습니다.");
-        }
+
     }
 
-
-    public int GetCurrentPlayersNum()
+    public Player GetPlayer()
     {
-        int Length = 0;
-        foreach (var player in players)
-        {
-            if (player != null)
-            {
-                Length++;
-            }
-        }
-        return Length;
+        return player;
     }
-
-    public Player GetPlayers(int playerIndex)
-    {
-        return players[playerIndex];
-    }
-
-
-
 }

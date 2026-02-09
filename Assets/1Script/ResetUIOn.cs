@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class ResetUIOn : MonoBehaviour
 {
 
 
     GraphicMove graphicMoves;
 
-    MorseInputTarget _resetMorseImageDash;
+    public MorseImage _resetMorseImage;
 
-    Graphic _resetMorseImageDashBarGraphic;
 
     void Start()
     {
         graphicMoves = GetComponent<GraphicMove>();
-        _resetMorseImageDash = transform.parent.GetComponentInChildren<MorseInputTarget>();
-        _resetMorseImageDashBarGraphic = _resetMorseImageDash.transform.parent.GetComponent<Graphic>();
+        _resetMorseImage = transform.parent.GetComponentInChildren<MorseImage>();
     }
     public void StartResetUIOn()
     {
@@ -27,22 +27,12 @@ public class ResetUIOn : MonoBehaviour
 
     public void ResetBarUpdate(float filling)
     {
-        if (filling > 1f)
-        {
-            filling = 1f;
-        }
-        if (filling < 0.1)
-        {
-            FadeManager.Instance.SetAlphaOne(_resetMorseImageDashBarGraphic);
-        }
-
-
-        _resetMorseImageDash.UpdateBar(filling);
+        _resetMorseImage.UpdateBar(filling);
     }
 
     public void Reset()
     {
-        _resetMorseImageDash.Reset();
+        _resetMorseImage.Reset();
         graphicMoves.Reset();
     }
 }

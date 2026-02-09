@@ -9,7 +9,7 @@ public class MorseInputImage : MonoBehaviour
     MorseInputTarget _morseImageDash;
 
 
-    public bool isFilled = false;
+    public bool IsFilled = false;
 
     Coroutine WaitCheckCoroutine = null;
 
@@ -39,7 +39,7 @@ public class MorseInputImage : MonoBehaviour
     {
         _morseImageDot.Reset();
         _morseImageDash.Reset();
-        isFilled = false;
+        IsFilled = false;
     }
 
     void OnEnable()
@@ -48,7 +48,7 @@ public class MorseInputImage : MonoBehaviour
     }
     public void StartColoring(MorseType morseType)
     {
-        isFilled = false;
+        IsFilled = false;
         if (morseType == MorseType.Dot)
         {
             _morseImageDot.StartColoring();
@@ -71,6 +71,6 @@ public class MorseInputImage : MonoBehaviour
             yield return CoroutineReturnManager.WaitForFixedUpdate;
         }
         WaitCheckCoroutine = null;
-        isFilled = true;
+        IsFilled = true;
     }
 }
