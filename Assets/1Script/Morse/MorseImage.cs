@@ -115,32 +115,37 @@ public class MorseImage : MonoBehaviour
             }
             _currentMorseType = MorseType.Dash;
         }
+        _graphic_Half.color = _colorHalf;
         if (isColorWhite)
+        {
             _graphic_Full.color = _colorWhite;
+            Debug.Log($"White {_graphic_Full.name}");
+
+        }
         else
-            _graphic_Half.color = _colorHalf;
+        {
+            _graphic_Full.color = _colorFull;
+            Debug.Log($"Full {_graphic_Full.name}");
+        }
+
         UpdateBar(0f);
 
     }
 
-    protected void OnEnable()
+    void OnEnable()
     {
-        if (_graphic_Half == null || _graphic_Full == null)
-            return;
-        _graphic_Half.color = _colorHalf;
 
 
-        FadeManager.Instance.SetAlphaZero(_graphic_Full);
+
     }
 
-    protected void OnDisable()
+    void OnDisable()
     {
         if (_rectTransform != null)
         {
             _currentFillAmount = 0;
             UpdateBar(_currentFillAmount);
         }
-        FadeManager.Instance.SetAlphaZero(_graphic_Full);
         IsCheck = false;
 
     }
@@ -164,9 +169,16 @@ public class MorseImage : MonoBehaviour
     public void StartColoring()
     {
         if (isColorWhite)
+        {
             _graphic_Full.color = _colorWhite;
+            Debug.Log($"2White {_graphic_Full.name}");
+
+        }
         else
-            _graphic_Half.color = _colorHalf;
+        {
+            _graphic_Full.color = _colorFull;
+            Debug.Log($"2Full {_graphic_Full.name}");
+        }
 
 
 
@@ -180,13 +192,20 @@ public class MorseImage : MonoBehaviour
     }
     public void UpdateBar(float fillAmount)
     {
-        if (fillAmount < 0.1f)
-        {
-            if (isColorWhite)
-                _graphic_Full.color = _colorWhite;
-            else
-                _graphic_Full.color = _colorFull;
-        }
+        // if (fillAmount < 0.1f)
+        // {
+        //     if (isColorWhite)
+        //     {
+        //         _graphic_Full.color = _colorWhite;
+        //         Debug.Log($"1White {_graphic_Full.name}");
+
+        //     }
+        //     else
+        //     {
+        //         _graphic_Full.color = _colorFull;
+        //         Debug.Log($"1Full {_graphic_Full.name}");
+        //     }
+        // }
 
         _rectTransform.SetSizeWithCurrentAnchors(
         RectTransform.Axis.Horizontal,
