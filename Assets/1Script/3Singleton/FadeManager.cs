@@ -23,7 +23,7 @@ public class FadeManager : MonoBehaviour
         }
     }
 
-    float _fadeDuration = 0.5f;
+    float _fadeDuration = 0.05f;
 
     public float FadeDuration
     {

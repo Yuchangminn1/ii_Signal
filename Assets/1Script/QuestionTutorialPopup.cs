@@ -8,6 +8,8 @@ public class QuestionTutorialPopup : MonoBehaviour
     CanvasGroup _canvasGroup;
     Text[] _guideTexts;
 
+    Text _currentText = null;
+
     void Start()
     {
         _guideTexts = GetComponentsInChildren<Text>();
@@ -15,14 +17,26 @@ public class QuestionTutorialPopup : MonoBehaviour
     }
     public void SetText(int index)
     {
-        FadeManager.Instance.SetAlphaOne(_canvasGroup);
-        for (int i = 0; i < _guideTexts.Length; i++)
+        StartCoroutine(FadeCoroutineCC(index));
+
+    }
+
+    IEnumerator FadeCoroutineCC(int index)
+    {
+        if (_canvasGroup.alpha < 0.9f)
+            FadeManager.Instance.TargetFade(_canvasGroup, 1f, FadeManager.Instance.FadeDuration);
+
+        if (_currentText != null)
         {
-            if (i == index)
-                FadeManager.Instance.SetAlphaOne(_guideTexts[i]);
-            else
-                FadeManager.Instance.SetAlphaZero(_guideTexts[i]);
+            FadeManager.Instance.TargetFade(_currentText, 0f, FadeManager.Instance.FadeDuration);
+            yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
         }
+        if (_guideTexts.Length <= index)
+        {
+            yield break;
+        }
+        _currentText = _guideTexts[index];
+        FadeManager.Instance.TargetFade(_currentText, 1f, FadeManager.Instance.FadeDuration);
     }
 
     public int GetTextCount()

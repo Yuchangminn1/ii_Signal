@@ -47,6 +47,8 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
     Coroutine _nextQuestionCoroutine = null;
 
     public GameObject ResetContainer;
+    CanvasGroup _resetContainerCanvasGroup;
+
 
     QuestionSelectTextContainer questionTextContainer;
     public string jsonPath = "Json/QuestionConfig.json";
@@ -62,6 +64,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
         questionTextContainer = GetComponentInChildren<QuestionSelectTextContainer>();
 
         tutorialPopup = GetComponentInChildren<QuestionTutorialPopup>();
+        _resetContainerCanvasGroup = ResetContainer.GetComponent<CanvasGroup>();
     }
 
     void OnEnable()
@@ -108,24 +111,35 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
         }
         if (currentIndex == 0)
         {
-            for (int i = 0; i <= tutorialPopup.GetTextCount(); i++)
+            for (int i = 0; i < tutorialPopup.GetTextCount(); i++)
             {
                 tutorialPopup.SetText(i);
-                yield return CoroutineReturnManager.GetWaitForSeconds(2f);
+                yield return CoroutineReturnManager.GetWaitForSeconds(2.5f);
             }
 
         }
 
         currentIndex++;
 
-        QuestionText.text = questionInfos[currentIndex].Question;
-        questionTextContainer.SetSelectedOption(questionInfos[currentIndex].Selection);
+        FadeManager.Instance.SetAlphaZero(QuestionText);
+        FadeManager.Instance.SetAlphaZero(questionTextContainer.GetCanvasGroup());
 
         morseImageContainer.Reset();
+        FadeManager.Instance.TargetFade(_resetContainerCanvasGroup, 0f, FadeManager.Instance.FadeDuration);
+
+        yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
+
         ResetContainer?.SetActive(false);
 
         yield return delayWait;
         ResetContainer?.SetActive(true);
+
+        QuestionText.text = questionInfos[currentIndex].Question;
+        questionTextContainer.SetSelectedOption(questionInfos[currentIndex].Selection);
+        FadeManager.Instance.TargetFade(_resetContainerCanvasGroup, 1f, FadeManager.Instance.FadeDuration);
+
+        yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
+
         pageBase.ResetValue();
 
         _nextQuestionCoroutine = null;

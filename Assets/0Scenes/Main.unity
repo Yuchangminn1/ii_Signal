@@ -181,16 +181,16 @@ MonoBehaviour:
   isTrigger: 1
   originTrigger: 0
   nextDelayTime: 2
-  CutINGraphics:
-  - {fileID: 216442627}
-  - {fileID: 1402926002}
-  CutOutGraphics:
-  - {fileID: 1576848056}
-  - {fileID: 1332869550}
+  CutINGraphics: []
+  CutOutGraphics: []
   CutInCanvasGroups: []
   CutOutCanvasGroups: []
-  FadeInGraphics: []
-  FadeOutGraphics: []
+  FadeInGraphics:
+  - {fileID: 216442627}
+  - {fileID: 1402926002}
+  FadeOutGraphics:
+  - {fileID: 1332869550}
+  - {fileID: 1576848056}
   FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
@@ -999,8 +999,8 @@ MonoBehaviour:
   onEndPage:
     m_PersistentCalls:
       m_Calls: []
-  isCutIn: 1
-  isCutOut: 1
+  isCutIn: 0
+  isCutOut: 0
   currentindex: 0
 --- !u!225 &62424444
 CanvasGroup:
@@ -1394,12 +1394,12 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 1511461734}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1511461734}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &113197683
@@ -1886,12 +1886,12 @@ MonoBehaviour:
   nextDelayTime: -1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 508321092}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 508321092}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &146067099
@@ -2035,13 +2035,13 @@ MonoBehaviour:
   nextDelayTime: -1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 692807956}
-  - {fileID: 1591842528}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1591842528}
+  - {fileID: 692807956}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &177875695
@@ -2105,14 +2105,14 @@ MonoBehaviour:
   nextDelayTime: 0.5
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 1603673673}
-  CutOutCanvasGroups:
-  - {fileID: 2016181031}
+  CutInCanvasGroups: []
+  CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1603673673}
+  FadeOutCanvasGroups:
+  - {fileID: 2016181031}
   CustomFadeDuration: -1
 --- !u!1 &188092163
 GameObject:
@@ -2796,17 +2796,17 @@ MonoBehaviour:
   isTrigger: 1
   originTrigger: 0
   nextDelayTime: 2
-  CutINGraphics:
-  - {fileID: 1181661738}
-  CutOutGraphics:
-  - {fileID: 2046196408}
+  CutINGraphics: []
+  CutOutGraphics: []
   CutInCanvasGroups: []
   CutOutCanvasGroups: []
-  FadeInGraphics: []
-  FadeOutGraphics: []
+  FadeInGraphics:
+  - {fileID: 1181661738}
+  FadeOutGraphics:
+  - {fileID: 2046196408}
   FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
-  CustomFadeDuration: 1
+  CustomFadeDuration: -1
 --- !u!1 &216442625
 GameObject:
   m_ObjectHideFlags: 0
@@ -2947,12 +2947,12 @@ MonoBehaviour:
   nextDelayTime: 3
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 618169006}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 618169006}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &225294670
@@ -3592,19 +3592,19 @@ MonoBehaviour:
   isTrigger: 1
   originTrigger: 0
   nextDelayTime: 2
-  CutINGraphics:
-  - {fileID: 1181078907}
+  CutINGraphics: []
+  CutOutGraphics: []
+  CutInCanvasGroups: []
+  CutOutCanvasGroups: []
+  FadeInGraphics:
   - {fileID: 1215312885}
-  CutOutGraphics:
+  - {fileID: 1181078907}
+  FadeOutGraphics:
+  - {fileID: 1144913378}
   - {fileID: 216442627}
   - {fileID: 1402926002}
-  - {fileID: 1144913378}
-  CutInCanvasGroups:
+  FadeInCanvasGroups:
   - {fileID: 1236318619}
-  CutOutCanvasGroups: []
-  FadeInGraphics: []
-  FadeOutGraphics: []
-  FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &247216421
@@ -3759,12 +3759,12 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 688897095}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 688897095}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &266225260
@@ -3883,16 +3883,16 @@ MonoBehaviour:
   isSubPageSequence: 0
   isTrigger: 1
   originTrigger: 0
-  nextDelayTime: 1
-  CutINGraphics:
-  - {fileID: 1839020282}
+  nextDelayTime: -1
+  CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 312458514}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
-  FadeInGraphics: []
+  FadeInGraphics:
+  - {fileID: 1839020282}
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 312458514}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &278494226
@@ -4263,13 +4263,13 @@ MonoBehaviour:
   nextDelayTime: 2
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 1979076812}
-  - {fileID: 1048548511}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1979076812}
+  - {fileID: 1048548511}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &293347475
@@ -4416,86 +4416,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301184701}
   m_CullTransparentMesh: 1
---- !u!1 &307519563
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 307519564}
-  - component: {fileID: 307519565}
-  m_Layer: 0
-  m_Name: Trigger6
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &307519564
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 307519563}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1249969074}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &307519565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 307519563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01ca2ab1f3b85e843aff91333114bb74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  nextVedeoPlayer: {fileID: 0}
-  OnSequenceStart:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1263260877}
-        m_TargetAssemblyTypeName: ChangeText, Assembly-CSharp
-        m_MethodName: SetText
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  triggerCallback:
-    m_PersistentCalls:
-      m_Calls: []
-  nextSequenceCallback:
-    m_PersistentCalls:
-      m_Calls: []
-  isSubPageSequence: 0
-  isTrigger: 1
-  originTrigger: 0
-  nextDelayTime: 2
-  CutINGraphics: []
-  CutOutGraphics: []
-  CutInCanvasGroups: []
-  CutOutCanvasGroups: []
-  FadeInGraphics: []
-  FadeOutGraphics: []
-  FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
-  CustomFadeDuration: -1
 --- !u!1 &312458512
 GameObject:
   m_ObjectHideFlags: 0
@@ -5652,12 +5572,12 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 1742608588}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1742608588}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &415708658
@@ -5873,12 +5793,12 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 1615190471}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1615190471}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &426768332
@@ -6149,14 +6069,14 @@ MonoBehaviour:
   isTrigger: 1
   originTrigger: 0
   nextDelayTime: 1
-  CutINGraphics:
-  - {fileID: 1584303748}
-  - {fileID: 865305152}
+  CutINGraphics: []
   CutOutGraphics: []
   CutInCanvasGroups: []
   CutOutCanvasGroups:
   - {fileID: 1617151220}
-  FadeInGraphics: []
+  FadeInGraphics:
+  - {fileID: 1584303748}
+  - {fileID: 865305152}
   FadeOutGraphics: []
   FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
@@ -6302,12 +6222,12 @@ MonoBehaviour:
   nextDelayTime: -1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 202247772}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 202247772}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &460156906
@@ -6767,8 +6687,10 @@ MonoBehaviour:
   - {fileID: 1511461734}
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1772811944}
+  FadeOutCanvasGroups:
+  - {fileID: 1511461734}
   CustomFadeDuration: -1
 --- !u!1 &505503720
 GameObject:
@@ -7748,8 +7670,8 @@ MonoBehaviour:
   onEndPage:
     m_PersistentCalls:
       m_Calls: []
-  isCutIn: 1
-  isCutOut: 1
+  isCutIn: 0
+  isCutOut: 0
   currentindex: 0
 --- !u!225 &540795140
 CanvasGroup:
@@ -8002,15 +7924,15 @@ MonoBehaviour:
   isTrigger: 0
   originTrigger: 0
   nextDelayTime: 1
-  CutINGraphics:
-  - {fileID: 794757908}
+  CutINGraphics: []
   CutOutGraphics:
   - {fileID: 509207228}
   - {fileID: 746904778}
   CutInCanvasGroups: []
   CutOutCanvasGroups:
   - {fileID: 947073528}
-  FadeInGraphics: []
+  FadeInGraphics:
+  - {fileID: 794757908}
   FadeOutGraphics: []
   FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
@@ -9610,14 +9532,14 @@ MonoBehaviour:
   nextDelayTime: 3
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 1906097285}
-  CutOutCanvasGroups:
-  - {fileID: 618169006}
+  CutInCanvasGroups: []
+  CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1906097285}
+  FadeOutCanvasGroups:
+  - {fileID: 618169006}
   CustomFadeDuration: -1
 --- !u!1 &670503098
 GameObject:
@@ -10233,7 +10155,7 @@ GameObject:
   - component: {fileID: 695418382}
   - component: {fileID: 695418383}
   m_Layer: 0
-  m_Name: Trigger7
+  m_Name: Trigger6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10270,19 +10192,7 @@ MonoBehaviour:
   nextVedeoPlayer: {fileID: 0}
   OnSequenceStart:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1263260877}
-        m_TargetAssemblyTypeName: ChangeText, Assembly-CSharp
-        m_MethodName: SetText
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   triggerCallback:
     m_PersistentCalls:
       m_Calls: []
@@ -10292,7 +10202,7 @@ MonoBehaviour:
   isSubPageSequence: 0
   isTrigger: 1
   originTrigger: 0
-  nextDelayTime: 2
+  nextDelayTime: -1
   CutINGraphics: []
   CutOutGraphics: []
   CutInCanvasGroups: []
@@ -12251,13 +12161,13 @@ MonoBehaviour:
   isTrigger: 1
   originTrigger: 0
   nextDelayTime: 1
-  CutINGraphics:
-  - {fileID: 588595261}
-  - {fileID: 704500521}
+  CutINGraphics: []
   CutOutGraphics: []
   CutInCanvasGroups: []
   CutOutCanvasGroups: []
-  FadeInGraphics: []
+  FadeInGraphics:
+  - {fileID: 588595261}
+  - {fileID: 704500521}
   FadeOutGraphics: []
   FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
@@ -12525,14 +12435,14 @@ MonoBehaviour:
   isTrigger: 1
   originTrigger: 0
   nextDelayTime: 2
-  CutINGraphics:
-  - {fileID: 1773263769}
-  CutOutGraphics:
-  - {fileID: 426768334}
+  CutINGraphics: []
+  CutOutGraphics: []
   CutInCanvasGroups: []
   CutOutCanvasGroups: []
-  FadeInGraphics: []
-  FadeOutGraphics: []
+  FadeInGraphics:
+  - {fileID: 1773263769}
+  FadeOutGraphics:
+  - {fileID: 426768334}
   FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
@@ -13848,8 +13758,8 @@ MonoBehaviour:
   onEndPage:
     m_PersistentCalls:
       m_Calls: []
-  isCutIn: 1
-  isCutOut: 1
+  isCutIn: 0
+  isCutOut: 0
   currentindex: 0
 --- !u!225 &969615733
 CanvasGroup:
@@ -14238,6 +14148,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 525e6e8fd98fad447827877ac96bbbc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &996360065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 996360066}
+  - component: {fileID: 996360068}
+  - component: {fileID: 996360067}
+  m_Layer: 0
+  m_Name: BG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &996360066
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996360065}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1772811943}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &996360067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996360065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 2fed9f52d96028146bbd924a4601ff6c, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &996360068
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996360065}
+  m_CullTransparentMesh: 1
 --- !u!1 &1002867472
 GameObject:
   m_ObjectHideFlags: 0
@@ -15037,8 +15019,8 @@ MonoBehaviour:
   onEndPage:
     m_PersistentCalls:
       m_Calls: []
-  isCutIn: 1
-  isCutOut: 1
+  isCutIn: 0
+  isCutOut: 0
   currentindex: 0
 --- !u!225 &1040028785
 CanvasGroup:
@@ -16635,14 +16617,14 @@ MonoBehaviour:
   nextDelayTime: -1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 675542179}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 675542179}
   FadeOutCanvasGroups: []
-  CustomFadeDuration: 1
+  CustomFadeDuration: -1
 --- !u!1 &1231623264
 GameObject:
   m_ObjectHideFlags: 0
@@ -16982,7 +16964,6 @@ Transform:
   - {fileID: 2067433887}
   - {fileID: 443870599}
   - {fileID: 2059208953}
-  - {fileID: 307519564}
   - {fileID: 695418382}
   m_Father: {fileID: 569320697}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17105,8 +17086,8 @@ MonoBehaviour:
   onEndPage:
     m_PersistentCalls:
       m_Calls: []
-  isCutIn: 1
-  isCutOut: 1
+  isCutIn: 0
+  isCutOut: 0
   currentindex: 0
 --- !u!225 &1257312763
 CanvasGroup:
@@ -18471,7 +18452,7 @@ GameObject:
   - component: {fileID: 1380653907}
   - component: {fileID: 1380653908}
   m_Layer: 0
-  m_Name: Trigger5
+  m_Name: Trigger4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18519,17 +18500,17 @@ MonoBehaviour:
   isTrigger: 0
   originTrigger: 0
   nextDelayTime: 0.5
-  CutINGraphics:
-  - {fileID: 1721883179}
-  CutOutGraphics:
-  - {fileID: 1880381357}
+  CutINGraphics: []
+  CutOutGraphics: []
   CutInCanvasGroups: []
-  CutOutCanvasGroups:
-  - {fileID: 383983047}
-  FadeInGraphics: []
-  FadeOutGraphics: []
+  CutOutCanvasGroups: []
+  FadeInGraphics:
+  - {fileID: 1721883179}
+  FadeOutGraphics:
+  - {fileID: 1880381357}
   FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
+  FadeOutCanvasGroups:
+  - {fileID: 383983047}
   CustomFadeDuration: -1
 --- !u!1 &1385526727
 GameObject:
@@ -18621,7 +18602,7 @@ GameObject:
   - component: {fileID: 1387461803}
   - component: {fileID: 1387461804}
   m_Layer: 0
-  m_Name: Trigger6
+  m_Name: Trigger5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20606,12 +20587,12 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 383983047}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 383983047}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &1511461732
@@ -21533,8 +21514,8 @@ MonoBehaviour:
   onEndPage:
     m_PersistentCalls:
       m_Calls: []
-  isCutIn: 1
-  isCutOut: 1
+  isCutIn: 0
+  isCutOut: 0
   currentindex: 0
 --- !u!114 &1563744622
 MonoBehaviour:
@@ -22846,14 +22827,14 @@ MonoBehaviour:
   originTrigger: 0
   nextDelayTime: 2
   CutINGraphics: []
-  CutOutGraphics:
-  - {fileID: 1773263769}
-  CutInCanvasGroups:
-  - {fileID: 1828542710}
+  CutOutGraphics: []
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
-  FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeOutGraphics:
+  - {fileID: 1773263769}
+  FadeInCanvasGroups:
+  - {fileID: 1828542710}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &1670604710
@@ -24648,6 +24629,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 996360066}
   - {fileID: 863732267}
   - {fileID: 644805987}
   - {fileID: 1144913377}
@@ -25039,14 +25021,14 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 505503722}
-  CutOutCanvasGroups:
-  - {fileID: 606270515}
+  CutInCanvasGroups: []
+  CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 505503722}
+  FadeOutCanvasGroups:
+  - {fileID: 606270515}
   CustomFadeDuration: -1
 --- !u!1 &1787144469
 GameObject:
@@ -25959,14 +25941,14 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 794434555}
-  CutOutCanvasGroups:
-  - {fileID: 202247772}
+  CutInCanvasGroups: []
+  CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 794434555}
+  FadeOutCanvasGroups:
+  - {fileID: 202247772}
   CustomFadeDuration: -1
 --- !u!1 &1874800774
 GameObject:
@@ -27196,14 +27178,14 @@ MonoBehaviour:
   nextDelayTime: 3
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 606270515}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 606270515}
   FadeOutCanvasGroups: []
-  CustomFadeDuration: 1
+  CustomFadeDuration: -1
 --- !u!1 &1925903535
 GameObject:
   m_ObjectHideFlags: 0
@@ -27277,12 +27259,12 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 1401019480}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1401019480}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &1929169271
@@ -27393,8 +27375,8 @@ MonoBehaviour:
   onEndPage:
     m_PersistentCalls:
       m_Calls: []
-  isCutIn: 1
-  isCutOut: 1
+  isCutIn: 0
+  isCutOut: 0
   currentindex: 0
 --- !u!114 &1929169276
 MonoBehaviour:
@@ -27485,16 +27467,16 @@ MonoBehaviour:
   isTrigger: 1
   originTrigger: 0
   nextDelayTime: 2
-  CutINGraphics:
+  CutINGraphics: []
+  CutOutGraphics: []
+  CutInCanvasGroups: []
+  CutOutCanvasGroups: []
+  FadeInGraphics:
   - {fileID: 1576848056}
   - {fileID: 1144913378}
   - {fileID: 1332869550}
-  CutOutGraphics:
+  FadeOutGraphics:
   - {fileID: 863732268}
-  CutInCanvasGroups: []
-  CutOutCanvasGroups: []
-  FadeInGraphics: []
-  FadeOutGraphics: []
   FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
@@ -29148,19 +29130,7 @@ MonoBehaviour:
   nextVedeoPlayer: {fileID: 0}
   OnSequenceStart:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1263260877}
-        m_TargetAssemblyTypeName: ChangeText, Assembly-CSharp
-        m_MethodName: SetText
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   triggerCallback:
     m_PersistentCalls:
       m_Calls: []
@@ -29170,17 +29140,17 @@ MonoBehaviour:
   isSubPageSequence: 0
   isTrigger: 0
   originTrigger: 0
-  nextDelayTime: 2
+  nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 1342467353}
-  CutOutCanvasGroups:
-  - {fileID: 312458514}
+  CutInCanvasGroups: []
+  CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 1342467353}
+  FadeOutCanvasGroups:
+  - {fileID: 312458514}
   CustomFadeDuration: -1
 --- !u!1 &2067433886
 GameObject:
@@ -29241,15 +29211,15 @@ MonoBehaviour:
   isTrigger: 0
   originTrigger: 0
   nextDelayTime: 0.5
-  CutINGraphics:
-  - {fileID: 547470472}
+  CutINGraphics: []
   CutOutGraphics:
   - {fileID: 1010546436}
   - {fileID: 1805467337}
   CutInCanvasGroups: []
   CutOutCanvasGroups:
   - {fileID: 1617151220}
-  FadeInGraphics: []
+  FadeInGraphics:
+  - {fileID: 547470472}
   FadeOutGraphics: []
   FadeInCanvasGroups: []
   FadeOutCanvasGroups: []
@@ -29366,15 +29336,15 @@ MonoBehaviour:
   nextDelayTime: 1
   CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 2016181031}
-  - {fileID: 660787623}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
   FadeInGraphics: []
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 2016181031}
+  - {fileID: 660787623}
   FadeOutCanvasGroups: []
-  CustomFadeDuration: 1
+  CustomFadeDuration: -1
 --- !u!1 &2083353072
 GameObject:
   m_ObjectHideFlags: 0
@@ -29537,15 +29507,15 @@ MonoBehaviour:
   isTrigger: 1
   originTrigger: 0
   nextDelayTime: 2
-  CutINGraphics:
-  - {fileID: 736312377}
+  CutINGraphics: []
   CutOutGraphics: []
-  CutInCanvasGroups:
-  - {fileID: 75401624}
+  CutInCanvasGroups: []
   CutOutCanvasGroups: []
-  FadeInGraphics: []
+  FadeInGraphics:
+  - {fileID: 736312377}
   FadeOutGraphics: []
-  FadeInCanvasGroups: []
+  FadeInCanvasGroups:
+  - {fileID: 75401624}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
 --- !u!1 &2087302548

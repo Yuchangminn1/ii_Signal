@@ -28,14 +28,8 @@ public class PageBase : MonoBehaviour
 
     Coroutine _mainCoroutine;
 
-    Coroutine _currentPageResetCoroutine = null;
-
     CanvasGroup _canvasGroup;
 
-
-    WaitForSeconds _fadeDelay = null;
-
-    WaitForFixedUpdate _waitForFixedUpdate = new WaitForFixedUpdate();
 
 
     public bool isCutIn = true;
@@ -104,8 +98,7 @@ public class PageBase : MonoBehaviour
             sequenceScripts[i].AddNextSequenceCallback(NextSequence);
         }
 
-        if (_pageController.FadeDuration > 0)
-            _fadeDelay = new WaitForSeconds(_pageController.FadeDuration);
+
     }
     public void NextSequence()
     {
@@ -172,8 +165,7 @@ public class PageBase : MonoBehaviour
 
     public void Reset()
     {
-        if (_fadeDelay == null)
-            return;
+
         ResetValue();
     }
 
@@ -183,16 +175,16 @@ public class PageBase : MonoBehaviour
             FadeManager.Instance.SetAlphaZero(_canvasGroup);
         else
             CanvasFadeOut();
-        yield return _fadeDelay;
+        yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
 
-        yield return _waitForFixedUpdate;
+        yield return CoroutineReturnManager.WaitForFixedUpdate;
 
         ResetValue();
         if (isCutIn)
             FadeManager.Instance.SetAlphaOne(_canvasGroup);
         else
             CanvasFadeIn();
-        yield return _fadeDelay;
+        yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
 
 
     }
@@ -212,12 +204,12 @@ public class PageBase : MonoBehaviour
 
     public void CanvasFadeIn()
     {
-        FadeManager.Instance.TargetFade(GetCanvasGroup(), 1f, _pageController.FadeDuration);
+        FadeManager.Instance.TargetFade(GetCanvasGroup(), 1f, FadeManager.Instance.FadeDuration);
     }
 
     public void CanvasFadeOut()
     {
-        FadeManager.Instance.TargetFade(GetCanvasGroup(), 0f, _pageController.FadeDuration);
+        FadeManager.Instance.TargetFade(GetCanvasGroup(), 0f, FadeManager.Instance.FadeDuration);
     }
 
 

@@ -59,10 +59,13 @@ public class MorseColoringImage : MorseImage
         if (morseType == MorseType.Dot)
         {
             _remainingImage.texture = _graphic_Dot;
+            fillSpeed = 10f;
         }
         else if (morseType == MorseType.Dash)
         {
             _remainingImage.texture = _graphic_Dash;
+            fillSpeed = 3f;
+
         }
 
         if (isNativeSize)

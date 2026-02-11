@@ -49,9 +49,9 @@ public class SequenceFade : SequenceScript
 
 
 
-        yield return StartFadeEffect(FadeOutGraphics, FadeOutCanvasGroups);
+        yield return StartFadeEffect(FadeOutGraphics, FadeOutCanvasGroups, 0f);
 
-        yield return StartFadeEffect(FadeInGraphics, FadeInCanvasGroups);
+        yield return StartFadeEffect(FadeInGraphics, FadeInCanvasGroups, 1f);
 
 
         // 모든 페이드 효과가 완료될 때까지 기다립니다.
@@ -59,7 +59,7 @@ public class SequenceFade : SequenceScript
 
 
 
-    private IEnumerator StartFadeEffect(List<Graphic> graphics, List<CanvasGroup> canvasGroups)
+    private IEnumerator StartFadeEffect(List<Graphic> graphics, List<CanvasGroup> canvasGroups, float alpha)
     {
         if ((graphics == null || graphics.Count == 0) && (canvasGroups == null || canvasGroups.Count == 0))
         {
@@ -71,7 +71,7 @@ public class SequenceFade : SequenceScript
             {
                 for (int i = 0; i < graphics.Count; i++)
                 {
-                    FadeManager.Instance.ToggleFade(graphics[i], CustomFadeDuration);
+                    FadeManager.Instance.TargetFade(graphics[i], alpha, FadeManager.Instance.FadeDuration);
                 }
             }
             // 모든 그래픽에 대해 페이드 효과를 동시에 시작합니다.
@@ -80,7 +80,7 @@ public class SequenceFade : SequenceScript
             {
                 for (int i = 0; i < canvasGroups.Count; i++)
                 {
-                    FadeManager.Instance.ToggleFade(canvasGroups[i], CustomFadeDuration);
+                    FadeManager.Instance.TargetFade(canvasGroups[i], alpha, FadeManager.Instance.FadeDuration);
                 }
             }
             yield return _fadeDelay;

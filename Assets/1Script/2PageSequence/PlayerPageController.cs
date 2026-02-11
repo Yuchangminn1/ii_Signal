@@ -52,12 +52,11 @@ public class PlayerPageController : MonoBehaviour
     //처음 초기화 기다리기
 
 
-    float _fadeDuration = 0.5f;
-    public float FadeDuration { get { return _fadeDuration; } set { _fadeDuration = value; } }
+    // float _fadeDuration = 0.5f;
+    // public float FadeDuration { get { return _fadeDuration; } set { _fadeDuration = value; } }
 
-    WaitForSeconds _fadeDelay;
+    // WaitForSeconds _fadeDelay;
 
-    WaitForSeconds _waitDelay = new WaitForSeconds(0.05f);
 
     Coroutine _pageResetCoroutine = null;
 
@@ -137,10 +136,6 @@ public class PlayerPageController : MonoBehaviour
     }
 
 
-    void Awake()
-    {
-        _fadeDelay = new WaitForSeconds(_fadeDuration);
-    }
 
 
     void Update()
@@ -210,7 +205,7 @@ public class PlayerPageController : MonoBehaviour
     IEnumerator ResetCoroutine()
     {
         CloseAllPages();
-        yield return _waitDelay;
+        yield return CoroutineReturnManager.GetWaitForSeconds(0.05f);
 
         CurrentPage = 0;
 
@@ -246,14 +241,14 @@ public class PlayerPageController : MonoBehaviour
         {
             Pages[_nCurrentPage].ClosePage();
             if (Pages[_nCurrentPage].isCutOut == false)
-                yield return _fadeDelay;
+                yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
 
             Pages[_nCurrentPage].gameObject.SetActive(false);
 
 
             _nCurrentPage = pageNum;
 
-            yield return _waitDelay;
+            yield return CoroutineReturnManager.GetWaitForSeconds(0.05f);
 
 
             Pages[pageNum].gameObject.SetActive(true);

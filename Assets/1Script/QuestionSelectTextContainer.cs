@@ -16,6 +16,10 @@ public class QuestionSelectTextContainer : MonoBehaviour
 
     SelectOption[] selectOptions;
 
+    CanvasGroup _canvasGroup;
+
+
+
     string[] currentQuestions =
     {
         "봄", "여름", "가을", "겨울","사계절"
@@ -31,6 +35,14 @@ public class QuestionSelectTextContainer : MonoBehaviour
         selectOptions = GetComponentsInChildren<SelectOption>();
     }
 
+    void Start()
+    {
+        _canvasGroup = GetComponent<CanvasGroup>();
+    }
+    public CanvasGroup GetCanvasGroup()
+    {
+        return _canvasGroup;
+    }
 
     public void SetSelectedOption(string[] options)
     {

@@ -88,7 +88,7 @@ public class MorseImageContainer : MonoBehaviour
 
         foreach (CanvasGroup popupUI in PopupUI)
         {
-            FadeManager.Instance.SetAlphaZero(popupUI);
+            FadeManager.Instance.TargetFade(popupUI, 0f, FadeManager.Instance.FadeDuration);
         }
 
         // FadeManager.Instance.SetAlphaZero(CheckGraphics);
@@ -143,8 +143,9 @@ public class MorseImageContainer : MonoBehaviour
 
         foreach (CanvasGroup popupUI in PopupUI)
         {
-            FadeManager.Instance.SetAlphaOne(popupUI);
+            FadeManager.Instance.TargetFade(popupUI, 1f, FadeManager.Instance.FadeDuration);
         }
+        yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
         isAnswer = true;
     }
 
