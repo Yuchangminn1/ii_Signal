@@ -8,20 +8,40 @@ using UnityEngine.UI;
 public class ResetUIOn : MonoBehaviour
 {
 
+    const float ResetBarDelay = 0.4f;
 
-    GraphicMove graphicMoves;
+    GraphicMove _graphicMoves;
 
-    public MorseImage _resetMorseImage;
+
+
+
+    public MorseColoringImage _resetMorseImage;
 
 
     void Start()
     {
-        graphicMoves = GetComponent<GraphicMove>();
-        _resetMorseImage = transform.parent.GetComponentInChildren<MorseImage>();
+        _graphicMoves = GetComponent<GraphicMove>();
+        _resetMorseImage = transform.parent.GetComponentInChildren<MorseColoringImage>();
     }
-    public void StartResetUIOn()
+
+    public bool StartResetUIOn()
     {
-        graphicMoves.MoveGraphic();
+
+        if (_graphicMoves.MoveGraphicBool())
+        {
+            StartCoroutine(DelayToStartCoroutine());
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+    IEnumerator DelayToStartCoroutine()
+    {
+        yield return CoroutineReturnManager.GetWaitForSeconds(ResetBarDelay);
+        _resetMorseImage.SetColor(false);
 
     }
 
@@ -33,6 +53,8 @@ public class ResetUIOn : MonoBehaviour
     public void Reset()
     {
         _resetMorseImage.Reset();
-        graphicMoves.Reset();
+        _resetMorseImage.SetColor(true);
+
+        _graphicMoves.Reset();
     }
 }

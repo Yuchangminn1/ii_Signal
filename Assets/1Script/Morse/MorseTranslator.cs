@@ -50,52 +50,81 @@ public static class MorseTranslator
         float[] outputPressTimes = new float[4];
         for (int i = 0; i < outputPressTimes.Length; i++)
         {
+            float difference;
             if (morseData[i] == '0')
             {
-
-                if (pressTimes[i] < DefaultDotTime)
-                {
-                    outputPressTimes[i] = pressTimes[i] / DefaultDotTime;
-
-                }
-                else if (pressTimes[i] > DefaultDotTime)
-                {
-                    outputPressTimes[i] = pressTimes[i] / DefaultDotTime;
-                    if (outputPressTimes[i] > 2f)
-                        outputPressTimes[i] = 0f;
-                    else
-                    {
-                        outputPressTimes[i] -= 1f;
-                    }
-                }
-                else
-                {
-                    outputPressTimes[i] = 1f;
-                }
+                difference = Mathf.Abs(pressTimes[i] - DefaultDotTime);
             }
             else if (morseData[i] == '1')
             {
-
-                if (pressTimes[i] < DefaultDashTime)
-                {
-                    outputPressTimes[i] = pressTimes[i] / DefaultDashTime;
-
-                }
-                else if (pressTimes[i] > DefaultDashTime)
-                {
-                    outputPressTimes[i] = pressTimes[i] / DefaultDashTime;
-                    if (outputPressTimes[i] > 2f)
-                        outputPressTimes[i] = 0f;
-                    else
-                    {
-                        outputPressTimes[i] -= 1f;
-                    }
-                }
-                else
-                {
-                    outputPressTimes[i] = 1f;
-                }
+                difference = Mathf.Abs(pressTimes[i] - DefaultDashTime);
             }
+            else
+            {
+                difference = 0f;
+                Debug.LogError("MorseTranslator Translate 오류 : morseData가 0또는 1이 아님");
+            }
+
+            if (difference < 0.5f)
+            {
+                outputPressTimes[i] = 1f;
+            }
+            else if (difference < 1f)
+            {
+                outputPressTimes[i] = 0.95f;
+            }
+            else
+            {
+                outputPressTimes[i] = 0.90f;
+            }
+
+            //TODO 아래가 정확한 판단 기획서랑 달라서 일단 주석
+            // if (morseData[i] == '0')
+            // {
+
+            //     if (pressTimes[i] < DefaultDotTime)
+            //     {
+            //         outputPressTimes[i] = pressTimes[i] / DefaultDotTime;
+
+            //     }
+            //     else if (pressTimes[i] > DefaultDotTime)
+            //     {
+            //         outputPressTimes[i] = pressTimes[i] / DefaultDotTime;
+            //         if (outputPressTimes[i] > 2f)
+            //             outputPressTimes[i] = 0f;
+            //         else
+            //         {
+            //             outputPressTimes[i] -= 1f;
+            //         }
+            //     }
+            //     else
+            //     {
+            //         outputPressTimes[i] = 1f;
+            //     }
+            // }
+            // else if (morseData[i] == '1')
+            // {
+
+            //     if (pressTimes[i] < DefaultDashTime)
+            //     {
+            //         outputPressTimes[i] = pressTimes[i] / DefaultDashTime;
+
+            //     }
+            //     else if (pressTimes[i] > DefaultDashTime)
+            //     {
+            //         outputPressTimes[i] = pressTimes[i] / DefaultDashTime;
+            //         if (outputPressTimes[i] > 2f)
+            //             outputPressTimes[i] = 0f;
+            //         else
+            //         {
+            //             outputPressTimes[i] -= 1f;
+            //         }
+            //     }
+            //     else
+            //     {
+            //         outputPressTimes[i] = 1f;
+            //     }
+            // }
         }
 
         if (PageController.Instance.CurrentPage == 4)

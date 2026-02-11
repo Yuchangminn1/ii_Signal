@@ -162,6 +162,8 @@ public class MorseImageContainer : MonoBehaviour
                 PlayerDatas.Instance.GetPlayer().QuestionAnswerData.Enqueue(MorseTranslator.CurrentData);
                 SequenceScript.TriggerFroceOn();
                 arduino_MorseKey.StopMorseCheck();
+                isAnswer = false;
+
             }
         }
     }
@@ -196,12 +198,34 @@ public class MorseImageContainer : MonoBehaviour
         {
             yield return CoroutineReturnManager.WaitForFixedUpdate;
 
-            ColoringMorseImage(_morseInput.Dequeue());
+            ColoringMorseImage2(_morseInput.Dequeue());
         }
 
     }
 
     public void ColoringMorseImage(MorseType morseType)
+    {
+
+
+        //TODO 급하게 막았는데 구조 좀 생각해서 수정 
+        //TODO Guide모드에서 틀린 입력 들어왔을 때 인덱스 떄문에 구조 고민해야함
+
+        if (_morseIndexCheckCoroutine == null)
+        {
+
+            morseInputImages[_currentIndex].StartColoring(morseType);
+            _morseIndexCheckCoroutine = StartCoroutine(MorseIndexCheckCoroutine(morseType));
+
+        }
+        else
+        {
+            //Debug.Log($"코루틴 돌리는중 추가입력 {morseType} 큐에 추가");
+            _morseInput.Enqueue(morseType);
+        }
+
+    }
+
+    public void ColoringMorseImage2(MorseType morseType)
     {
 
         if (_currentIndex >= morseInputImages.Length)
@@ -222,6 +246,7 @@ public class MorseImageContainer : MonoBehaviour
             //Debug.Log($"코루틴 돌리는중 추가입력 {morseType} 큐에 추가");
             _morseInput.Enqueue(morseType);
         }
+
     }
 
 

@@ -154,10 +154,10 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
-        {
-            GoToIdleCoroutine();
-        }
+        // if (Input.GetMouseButtonUp(0))
+        // {
+        //     GoToIdleCoroutine();
+        // }
         if (Input.GetKeyDown(CursorToggleKey))
         {
             startHidden = !startHidden;

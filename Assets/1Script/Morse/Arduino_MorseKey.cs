@@ -79,6 +79,13 @@ public class Arduino_MorseKey : MonoBehaviour
 
     public bool IsColoringDone = false;
 
+    bool _isGuide = false;
+    public bool IsGuide
+    {
+        get { return _isGuide; }
+        set { _isGuide = value; }
+    }
+
 
     int _inputCount = 0;
 
@@ -102,12 +109,16 @@ public class Arduino_MorseKey : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.C))
             {
-                if (_answer != "")
-                {
-                    ResetUIOn?.StartResetUIOn();
-                }
                 startTime = Time.time;
                 isPress = true;
+
+                if (_answer != "")
+                {
+                    //게이지 바 컷인 떄문에 확 올라가는거 방지할려는 임시방편
+                    //TODO 수정
+                    if (ResetUIOn?.StartResetUIOn() == true)
+                        startTime += 0.5f;
+                }
             }
 
             else if (isPress && Input.GetKey(KeyCode.C))
@@ -170,14 +181,14 @@ public class Arduino_MorseKey : MonoBehaviour
     {
         onMorseInput -= morseAction;
     }
-    IEnumerator EndInputCoroutine()
-    {
+    // IEnumerator EndInputCoroutine()
+    // {
 
 
-        yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.MaxDashTime + 0.5f);
+    //     yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.MaxDashTime + 0.5f);
 
-        CheckMorse();
-    }
+    //     CheckMorse();
+    // }
 
     public void MorseTransmit(float pressTime)
     {
@@ -191,28 +202,38 @@ public class Arduino_MorseKey : MonoBehaviour
         if (MorseTranslator.MaxDotTime >= pressTime)
         {
             Debug.Log($"DOT");
-            MorseDotSound.PlayOneShot(MorseDotSound.clip, 1f);
+
             _currentMorseInputData[_inputCount].SetMorseInputData(false, pressTime);
             onMorseInput?.Invoke(MorseType.Dot);
         }
         else
         {
             Debug.Log($"DASH");
-            MorseDashSound.PlayOneShot(MorseDashSound.clip, 1f);
             _currentMorseInputData[_inputCount].SetMorseInputData(true, pressTime);
             onMorseInput?.Invoke(MorseType.Dash);
         }
+        if (_isGuide == false)
+        {
+
+            _morseQueue.Enqueue(_currentMorseInputData[_inputCount]);
+            _inputCount++;
+        }
+
+
+    }
+
+    public void AddInputCount()
+    {
         _morseQueue.Enqueue(_currentMorseInputData[_inputCount]);
-
-        Debug.Log($"{_morseQueue.Count} : {_morseQueue.Peek().IsDash} ");
-
         _inputCount++;
 
+        Debug.Log($"InputCount : {_inputCount} ");
 
     }
 
     public void PlayMorseSound(MorseType morseType)
     {
+        return;
         if (morseType == MorseType.Dash)
             MorseDashSound.PlayOneShot(MorseDashSound.clip, 1f);
         else
@@ -339,6 +360,7 @@ public class Arduino_MorseKey : MonoBehaviour
     }
     public void StopMorseCheck()
     {
+        _isGuide = false;
         OnReset = null;
         ResetUIOn = null;
         OnMorseTransmitEnd = null;

@@ -91,6 +91,7 @@ public abstract class SequenceScript : MonoBehaviour
             yield return textUpdateDelay;
         }
         isTrigger = originTrigger;
+        GameManager.Instance.GoToIdleCheck();
         //특정 트리거 필요하면 대기 
         OnSequenceStart?.Invoke();
 
@@ -173,7 +174,6 @@ public abstract class SequenceScript : MonoBehaviour
         if (nextVedeoPlayer != null) nextVedeoPlayer.Prepare();
 
         isTrigger = originTrigger;
-        GameManager.Instance.GoToIdleCheck();
         nextSequenceCallback?.Invoke();
     }
 

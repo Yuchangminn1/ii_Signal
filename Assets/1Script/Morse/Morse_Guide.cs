@@ -7,9 +7,9 @@ public class Morse_Guide : MonoBehaviour
 {
 
 
-    MorseImage[] morseImages;
+    MorseColoringImage[] _morseColoringImages;
 
-
+    Queue<MorseType> _morseInput = new Queue<MorseType>();
     Arduino_MorseKey arduino_MorseKey;
 
     public SequenceScript SequenceScript;
@@ -35,12 +35,12 @@ public class Morse_Guide : MonoBehaviour
 
     public void CheckStart()
     {
-        for (int i = 0; i < morseImages.Length; i++)
+        for (int i = 0; i < _morseColoringImages.Length; i++)
         {
             if (MorseData[i] == '0')
-                morseImages[i].SetMorseType(MorseType.Dot);
+                _morseColoringImages[i].SetMorseType(MorseType.Dot);
             else if (MorseData[i] == '1')
-                morseImages[i].SetMorseType(MorseType.Dash);
+                _morseColoringImages[i].SetMorseType(MorseType.Dash);
         }
 
 
@@ -52,27 +52,40 @@ public class Morse_Guide : MonoBehaviour
         {
             arduino_MorseKey.AddOnMorseInput(ColoringMorseImage);
             arduino_MorseKey.OnReset += Reset;
+            arduino_MorseKey.IsGuide = true;
 
         }
-        _currentIndex = 0;
-
+        ResetValue();
 
         arduino_MorseKey.StartMorseCheck();
 
 
     }
 
+    private void ResetValue()
+    {
+        _currentIndex = 0;
+        _morseInput.Clear();
+    }
+
     public void Reset()
     {
-        Debug.Log("Reset");
+        //ResetValue();
+        ;
     }
 
 
     IEnumerator MorseIndexCheckCoroutine(MorseType morseType)
     {
+        if (morseType == MorseType.Dot)
+            arduino_MorseKey.PlayMorseSound(MorseType.Dot);
+        else if (morseType == MorseType.Dash)
+            arduino_MorseKey.PlayMorseSound(MorseType.Dash);
 
 
-        while (morseImages[_currentIndex].IsCheck == false)
+
+
+        while (_morseColoringImages[_currentIndex].IsCheck == false)
         {
             yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
         }
@@ -80,11 +93,11 @@ public class Morse_Guide : MonoBehaviour
 
         _currentIndex++;
 
-        if (_currentIndex == morseImages.Length)
+        if (_currentIndex == _morseColoringImages.Length)
         {
             arduino_MorseKey.StopMorseCheck();
 
-            while (morseImages[_currentIndex - 1].IsCheck == false)
+            while (_morseColoringImages[_currentIndex - 1].IsCheck == false)
             {
                 yield return CoroutineReturnManager.WaitForFixedUpdate;
             }
@@ -93,17 +106,30 @@ public class Morse_Guide : MonoBehaviour
             Debug.Log("트리거");
             SequenceScript.TriggerFroceOn();
         }
+        if (_currentIndex < _morseColoringImages.Length && _morseInput.Count > 0)
+        {
+            StartCoroutine(InputDequeue());
+        }
 
         _morseIndexCheckCoroutine = null;
 
 
     }
+    IEnumerator InputDequeue()
+    {
+        if (_morseInput.Count > 0)
+        {
+            yield return CoroutineReturnManager.WaitForFixedUpdate;
 
+            ColoringMorseImage(_morseInput.Dequeue());
+        }
+
+    }
 
 
     void Start()
     {
-        morseImages = GetComponentsInChildren<MorseImage>();
+        _morseColoringImages = GetComponentsInChildren<MorseColoringImage>();
 
         arduino_MorseKey = GetComponentInParent<Arduino_MorseKey>();
 
@@ -125,16 +151,22 @@ public class Morse_Guide : MonoBehaviour
     public void ColoringMorseImage(MorseType morseType)
     {
 
-        if (_currentIndex >= morseImages.Length)
+        if (_currentIndex >= _morseColoringImages.Length)
         {
             return;
         }
-        if (morseImages[_currentIndex].CurrentMorseType == morseType)
+        if (_morseColoringImages[_currentIndex].CurrentMorseType == morseType)
         {
-            morseImages[_currentIndex].StartColoring();
+            _morseColoringImages[_currentIndex].StartColoring();
             if (_morseIndexCheckCoroutine == null)
                 _morseIndexCheckCoroutine = StartCoroutine(MorseIndexCheckCoroutine(morseType));
+            else
+            {
+                //Debug.Log($"코루틴 돌리는중 추가입력 {morseType} 큐에 추가");
+                _morseInput.Enqueue(morseType);
+            }
         }
+
     }
 
 }

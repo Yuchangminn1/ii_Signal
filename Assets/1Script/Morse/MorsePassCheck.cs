@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MorsePassCheck : MonoBehaviour
 {
-    MorseImage[] morseImages;
+    MorseColoringImage[] _morseColoringImages;
 
     Queue<MorseType> _morseInput = new Queue<MorseType>();
 
@@ -59,7 +59,7 @@ public class MorsePassCheck : MonoBehaviour
     {
 
 
-        while (morseImages[_currentIndex].IsCheck == false)
+        while (_morseColoringImages[_currentIndex].IsCheck == false)
         {
             yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
         }
@@ -67,7 +67,7 @@ public class MorsePassCheck : MonoBehaviour
 
         _currentIndex++;
 
-        if (_currentIndex == morseImages.Length)
+        if (_currentIndex == _morseColoringImages.Length)
         {
             Debug.Log("트리거");
             SequenceScript.TriggerFroceOn();
@@ -83,7 +83,7 @@ public class MorsePassCheck : MonoBehaviour
 
     void Start()
     {
-        morseImages = GetComponentsInChildren<MorseImage>();
+        _morseColoringImages = GetComponentsInChildren<MorseColoringImage>();
 
         arduino_MorseKey = GetComponentInParent<Arduino_MorseKey>();
     }
@@ -102,13 +102,13 @@ public class MorsePassCheck : MonoBehaviour
     public void ColoringMorseImage(MorseType morseType)
     {
 
-        if (_currentIndex >= morseImages.Length)
+        if (_currentIndex >= _morseColoringImages.Length)
         {
             return;
         }
-        if (morseImages[_currentIndex].CurrentMorseType == morseType)
+        if (_morseColoringImages[_currentIndex].CurrentMorseType == morseType)
         {
-            morseImages[_currentIndex].StartColoring();
+            _morseColoringImages[_currentIndex].StartColoring();
             if (_morseIndexCheckCoroutine == null)
                 _morseIndexCheckCoroutine = StartCoroutine(MorseIndexCheckCoroutine(morseType));
         }

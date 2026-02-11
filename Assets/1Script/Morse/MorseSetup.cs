@@ -5,31 +5,33 @@ using UnityEngine.UI;
 
 public class MorseSetup : MonoBehaviour
 {
-    MorseImage[] morseImages;
+    MorseColoringImage[] _morseColoringImage;
 
     Arduino_MorseKey arduino_MorseKey;
 
     public SequenceScript sequenceScript;
 
-    public Text rateText;
+    public Text RateText;
+
+    public Text ResultText;
+
 
     public CanvasGroup rateTextCanvasgroup;
 
     Coroutine _coloringCheckCoroutine = null;
 
     string[] rateTextList = new string[3] { "% 일치", "% 일치1", "% 일치2" };
+    string[] resultTextList = new string[2] { "합니다. 다시 입력해 주세요.", "합니다." };
+
     int _currentIndex = 0;
     string _morseData = "0";
     void Start()
     {
-        morseImages = GetComponentsInChildren<MorseImage>();
+        _morseColoringImage = GetComponentsInChildren<MorseColoringImage>();
 
         arduino_MorseKey = GetComponentInParent<Arduino_MorseKey>();
 
-        // foreach (MorseImage morseImage in morseImages)
-        // {
-        //     morseImage.SetTextures(arduino_MorseKey.DotTexture, arduino_MorseKey.DashTexture);
-        // }
+
     }
 
 
@@ -43,12 +45,12 @@ public class MorseSetup : MonoBehaviour
         if (_morseData == "")
             return;
 
-        for (int i = 0; i < morseImages.Length; i++)
+        for (int i = 0; i < _morseColoringImage.Length; i++)
         {
             if (_morseData[i] == '0')
-                morseImages[i].SetMorseType(MorseType.Dot);
+                _morseColoringImage[i].SetMorseType(MorseType.Dot);
             else if (_morseData[i] == '1')
-                morseImages[i].SetMorseType(MorseType.Dash);
+                _morseColoringImage[i].SetMorseType(MorseType.Dash);
         }
 
 
@@ -82,11 +84,26 @@ public class MorseSetup : MonoBehaviour
     public void AccuracyCheck(float rate)
     {
         rateTextCanvasgroup.alpha = 1f;
-        rateText.text = rate.ToString("F0") + rateTextList[_currentIndex];
-        if (rate < 50f)
+        string q = "";
+        if (rate < 10f)
+        {
+            q += "  ";
+        }
+        else if (rate < 100f)
+        {
+            q += "  ";
+        }
+        RateText.text = q + rate.ToString("F0") + rateTextList[_currentIndex];
+        if (rate < 80f)
+        {
+            ResultText.text = resultTextList[0];
             arduino_MorseKey.Reset();
+
+        }
         else
         {
+            ResultText.text = resultTextList[1];
+
             ColoringMorseImage();
         }
     }
@@ -102,7 +119,7 @@ public class MorseSetup : MonoBehaviour
     }
     public IEnumerator ColoringMorseImageCorotuine()
     {
-        for (int i = 0; i < morseImages.Length; i++)
+        for (int i = 0; i < _morseColoringImage.Length; i++)
         {
             if (_morseData[i] == '0')
             {
@@ -112,11 +129,13 @@ public class MorseSetup : MonoBehaviour
             {
                 arduino_MorseKey.PlayMorseSound(MorseType.Dash);
             }
-            morseImages[i].StartColoring();
-            while (morseImages[i].IsCheck == false)
+            _morseColoringImage[i].StartColoring();
+            while (_morseColoringImage[i].IsCheck == false)
             {
                 yield return CoroutineReturnManager.WaitForFixedUpdate;
             }
+            yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
+
         }
         yield return CoroutineReturnManager.GetWaitForSeconds(1.5f);
         sequenceScript.TriggerOn();

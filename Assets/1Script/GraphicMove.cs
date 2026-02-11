@@ -11,7 +11,10 @@ public class GraphicMove : MonoBehaviour
 
     public UnityEvent onMoveEnd;
 
-    bool isMoving = false;
+    bool _isMoving = false;
+
+
+
 
 
     [Header("설정")]
@@ -33,12 +36,16 @@ public class GraphicMove : MonoBehaviour
     void OnEnable()
     {
         if (_rectTransform != null)
+        {
             _rectTransform.localPosition = startPos;
+        }
+
+
     }
 
     void FixedUpdate()
     {
-        if (isMoving)
+        if (_isMoving)
 
             _rectTransform.localPosition = Vector2.SmoothDamp(
                 _rectTransform.localPosition,
@@ -49,7 +56,7 @@ public class GraphicMove : MonoBehaviour
         if (Vector2.Distance(_rectTransform.localPosition, targetPos) < 0.1f)
         {
             _rectTransform.localPosition = targetPos;
-            isMoving = false;
+            _isMoving = false;
             SequenceScript?.TriggerOn();
             onMoveEnd?.Invoke();
         }
@@ -61,13 +68,17 @@ public class GraphicMove : MonoBehaviour
         if (_rectTransform != null)
             _rectTransform.localPosition = startPos;
     }
-
-
     public void MoveGraphic()
     {
-        isMoving = true;
+        _isMoving = true;
+    }
 
-
+    public bool MoveGraphicBool()
+    {
+        if (Vector2.Distance(_rectTransform.localPosition, targetPos) < 0.1f)
+            return false;
+        _isMoving = true;
+        return true;
     }
 
     // 오브젝트가 비활성화될 때 트윈 정리 (메모리 누수 방지)
