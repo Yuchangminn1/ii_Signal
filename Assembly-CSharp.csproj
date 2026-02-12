@@ -95,6 +95,7 @@
     <Compile Include="Assets\1Script\Slider.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceFade.cs" />
     <Compile Include="Assets\1Script\PageController.cs" />
+    <Compile Include="Assets\1Script\TcpClientMono.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
     <Compile Include="Assets\1Script\MorseAnswerContainer.cs" />
     <Compile Include="Assets\1Script\Morse\Arduino_MorseKey.cs" />
@@ -129,8 +130,8 @@
     <Compile Include="Assets\1Script\2PageSequence\MainPage.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceCanvasFade.cs" />
     <Compile Include="Assets\1Script\Morse\MorsePassCheck.cs" />
-    <Compile Include="Assets\1Script\UnifiedTcp.cs" />
     <Compile Include="Assets\1Script\Morse\MorseTranslator.cs" />
+    <Compile Include="Assets\1Script\TcpServer.cs" />
     <Compile Include="Assets\1Script\3Singleton\SoundManager.cs" />
     <Compile Include="Assets\1Script\1Json\QuestionLoader.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SetColorA.cs" />
