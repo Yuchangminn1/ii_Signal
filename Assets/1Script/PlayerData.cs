@@ -22,11 +22,19 @@ public class Player
 
     int _playedContentCount = 0;
 
+    int _stampCount = 0;
+
     string passCode;
 
     PlayDirection _direction;
 
     #region Properties
+
+    public int StampCount
+    {
+        get { return _stampCount; }
+        set { _stampCount = value; }
+    }
 
     public string PassCode
     {
@@ -110,23 +118,23 @@ public class Pair
 }
 
 
-public class PlayerDatas : MonoBehaviour
+public class PlayerData : MonoBehaviour
 {
 
-    private static PlayerDatas instance;
+    private static PlayerData instance;
 
-    public static PlayerDatas Instance
+    public static PlayerData Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = FindFirstObjectByType<PlayerDatas>();
+                instance = FindFirstObjectByType<PlayerData>();
 
                 if (instance == null)
                 {
                     GameObject singletonObject = new GameObject("PlayerDatas");
-                    instance = singletonObject.AddComponent<PlayerDatas>();
+                    instance = singletonObject.AddComponent<PlayerData>();
                 }
             }
             return instance;
@@ -177,7 +185,7 @@ public class PlayerDatas : MonoBehaviour
     public void TestKey()
     {
         Reset();
-        SetPlayers("아영");
+        SetPlayers("길동");
     }
     public void SetPlayers(string Name)
     {
@@ -186,6 +194,7 @@ public class PlayerDatas : MonoBehaviour
         {
             player = new Player(Name, PlayDirection.Left);
         }
+        player.StampCount = UnityEngine.Random.Range(1, 6);
 
     }
 

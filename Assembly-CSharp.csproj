@@ -72,13 +72,13 @@
     <Compile Include="Assets\1Script\Morse\MorseInputTarget.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceTriggers.cs" />
     <Compile Include="Assets\1Script\CanvasGC.cs" />
+    <Compile Include="Assets\1Script\PlayerData.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceTime.cs" />
     <Compile Include="Assets\1Script\Singleton.cs" />
     <Compile Include="Assets\1Script\2PageSequence\PageBase.cs" />
     <Compile Include="Assets\1Script\3Singleton\GameManager.cs" />
     <Compile Include="Assets\1Script\CoroutineReturnManager.cs" />
     <Compile Include="Assets\1Script\Morse\MorseInputImage.cs" />
-    <Compile Include="Assets\1Script\PlayerDatas.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\Test\Rotate.cs" />
     <Compile Include="Assets\1Script\LinkScript.cs" />
     <Compile Include="Assets\1Script\1Json\TextLoader.cs" />
@@ -104,8 +104,10 @@
     <Compile Include="Assets\1Script\2PageSequence\SequenceVideoPlayer.cs" />
     <Compile Include="Assets\1Script\1Json\JsonLoaderBase.cs" />
     <Compile Include="Assets\1Script\WaitCheck.cs" />
+    <Compile Include="Assets\1Script\NameText.cs" />
     <Compile Include="Assets\1Script\QuestionScript.cs" />
     <Compile Include="Assets\1Script\Morse\MorseSetup.cs" />
+    <Compile Include="Assets\1Script\AnswerStamp.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceScript.cs" />
     <Compile Include="Assets\1Script\2PageSequence\PageButton.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\Reporter.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Assets\1Script\GraphicMove.cs" />
     <Compile Include="Assets\1Script\RawImageFaderGroup.cs" />
     <Compile Include="Assets\1Script\WaitCheckManager.cs" />
+    <Compile Include="Assets\1Script\ResultStampContainer.cs" />
     <Compile Include="Assets\1Script\EnterCheck.cs" />
     <Compile Include="Assets\1Script\ResetUIOn.cs" />
     <Compile Include="Assets\1Script\Morse\MorseSelectionReturn.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Assets\1Script\2PageSequence\MainPage.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceCanvasFade.cs" />
     <Compile Include="Assets\1Script\Morse\MorsePassCheck.cs" />
+    <Compile Include="Assets\1Script\UnifiedTcp.cs" />
     <Compile Include="Assets\1Script\Morse\MorseTranslator.cs" />
     <Compile Include="Assets\1Script\3Singleton\SoundManager.cs" />
     <Compile Include="Assets\1Script\1Json\QuestionLoader.cs" />

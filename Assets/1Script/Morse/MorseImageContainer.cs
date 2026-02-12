@@ -160,7 +160,7 @@ public class MorseImageContainer : MonoBehaviour
         {
             if (isAnswer)
             {
-                PlayerDatas.Instance.GetPlayer().QuestionAnswerData.Enqueue(MorseTranslator.CurrentData);
+                PlayerData.Instance.GetPlayer().QuestionAnswerData.Enqueue(MorseTranslator.CurrentData);
                 SequenceScript.TriggerFroceOn();
                 arduino_MorseKey.StopMorseCheck();
                 isAnswer = false;

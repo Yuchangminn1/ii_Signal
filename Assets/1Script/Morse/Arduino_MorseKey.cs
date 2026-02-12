@@ -325,7 +325,7 @@ public class Arduino_MorseKey : MonoBehaviour
             if (_answer != "")
             {
                 if (PageController.Instance.CurrentPage == 5)
-                    PlayerDatas.Instance.GetPlayer().PassCode = _answer;
+                    PlayerData.Instance.GetPlayer().PassCode = _answer;
                 OnMorseTransmitEnd?.Invoke();
                 _morseQueue.Clear();
 

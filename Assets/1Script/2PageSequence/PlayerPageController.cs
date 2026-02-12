@@ -86,7 +86,7 @@ public class PlayerPageController : MonoBehaviour
         if (value == 0)
         {
             _onRestRequest?.Invoke();
-            PlayerDatas.Instance.Reset();
+            PlayerData.Instance.Reset();
 
         }
 
@@ -121,7 +121,7 @@ public class PlayerPageController : MonoBehaviour
         if (value == 0)
         {
             _onRestRequest?.Invoke();
-            PlayerDatas.Instance.Reset();
+            PlayerData.Instance.Reset();
 
         }
         if (OnPageRequest != null)

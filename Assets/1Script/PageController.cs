@@ -22,28 +22,26 @@ public class PageController : Singleton<PageController>
     {
         //OpenPage - > CurrentPage프로퍼티 호출로 변경
 
-        if (GameManager.Instance.IsDebugMode)
+
+        if (Input.inputString.Length > 0)
         {
-            if (Input.inputString.Length > 0)
-            {
-                char inputChar = Input.inputString[0];
+            char inputChar = Input.inputString[0];
 
-                if (char.IsDigit(inputChar))
-                {
-                    foreach (var playerController in playerControllers)
-                    {
-                        playerController.CurrentPage = inputChar - '0';
-                    }
-
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.N))
+            if (char.IsDigit(inputChar))
             {
                 foreach (var playerController in playerControllers)
                 {
-                    playerController.DebugTrigger();
+                    playerController.CurrentPage = inputChar - '0';
                 }
+
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            foreach (var playerController in playerControllers)
+            {
+                playerController.DebugTrigger();
             }
         }
 

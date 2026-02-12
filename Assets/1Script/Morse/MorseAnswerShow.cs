@@ -35,7 +35,7 @@ public class MorseAnswerShow : MonoBehaviour
 
     public IEnumerator MoveOrderCoroutine()
     {
-        Queue<string> temp = PlayerDatas.Instance.GetPlayer().QuestionAnswerData;
+        Queue<string> temp = PlayerData.Instance.GetPlayer().QuestionAnswerData;
         temp.Dequeue(); //첫번째는 테스트코드
 
         while (temp.Count > 1) //마지막은 암호코드라 무시 

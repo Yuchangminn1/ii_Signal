@@ -43,7 +43,7 @@ public class EnterCheck : MonoBehaviour
         {
             yield return _checkWait;
             //Debug.Log($"플레이어 데이터 수 {PlayerDatas.Instance.GetCurrentPlayersNum()}");
-            if (PlayerDatas.Instance.GetPlayer() != null)
+            if (PlayerData.Instance.GetPlayer() != null)
             {
                 isAllChecked = true;
 

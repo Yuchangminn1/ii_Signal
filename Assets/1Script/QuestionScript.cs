@@ -30,7 +30,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
     int currentIndex = 0;
     MorseImageContainer morseImageContainer;
 
-    public Text QuestionText;
+    public NameText QuestionText;
 
 
     public SequenceScript endTrigger;
@@ -86,7 +86,8 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
 
 
         currentIndex = 0;
-        QuestionText.text = questionInfos[currentIndex].Question;
+        Debug.Log("첫 질문 설정: " + questionInfos[currentIndex].Question);
+        QuestionText.SetText(questionInfos[currentIndex].Question);
         questionTextContainer.Reset();
         questionTextContainer.SetSelectedOption(questionInfos[currentIndex].Selection);
     }
@@ -121,7 +122,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
 
         currentIndex++;
 
-        FadeManager.Instance.SetAlphaZero(QuestionText);
+        FadeManager.Instance.SetAlphaZero(QuestionText.GetTextComponent());
         FadeManager.Instance.SetAlphaZero(questionTextContainer.GetCanvasGroup());
 
         morseImageContainer.Reset();
@@ -134,7 +135,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
         yield return delayWait;
         ResetContainer?.SetActive(true);
 
-        QuestionText.text = questionInfos[currentIndex].Question;
+        QuestionText.SetText(questionInfos[currentIndex].Question);
         questionTextContainer.SetSelectedOption(questionInfos[currentIndex].Selection);
         FadeManager.Instance.TargetFade(_resetContainerCanvasGroup, 1f, FadeManager.Instance.FadeDuration);
 
