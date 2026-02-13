@@ -248,7 +248,7 @@ public class PlayerPageController : MonoBehaviour
 
             _nCurrentPage = pageNum;
 
-            yield return CoroutineReturnManager.GetWaitForSeconds(0.05f);
+            yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeInoutDelay);
 
 
             Pages[pageNum].gameObject.SetActive(true);

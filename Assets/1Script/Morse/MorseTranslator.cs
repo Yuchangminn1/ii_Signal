@@ -23,14 +23,17 @@ public class MorseTranslatorData
 }
 public static class MorseTranslator
 {
-    public const float DefaultDotTime = 0.1f;
+    public const float DefaultDotTime = 0.5f;
 
-    public const float DefaultDashTime = 0.5f;
-    public const float MaxDotTime = 0.2f;
+    public const float DefaultDashTime = 2f;
+    public const float MaxDotTime = 1.0f;
 
-    public const float MaxDashTime = 1f;
+    public const float MaxDashTime = 2.8f;
 
-    public const float InputResetTime = 2f;
+    public const float InputResetTime = 3f;
+
+    public const float OverInputTime = 5f;
+
     public static MorseTranslatorData _MorseTranslatorData = new MorseTranslatorData();
     public static int CurrentDataIndex
     {
@@ -48,6 +51,8 @@ public static class MorseTranslator
     public static MorseTranslatorData Translate(string morseData, float[] pressTimes)
     {
         float[] outputPressTimes = new float[4];
+        float accuracy = 100f;
+
         for (int i = 0; i < outputPressTimes.Length; i++)
         {
             float difference;
@@ -67,15 +72,15 @@ public static class MorseTranslator
 
             if (difference < 0.5f)
             {
-                outputPressTimes[i] = 1f;
+                ;
             }
             else if (difference < 1f)
             {
-                outputPressTimes[i] = 0.95f;
+                accuracy -= 5f;
             }
             else
             {
-                outputPressTimes[i] = 0.90f;
+                accuracy -= 10f;
             }
 
             //TODO 아래가 정확한 판단 기획서랑 달라서 일단 주석
@@ -237,11 +242,7 @@ public static class MorseTranslator
         }
         if (_currentData != "")
         {
-
-            float value = (outputPressTimes[0] + outputPressTimes[1] + outputPressTimes[2] + outputPressTimes[3]) / 4f * 100f;
-
-            Debug.Log($"{pressTimes[0]} ,{outputPressTimes[0]} / {pressTimes[1]},{outputPressTimes[1]} / {pressTimes[2]},{outputPressTimes[2]} / {pressTimes[3]},{outputPressTimes[3]}   = {value.ToString("F0")} ");
-            _MorseTranslatorData.SetData(_currentData, value);
+            _MorseTranslatorData.SetData(_currentData, accuracy);
 
         }
         else

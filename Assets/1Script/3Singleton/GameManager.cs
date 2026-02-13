@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
     PlayerPageController[] _pageControllers;
 
     //todo 제너릭 제이슨 만들어서 뺴기 
-    float _resetTime = 45f;
+    float _resetTime = 20f;
 
     WaitForSeconds resetDelay;
 
@@ -84,25 +84,15 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
         {
             resetDelay = new WaitForSeconds(_resetTime);
         }
+        PopupManager.Instance?.ClosePopup();
         //Debug.Log("Resetting Page in " + _resetTime + " seconds...");
-        yield return resetDelay;
+        float startTime = Time.time;
+        while (Time.time - startTime < _resetTime)
+        {
+            yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
+        }
 
-        bool isIdle = true;
-        foreach (var pageController in _pageControllers)
-        {
-            if (PageController.Instance.IsIdle() == false)
-            {
-                isIdle = false;
-                break;
-            }
-        }
-        if (isIdle == false)
-        {
-            foreach (var pageController in _pageControllers)
-            {
-                pageController.PageReset();
-            }
-        }
+        PopupManager.Instance?.ResetPopUpOpen();
 
         resetCoroutine = null;
     }
@@ -137,10 +127,10 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
 
         // Display 1은 기본 활성화
         // Display 2 이상을 활성화하려면 Activate() 호출
-        for (int i = 1; i < Display.displays.Length; i++)
-        {
-            Display.displays[i].Activate();
-        }
+        // for (int i = 1; i < Display.displays.Length; i++)
+        // {
+        //     Display.displays[i].Activate();
+        // }
     }
     private void Awake()
     {

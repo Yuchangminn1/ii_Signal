@@ -14,8 +14,7 @@ public class ResetUIOn : MonoBehaviour
 
 
 
-
-    public MorseColoringImage _resetMorseImage;
+    MorseColoringImage _resetMorseImage;
 
 
     void Start()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GraphicMove : MonoBehaviour
 {
@@ -11,14 +12,16 @@ public class GraphicMove : MonoBehaviour
 
     public UnityEvent onMoveEnd;
 
+
     bool _isMoving = false;
 
 
 
 
 
+
+
     [Header("설정")]
-    private float duration = 1.0f;
 
     // 1. 컴포넌트 캐싱
     private RectTransform _rectTransform;
@@ -59,6 +62,7 @@ public class GraphicMove : MonoBehaviour
             _isMoving = false;
             SequenceScript?.TriggerOn();
             onMoveEnd?.Invoke();
+
         }
 
     }

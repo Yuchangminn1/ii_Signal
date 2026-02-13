@@ -1,11 +1,7 @@
 using UnityEngine;
-using System.IO.Ports;
 using System.Collections;
 using System;
 using System.Collections.Generic;
-using Random = UnityEngine.Random;
-using UnityEngine.Events;
-using Unity.VisualScripting;
 
 class MorseInputData
 {
@@ -51,7 +47,6 @@ public class Arduino_MorseKey : MonoBehaviour
     public Action<float> OnAccuracyCheckAction;
 
 
-    public Action OnReset;
 
     bool _isAccuracyRateCheck = false;
 
@@ -63,6 +58,11 @@ public class Arduino_MorseKey : MonoBehaviour
 
 
     public Action OnMorseTransmitEnd;
+    public CanvasGroup OverInputPopup;
+    public Action OnReset;
+
+    readonly float _overInputPopupTime = 3f;
+    bool _isOverInputPopupOn = false;
 
     bool isInputCheck = false;
 
@@ -78,6 +78,8 @@ public class Arduino_MorseKey : MonoBehaviour
     bool resetRequest = false;
 
     public bool IsColoringDone = false;
+
+    Coroutine _overInputCoroutine = null;
 
     bool _isGuide = false;
     public bool IsGuide
@@ -105,7 +107,7 @@ public class Arduino_MorseKey : MonoBehaviour
 
     void Update()
     {
-        if (isInputCheck)
+        if (isInputCheck && _isOverInputPopupOn == false)
         {
             if (Input.GetKeyDown(KeyCode.C))
             {
@@ -126,6 +128,10 @@ public class Arduino_MorseKey : MonoBehaviour
                 if (_answer != "")
                 {
                     ResetUIOn?.ResetBarUpdate((Time.time - startTime) / MorseTranslator.InputResetTime);
+                }
+                if (Time.time - startTime >= MorseTranslator.OverInputTime)
+                {
+                    OverInputProcess();
                 }
 
 
@@ -206,11 +212,15 @@ public class Arduino_MorseKey : MonoBehaviour
             _currentMorseInputData[_inputCount].SetMorseInputData(false, pressTime);
             onMorseInput?.Invoke(MorseType.Dot);
         }
-        else
+        else if (MorseTranslator.MaxDashTime >= pressTime)
         {
             Debug.Log($"DASH");
             _currentMorseInputData[_inputCount].SetMorseInputData(true, pressTime);
             onMorseInput?.Invoke(MorseType.Dash);
+        }
+        else
+        {
+            return;
         }
         if (_isGuide == false)
         {
@@ -220,6 +230,31 @@ public class Arduino_MorseKey : MonoBehaviour
         }
 
 
+    }
+
+    public void OverInputProcess()
+    {
+        if (_overInputCoroutine != null)
+        {
+            StopCoroutine(_overInputCoroutine);
+        }
+        _overInputCoroutine = StartCoroutine(OverInputCoroutine());
+    }
+    public IEnumerator OverInputCoroutine()
+    {
+        _isOverInputPopupOn = true;
+        if (OverInputPopup.alpha < 0.9f)
+            FadeManager.Instance.SetAlphaOne(OverInputPopup);
+        float starttime = Time.time;
+
+        while (Time.time - starttime < _overInputPopupTime)
+        {
+            yield return CoroutineReturnManager.WaitForFixedUpdate;
+        }
+        FadeManager.Instance.SetAlphaZero(OverInputPopup);
+        _isOverInputPopupOn = false;
+
+        _overInputCoroutine = null;
     }
 
     public void AddInputCount()
@@ -242,6 +277,7 @@ public class Arduino_MorseKey : MonoBehaviour
 
     public void Reset()
     {
+
         OnReset?.Invoke();
 
         ValueReset();
@@ -254,6 +290,7 @@ public class Arduino_MorseKey : MonoBehaviour
         _morseQueue.Clear();
         _answer = "";
         _inputCount = 0;
+        _overInputCoroutine = null;
 
         _morseData = "";
         isPress = false;

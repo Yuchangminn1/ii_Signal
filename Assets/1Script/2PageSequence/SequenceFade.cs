@@ -28,6 +28,7 @@ public class SequenceFade : SequenceScript
     public List<CanvasGroup> FadeOutCanvasGroups;
 
 
+
     [Header("0보다 클 경우 이 스크립트만 따로 시간 적용")] public float CustomFadeDuration = -1f;
 
 
@@ -50,6 +51,7 @@ public class SequenceFade : SequenceScript
 
 
         yield return StartFadeEffect(FadeOutGraphics, FadeOutCanvasGroups, 0f);
+        yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeInoutDelay);
 
         yield return StartFadeEffect(FadeInGraphics, FadeInCanvasGroups, 1f);
 

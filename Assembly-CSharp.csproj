@@ -70,6 +70,7 @@
     <Compile Include="Assets\1Script\ChangeText.cs" />
     <Compile Include="Assets\1Script\1Json\JsonManager.cs" />
     <Compile Include="Assets\1Script\Morse\MorseInputTarget.cs" />
+    <Compile Include="Assets\1Script\PopupManager.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceTriggers.cs" />
     <Compile Include="Assets\1Script\CanvasGC.cs" />
     <Compile Include="Assets\1Script\PlayerData.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Assets\1Script\Slider.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceFade.cs" />
     <Compile Include="Assets\1Script\PageController.cs" />
+    <Compile Include="Assets\1Script\StampCountText.cs" />
     <Compile Include="Assets\1Script\TcpClientMono.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
     <Compile Include="Assets\1Script\MorseAnswerContainer.cs" />

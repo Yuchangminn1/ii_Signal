@@ -18,6 +18,13 @@ public class TcpClientMono : MonoBehaviour
         thread.IsBackground = true;
         thread.Start();
     }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Send("Hello Server");
+        }
+    }
 
     void ClientLoop()
     {

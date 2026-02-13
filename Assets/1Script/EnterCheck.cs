@@ -57,7 +57,7 @@ public class EnterCheck : MonoBehaviour
             }
 
         }
-        NextPageTrigger?.TriggerOn();
+        NextPageTrigger?.TriggerFroceOn();
 
         _checkCoroutine = null;
     }

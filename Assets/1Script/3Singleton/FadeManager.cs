@@ -24,6 +24,8 @@ public class FadeManager : MonoBehaviour
     }
 
     float _fadeDuration = 0.05f;
+    public readonly float FadeInoutDelay = 0.5f;
+
 
     public float FadeDuration
     {

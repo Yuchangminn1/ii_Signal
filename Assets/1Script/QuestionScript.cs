@@ -115,7 +115,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
             for (int i = 0; i < tutorialPopup.GetTextCount(); i++)
             {
                 tutorialPopup.SetText(i);
-                yield return CoroutineReturnManager.GetWaitForSeconds(2.5f);
+                yield return CoroutineReturnManager.GetWaitForSeconds(3f);
             }
 
         }

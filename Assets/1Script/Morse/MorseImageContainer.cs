@@ -14,6 +14,7 @@ public class MorseImageContainer : MonoBehaviour
     public ResetUIOn resetUIOn;
 
     public CanvasGroup[] PopupUI;
+    public Graphic Input_Bar;
 
     public Graphic[] PopupUI_OffGraphics;
 
@@ -91,7 +92,6 @@ public class MorseImageContainer : MonoBehaviour
             FadeManager.Instance.TargetFade(popupUI, 0f, FadeManager.Instance.FadeDuration);
         }
 
-        // FadeManager.Instance.SetAlphaZero(CheckGraphics);
 
         isAnswer = false;
 
@@ -145,6 +145,8 @@ public class MorseImageContainer : MonoBehaviour
         {
             FadeManager.Instance.TargetFade(popupUI, 1f, FadeManager.Instance.FadeDuration);
         }
+        FadeManager.Instance.SetAlphaZero(Input_Bar);
+
         yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
         isAnswer = true;
     }

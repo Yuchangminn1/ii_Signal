@@ -24,7 +24,10 @@ public class QuestionTutorialPopup : MonoBehaviour
     IEnumerator FadeCoroutineCC(int index)
     {
         if (_canvasGroup.alpha < 0.9f)
+        {
             FadeManager.Instance.TargetFade(_canvasGroup, 1f, FadeManager.Instance.FadeDuration);
+
+        }
 
         if (_currentText != null)
         {
