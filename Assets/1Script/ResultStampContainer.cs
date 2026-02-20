@@ -6,6 +6,9 @@ public class ResultStampContainer : MonoBehaviour
 {
     AnswerStamp[] answerStamps = new AnswerStamp[5];
 
+
+    public SequenceScript sequenceScript;
+
     public Texture emptyStampTexture;
     public Texture correctStampTexture;
 
@@ -38,6 +41,7 @@ public class ResultStampContainer : MonoBehaviour
 
     public IEnumerator ShowStampCoroutine()
     {
+        yield return CoroutineReturnManager.GetWaitForSeconds(1f); //페이지 전환 대기 타임
         int stampCount = PlayerData.Instance.GetPlayer().StampCount;
         Debug.Log($"스탬프 개수: {stampCount}");
         for (int i = 0; i < stampCount; i++)
@@ -45,6 +49,7 @@ public class ResultStampContainer : MonoBehaviour
             answerStamps[i].SetCorrectStamp();
             yield return CoroutineReturnManager.GetWaitForSeconds(0.8f);
         }
+        sequenceScript?.TriggerFroceOn();
         showStampCoroutine = null;
     }
 }

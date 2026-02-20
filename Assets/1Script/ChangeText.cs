@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,9 +18,13 @@ public class ChangeText : MonoBehaviour
 
     public void SetText(int index)
     {
-        FadeManager.Instance.SetAlphaOne(text);
+        if (index == 2)
+        {
+            SoundManager.Instance.PlayEffectSound(EffectSoundNum.StepTextSound);
+        }
 
-        text.text = _changeTexts[index].Replace("Name", PlayerData.Instance.GetPlayer().Name); ;
+        text.text = _changeTexts[index].Replace("Name", PlayerData.Instance.GetPlayer().Name);
+
 
     }
 

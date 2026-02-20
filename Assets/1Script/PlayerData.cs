@@ -196,6 +196,8 @@ public class PlayerData : MonoBehaviour
         }
         player.StampCount = UnityEngine.Random.Range(1, 6);
 
+        QuestionManager.Instance.CurrentIndex = 0;
+
     }
 
     public Player GetPlayer()

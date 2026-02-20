@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class MorseColoringImage : MorseImage
 {
+    public SoundOptions CurrentSoundOption = SoundOptions.Sound_1;
 
-    float maxWidth = 1f;
+    protected float maxWidth = 1f;
 
     public bool isColorWhite = false;
 
@@ -17,14 +18,14 @@ public class MorseColoringImage : MorseImage
     readonly Color32 _colorWhiteHalf = new Color32(255, 255, 255, 127);
 
     readonly Color32 _colorWhiteFull = new Color32(255, 255, 255, 255);
-    RectTransform __remainingRectTransform;
+    protected RectTransform __remainingRectTransform;
 
-    float _currentFillAmount = 0;
-    float fillSpeed = 10f;
+    protected float _currentFillAmount = 0;
+    protected float fillSpeed = 10f;
 
-    bool isFilling = false;
+    protected bool isFilling = false;
 
-    bool isCheck = false;
+    protected bool isCheck = false;
     public bool IsCheck
     {
         get { return isCheck; }
@@ -59,12 +60,12 @@ public class MorseColoringImage : MorseImage
         if (morseType == MorseType.Dot)
         {
             _remainingImage.texture = _graphic_Dot;
-            fillSpeed = 10f;
+            fillSpeed = 1 / MorseTranslator.DefaultDotTime;
         }
         else if (morseType == MorseType.Dash)
         {
             _remainingImage.texture = _graphic_Dash;
-            fillSpeed = 3f;
+            fillSpeed = 1 / MorseTranslator.DefaultDashTime;
 
         }
 
@@ -123,6 +124,7 @@ public class MorseColoringImage : MorseImage
             _currentFillAmount += Time.fixedDeltaTime * fillSpeed;
             if (_currentFillAmount >= 1f)
             {
+
                 _currentFillAmount = 1f;
 
             }
@@ -132,6 +134,21 @@ public class MorseColoringImage : MorseImage
     public void FillingBar()
     {
         isFilling = true;
+
+        if (CurrentSoundOption == SoundOptions.Sound_1)
+        {
+            if (CurrentMorseType == MorseType.Dot)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
+            else if (CurrentMorseType == MorseType.Dash)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+        }
+        else if (CurrentSoundOption == SoundOptions.Sound_2)
+        {
+            if (CurrentMorseType == MorseType.Dot)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_2);
+            else if (CurrentMorseType == MorseType.Dash)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_2);
+        }
     }
     public void StartColoring()
     {
@@ -142,8 +159,9 @@ public class MorseColoringImage : MorseImage
 
         FillingBar();
 
+
     }
-    public void UpdateBar(float fillAmount)
+    virtual public void UpdateBar(float fillAmount)
     {
 
         __remainingRectTransform.SetSizeWithCurrentAnchors(
@@ -157,6 +175,7 @@ public class MorseColoringImage : MorseImage
         {
             IsCheck = true;
             isFilling = false;
+
         }
     }
 

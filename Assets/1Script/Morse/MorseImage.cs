@@ -28,12 +28,17 @@ public class MorseImage : MonoBehaviour
     readonly protected Color32 _colorFull = new Color32(90, 90, 90, 255);
 
 
+
     public MorseType CurrentMorseType
     {
         get { return _currentMorseType; }
     }
 
 
+    void OnEnable()
+    {
+        Reset();
+    }
 
 
     public void SetTextures(Texture dotTexture, Texture dashTexture)
@@ -50,6 +55,16 @@ public class MorseImage : MonoBehaviour
 
         arduino_MorseKey = GetComponentInParent<Arduino_MorseKey>();
         SetTextures(arduino_MorseKey.DotTexture, arduino_MorseKey.DashTexture);
+
+    }
+
+
+    void OnDisable()
+    {
+        if (GameManager.Instance.IsStarted)
+        {
+            Reset();
+        }
 
     }
 
@@ -85,6 +100,7 @@ public class MorseImage : MonoBehaviour
     virtual public void Reset()
     {
         ;
+
     }
 
 

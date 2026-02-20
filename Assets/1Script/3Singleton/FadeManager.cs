@@ -42,7 +42,6 @@ public class FadeManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        DontDestroyOnLoad(gameObject);
     }
 
     private readonly WaitForSeconds _delayWait = new WaitForSeconds(1f);

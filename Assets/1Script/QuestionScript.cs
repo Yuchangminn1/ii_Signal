@@ -1,33 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-public class QuestionInfo
-{
-    string _question;
-    public string Question
-    {
-        get { return _question; }
-        set { _question = value; }
-    }
-    string[] _selection;
-    public string[] Selection
-    {
-        get { return _selection; }
-        set { _selection = value; }
-    }
-}
-
-public class QuestionScript : MonoBehaviour, IQuestionTarget
+public class QuestionScript : MonoBehaviour
 {
 
-    List<QuestionInfo> questionInfos = new List<QuestionInfo>(16);
+    TutorialPopup tutorialPopup;
 
-    QuestionTutorialPopup tutorialPopup;
-
-    int currentIndex = 0;
     MorseImageContainer morseImageContainer;
 
     public NameText QuestionText;
@@ -38,8 +20,6 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
     public PageBase pageBase;
 
     public CanvasGroup TutorialPopUpObject;
-
-
 
 
     WaitForSeconds delayWait = new WaitForSeconds(1f);
@@ -53,6 +33,8 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
     QuestionSelectTextContainer questionTextContainer;
     public string jsonPath = "Json/QuestionConfig.json";
 
+
+
     void Awake()
     {
         pageBase = GetComponent<PageBase>();
@@ -63,7 +45,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
         morseImageContainer = GetComponentInChildren<MorseImageContainer>();
         questionTextContainer = GetComponentInChildren<QuestionSelectTextContainer>();
 
-        tutorialPopup = GetComponentInChildren<QuestionTutorialPopup>();
+        tutorialPopup = GetComponentInChildren<TutorialPopup>();
         _resetContainerCanvasGroup = ResetContainer.GetComponent<CanvasGroup>();
     }
 
@@ -83,13 +65,9 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
     public void Reset()
     {
 
-
-
-        currentIndex = 0;
-        Debug.Log("첫 질문 설정: " + questionInfos[currentIndex].Question);
-        QuestionText.SetText(questionInfos[currentIndex].Question);
-        questionTextContainer.Reset();
-        questionTextContainer.SetSelectedOption(questionInfos[currentIndex].Selection);
+        QuestionManager.Instance.CurrentIndex = 0;
+        Debug.Log("첫 질문 설정: " + QuestionManager.Instance.CurrentQuestionText);
+        QuestionText.SetText(QuestionManager.Instance.CurrentQuestionText);
     }
 
     public void NextQuestion()
@@ -104,13 +82,13 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
     public IEnumerator NextQuestionCoroutine()
     {
         //마지막 질문 넘어서 다음장으로
-        if (currentIndex >= questionInfos.Count - 1)
+        if (QuestionManager.Instance.CurrentIndex >= QuestionManager.Instance.QuestionInfos.Count - 1)
         {
             yield return delayWait;
             endTrigger?.TriggerOn();
             yield break;
         }
-        if (currentIndex == 0)
+        if (QuestionManager.Instance.CurrentIndex == 0)
         {
             for (int i = 0; i < tutorialPopup.GetTextCount(); i++)
             {
@@ -120,7 +98,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
 
         }
 
-        currentIndex++;
+        QuestionManager.Instance.CurrentIndex++;
 
         FadeManager.Instance.SetAlphaZero(QuestionText.GetTextComponent());
         FadeManager.Instance.SetAlphaZero(questionTextContainer.GetCanvasGroup());
@@ -135,8 +113,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
         yield return delayWait;
         ResetContainer?.SetActive(true);
 
-        QuestionText.SetText(questionInfos[currentIndex].Question);
-        questionTextContainer.SetSelectedOption(questionInfos[currentIndex].Selection);
+        QuestionText.SetText(QuestionManager.Instance.QuestionInfos[QuestionManager.Instance.CurrentIndex].Question);
         FadeManager.Instance.TargetFade(_resetContainerCanvasGroup, 1f, FadeManager.Instance.FadeDuration);
 
         yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
@@ -146,26 +123,7 @@ public class QuestionScript : MonoBehaviour, IQuestionTarget
         _nextQuestionCoroutine = null;
     }
 
-    // IQuestionTarget 구현
-    public void Initialize(List<QuestionInfo> items)
-    {
-        for (int i = 0; i < items.Count; i++)
-        {
-            Debug.Log($"{i} : {items[i].Question}");
-        }
-        questionInfos = items;
-
-        Debug.Log("로드된 질문 수: " + items.Count);
-    }
-
-    public List<QuestionInfo> Data()
-    {
-        return questionInfos;
-    }
 
     // 헬퍼들: 로드 데이터가 있으면 우선 사용, 없으면 기존 배열로 폴백
-
-
-
 
 }

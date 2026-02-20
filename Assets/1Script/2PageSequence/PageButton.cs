@@ -86,7 +86,7 @@ public class PageButton : MonoBehaviour
 
             FadeManager.Instance.TargetFade(text, 0f, _fadeDuration);
 
-        SoundManager.Instance.PlayEffectSound(EffectSoundNum.ButtonSound, 3f);
+        //SoundManager.Instance.PlayEffectSound(EffectSoundNum.ButtonSound, 3f);
 
     }
     IEnumerator SetRayCastTargetToDelay(Graphic graphic)

@@ -51,6 +51,7 @@ public class PopupManager : Singleton<PopupManager>
     {
         if (popupType == PopupType.PleaseInput)
         {
+            SoundManager.Instance.PlayEffectSound(EffectSoundNum.PopupSound);
 
             FadeManager.Instance.SetAlphaOne(_pleaseInputText);
 
@@ -59,6 +60,8 @@ public class PopupManager : Singleton<PopupManager>
         }
         else if (popupType == PopupType.ResetNotice)
         {
+            SoundManager.Instance.PlayEffectSound(EffectSoundNum.PopupSound);
+
             FadeManager.Instance.SetAlphaOne(_resetText);
 
             FadeManager.Instance.SetAlphaZero(_pleaseInputText);

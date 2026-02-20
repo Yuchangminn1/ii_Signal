@@ -24,6 +24,8 @@ public class AnswerStamp : MonoBehaviour
     {
 
         FadeManager.Instance.SetAlphaOne(_correctStampImage);
+
+        SoundManager.Instance.PlayEffectSound(EffectSoundNum.SoulPieceSound);
     }
 
 

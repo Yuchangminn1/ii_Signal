@@ -64,6 +64,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.3.62f2\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\1Script\Morse\MorseResetBar.cs" />
     <Compile Include="Assets\1Script\Morse\Morse_Guide.cs" />
     <Compile Include="Assets\1Script\1Json\RawImageLoader.cs" />
     <Compile Include="Assets\1Script\Morse\MorseAnswerShow.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Assets\1Script\Singleton.cs" />
     <Compile Include="Assets\1Script\2PageSequence\PageBase.cs" />
     <Compile Include="Assets\1Script\3Singleton\GameManager.cs" />
+    <Compile Include="Assets\1Script\Morse\ReceiveMorseImages.cs" />
     <Compile Include="Assets\1Script\CoroutineReturnManager.cs" />
     <Compile Include="Assets\1Script\Morse\MorseInputImage.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\Test\Rotate.cs" />
@@ -99,11 +101,13 @@
     <Compile Include="Assets\1Script\StampCountText.cs" />
     <Compile Include="Assets\1Script\TcpClientMono.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
+    <Compile Include="Assets\1Script\SoundObject.cs" />
     <Compile Include="Assets\1Script\MorseAnswerContainer.cs" />
     <Compile Include="Assets\1Script\Morse\Arduino_MorseKey.cs" />
     <Compile Include="Assets\1Script\Morse\MorseImage.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterMessageReceiver.cs" />
     <Compile Include="Assets\1Script\2PageSequence\PlayerPageController.cs" />
+    <Compile Include="Assets\1Script\1Json\MorsePassLoader.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceVideoPlayer.cs" />
     <Compile Include="Assets\1Script\1Json\JsonLoaderBase.cs" />
     <Compile Include="Assets\1Script\WaitCheck.cs" />
@@ -111,6 +115,7 @@
     <Compile Include="Assets\1Script\QuestionScript.cs" />
     <Compile Include="Assets\1Script\Morse\MorseSetup.cs" />
     <Compile Include="Assets\1Script\AnswerStamp.cs" />
+    <Compile Include="Assets\1Script\3Singleton\QuestionManager.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceScript.cs" />
     <Compile Include="Assets\1Script\2PageSequence\PageButton.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\Reporter.cs" />
@@ -124,7 +129,6 @@
     <Compile Include="Assets\1Script\Morse\MorseSelectionReturn.cs" />
     <Compile Include="Assets\1Script\Morse\MorseImageContainer.cs" />
     <Compile Include="Assets\1Script\QuestionSelectTextContainer.cs" />
-    <Compile Include="Assets\1Script\QuestionTutorialPopup.cs" />
     <Compile Include="Assets\1Script\1Json\AudioLoader.cs" />
     <Compile Include="Assets\1Script\SelectOption.cs" />
     <Compile Include="Assets\1Script\3Singleton\FadeManager.cs" />
@@ -135,6 +139,7 @@
     <Compile Include="Assets\1Script\Morse\MorseTranslator.cs" />
     <Compile Include="Assets\1Script\TcpServer.cs" />
     <Compile Include="Assets\1Script\3Singleton\SoundManager.cs" />
+    <Compile Include="Assets\1Script\TutorialPopup.cs" />
     <Compile Include="Assets\1Script\1Json\QuestionLoader.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SetColorA.cs" />
     <Compile Include="Assets\1Script\1Json\VideoLoader.cs" />

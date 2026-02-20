@@ -52,12 +52,15 @@ public class MorseInputImage : MonoBehaviour
         if (morseType == MorseType.Dot)
         {
             _morseImageDot.StartColoring();
+
+
             if (WaitCheckCoroutine == null)
                 WaitCheckCoroutine = StartCoroutine(WaitAndCheckFill(_morseImageDot));
         }
         else if (morseType == MorseType.Dash)
         {
             _morseImageDash.StartColoring();
+
             if (WaitCheckCoroutine == null)
                 WaitCheckCoroutine = StartCoroutine(WaitAndCheckFill(_morseImageDash));
         }

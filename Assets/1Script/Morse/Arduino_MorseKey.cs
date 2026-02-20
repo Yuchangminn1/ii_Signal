@@ -47,6 +47,9 @@ public class Arduino_MorseKey : MonoBehaviour
     public Action<float> OnAccuracyCheckAction;
 
 
+    bool morseInputDelay = false;
+
+
 
     bool _isAccuracyRateCheck = false;
 
@@ -125,6 +128,7 @@ public class Arduino_MorseKey : MonoBehaviour
 
             else if (isPress && Input.GetKey(KeyCode.C))
             {
+                GameManager.Instance.GoToIdleCheck();
                 if (_answer != "")
                 {
                     ResetUIOn?.ResetBarUpdate((Time.time - startTime) / MorseTranslator.InputResetTime);
@@ -246,6 +250,7 @@ public class Arduino_MorseKey : MonoBehaviour
         if (OverInputPopup.alpha < 0.9f)
             FadeManager.Instance.SetAlphaOne(OverInputPopup);
         float starttime = Time.time;
+        SoundManager.Instance.PlayEffectSound(EffectSoundNum.PopupSound);
 
         while (Time.time - starttime < _overInputPopupTime)
         {
@@ -349,12 +354,13 @@ public class Arduino_MorseKey : MonoBehaviour
                 break;
             }
         }
-        MorseTranslatorData morseTranslatorData = MorseTranslator.Translate(_morseData, pressTimes);
-        _answer = morseTranslatorData.MorseData;
+
+
+        _answer = MorseTranslator.Translate(_morseData);
 
         if (IsAccuracyRateCheck)
         {
-            OnAccuracyCheckAction?.Invoke(morseTranslatorData.PressTimes);
+            OnAccuracyCheckAction?.Invoke(MorseTranslator.Accuracy(_morseData, pressTimes));
 
         }
         else
@@ -363,9 +369,10 @@ public class Arduino_MorseKey : MonoBehaviour
             {
                 if (PageController.Instance.CurrentPage == 5)
                     PlayerData.Instance.GetPlayer().PassCode = _answer;
+
+                yield return CoroutineReturnManager.GetWaitForSeconds(0.3f); // 입력 사운드랑 겹쳐서 완성을 1초 딜레이 
                 OnMorseTransmitEnd?.Invoke();
                 _morseQueue.Clear();
-
             }
             else
             {

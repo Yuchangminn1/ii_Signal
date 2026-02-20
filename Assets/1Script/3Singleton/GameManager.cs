@@ -87,14 +87,18 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
         PopupManager.Instance?.ClosePopup();
         //Debug.Log("Resetting Page in " + _resetTime + " seconds...");
         float startTime = Time.time;
-        while (Time.time - startTime < _resetTime)
+        while (Time.time - startTime < _resetTime && PageController.Instance.IsIdle() == false)
         {
             yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
+        }
+        if (PageController.Instance.IsIdle())
+        {
+            resetCoroutine = null;
+            yield break;
         }
 
         PopupManager.Instance?.ResetPopUpOpen();
 
-        resetCoroutine = null;
     }
 
 

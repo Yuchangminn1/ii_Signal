@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class MorseImageContainer : MonoBehaviour
 {
+
 
 
 
@@ -14,7 +17,6 @@ public class MorseImageContainer : MonoBehaviour
     public ResetUIOn resetUIOn;
 
     public CanvasGroup[] PopupUI;
-    public Graphic Input_Bar;
 
     public Graphic[] PopupUI_OffGraphics;
 
@@ -95,6 +97,7 @@ public class MorseImageContainer : MonoBehaviour
 
         isAnswer = false;
 
+
         _currentIndex = 0;
     }
 
@@ -145,7 +148,6 @@ public class MorseImageContainer : MonoBehaviour
         {
             FadeManager.Instance.TargetFade(popupUI, 1f, FadeManager.Instance.FadeDuration);
         }
-        FadeManager.Instance.SetAlphaZero(Input_Bar);
 
         yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);
         isAnswer = true;
@@ -201,13 +203,17 @@ public class MorseImageContainer : MonoBehaviour
         {
             yield return CoroutineReturnManager.WaitForFixedUpdate;
 
-            ColoringMorseImage2(_morseInput.Dequeue());
+            ColoringMorseImage(_morseInput.Dequeue());
         }
 
     }
 
     public void ColoringMorseImage(MorseType morseType)
     {
+        if (_currentIndex >= morseInputImages.Length)
+        {
+            return;
+        }
 
 
         //TODO 급하게 막았는데 구조 좀 생각해서 수정 

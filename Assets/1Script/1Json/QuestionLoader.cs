@@ -19,7 +19,11 @@ public class QuestionLoader : JsonLoaderBase<List<QuestionInfo>, IQuestionTarget
     public override void ApplyLoadedData(string name, IQuestionTarget obj)
     {
         if (obj == null) return;
-        if (!TryGetData(name, out var items) || items == null) return;
+        if (!TryGetData(name, out var items) || items == null)
+        {
+            Debug.LogWarning($"QuestionLoader: No data found for key '{name}'");
+            return;
+        }
         obj.Initialize(items);
     }
 

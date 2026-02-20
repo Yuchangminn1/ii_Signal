@@ -1,7 +1,14 @@
 using UnityEngine;
 using UnityEngine.UI;
+public enum SoundOptions
+{
+    Sound_1 = 0,
+    Sound_2 = 1,
+}
 public class MorseInputTarget : MonoBehaviour
 {
+    public SoundOptions CurrentSoundOption = SoundOptions.Sound_1;
+
     RectTransform _rectTransform;
 
     RawImage _rawImage;
@@ -45,16 +52,27 @@ public class MorseInputTarget : MonoBehaviour
 
     void OnEnable()
     {
-
-
-        if (_rectTransform != null)
+        if (GameManager.Instance.IsStarted)
         {
-            _currentFillAmount = 0;
-            UpdateBar(_currentFillAmount);
-        }
-        FadeManager.Instance.SetAlphaZero(_rawImage);
-        IsCheck = false;
 
+            if (_rectTransform != null)
+            {
+                _currentFillAmount = 0;
+                UpdateBar(_currentFillAmount);
+            }
+            FadeManager.Instance.SetAlphaZero(_rawImage);
+            IsCheck = false;
+
+            if (CurrentMorseType == MorseType.Dot)
+            {
+                fillSpeed = 1 / MorseTranslator.DefaultDotTime;
+            }
+
+            else if (CurrentMorseType == MorseType.Dash)
+            {
+                fillSpeed = 1 / MorseTranslator.DefaultDashTime;
+            }
+        }
     }
 
     void Start()
@@ -82,6 +100,20 @@ public class MorseInputTarget : MonoBehaviour
     public void FillingBar()
     {
         isFilling = true;
+        if (CurrentSoundOption == SoundOptions.Sound_1)
+        {
+            if (CurrentMorseType == MorseType.Dot)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
+            else if (CurrentMorseType == MorseType.Dash)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+        }
+        else if (CurrentSoundOption == SoundOptions.Sound_2)
+        {
+            if (CurrentMorseType == MorseType.Dot)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_2);
+            else if (CurrentMorseType == MorseType.Dash)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_2);
+        }
     }
 
     public void UpdateBar(float fillAmount)

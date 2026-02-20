@@ -40,6 +40,9 @@ public class JsonManager : MonoBehaviour
 
     QuestionLoader _questionLoader = new QuestionLoader("Json/QuestionConfig.json");
     public QuestionLoader GetQuestionLoader { get { return _questionLoader; } }
+
+    MorsePassLoader _morsePass = new MorsePassLoader("Json/MorsePassConfig.json");
+    public MorsePassLoader GetMorsePass { get { return _morsePass; } }
     void Awake()
     {
         if (instance == null)
@@ -92,7 +95,7 @@ public class JsonManager : MonoBehaviour
         // _genericLoader.Load();
 
         _questionLoader.Load();
-
+        _morsePass.Load();
 
 
         // Text[] tempText = FindObjectsOfType<Text>();
@@ -126,12 +129,20 @@ public class JsonManager : MonoBehaviour
         // {
         //     _genericLoader.Register(((Component)t).gameObject.name, t);
         // }
-        var tempGenericTargets = FindObjectsOfType<MonoBehaviour>().OfType<IQuestionTarget>();
-        foreach (IQuestionTarget t in tempGenericTargets)
+        var tempQuestionTargets = FindObjectsOfType<MonoBehaviour>().OfType<IQuestionTarget>();
+        foreach (IQuestionTarget t in tempQuestionTargets)
         {
+            Debug.Log("Register QuestionTarget: " + ((Component)t).gameObject.name);
             _questionLoader.Register(((Component)t).gameObject.name, t);
         }
 
+
+        var tempMorsePassTargets = FindObjectsOfType<MonoBehaviour>().OfType<IMorsePassTarget>();
+        foreach (IMorsePassTarget t in tempMorsePassTargets)
+        {
+            Debug.Log("Register MorsePassTarget: " + ((Component)t).gameObject.name);
+            _morsePass.Register(((Component)t).gameObject.name, t);
+        }
 
     }
 

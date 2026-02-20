@@ -231,11 +231,11 @@ public class PlayerPageController : MonoBehaviour
 
     IEnumerator OpenPageCoroutine(int pageNum)
     {
-        if (pageNum == 0)
-        {
-            SoundManager.Instance.MuteBGM();
+        // if (pageNum == 0)
+        // {
+        //     SoundManager.Instance.MuteBGM();
 
-        }
+        // }
 
         if (Pages.Length > pageNum)
         {

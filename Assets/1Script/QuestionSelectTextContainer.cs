@@ -18,37 +18,43 @@ public class QuestionSelectTextContainer : MonoBehaviour
 
     CanvasGroup _canvasGroup;
 
-
-
-    string[] currentQuestions =
-    {
-        "봄", "여름", "가을", "겨울","사계절"
-    };
-
-    public string[] CurrentQuestions
-    {
-        get { return currentQuestions; }
-    }
-
     void Awake()
     {
-        selectOptions = GetComponentsInChildren<SelectOption>();
     }
 
     void Start()
     {
         _canvasGroup = GetComponent<CanvasGroup>();
+        selectOptions = GetComponentsInChildren<SelectOption>();
+
     }
     public CanvasGroup GetCanvasGroup()
     {
         return _canvasGroup;
     }
 
-    public void SetSelectedOption(string[] options)
+    public void UpdateData()
     {
-        for (int i = 0; i < options.Length; i++)
+        string[] selection = null;
+        string[] patterns = null;
+        if (PageController.Instance.CurrentPage == 4)
         {
-            selectOptions[i].Initialize(options[i]);
+            selection = QuestionManager.Instance.CurrentSelection;
+            patterns = QuestionManager.Instance.CurrentMorsePattern;
+        }
+
+        else
+        {
+            return;
+        }
+
+        for (int i = 0; i < selection.Length; i++)
+        {
+            selectOptions[i].Initialize(selection[i]);
+        }
+        for (int i = 0; i < selectOptions.Length; i++)
+        {
+            selectOptions[i].SetPattern(patterns[i]);
         }
     }
 
@@ -66,6 +72,14 @@ public class QuestionSelectTextContainer : MonoBehaviour
         {
             option.Reset();
         }
+        UpdateData();
+
+    }
+
+    void OnEnable()
+    {
+        if (GameManager.Instance.IsStarted)
+            Reset();
     }
 
 
