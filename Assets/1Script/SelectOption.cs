@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+enum SelectSymbolGapDuration
+{
+    Dot_Dot = 49,
+    Dot_Dash = 66,
+    Dash_Dash = 78
+}
+
 public class SelectOption : MonoBehaviour
 {
     public string _morseValue = "";
@@ -18,15 +26,13 @@ public class SelectOption : MonoBehaviour
     RectTransform[] _rawImagesRects;
     const int GAP_COUNT = 3;
 
-    const float DEFAULT_X_GAP = 52f;
-    const float DEFAULT_DASH_GAP = 66f;
     Text _text;
     Color32 _normalColor = new Color32(66, 66, 66, 255);
 
     Color32 _selectedColor = new Color32(141, 118, 178, 255);
 
     QuestionSelectTextContainer _questionSelectTextContainer;
-    bool[] _dotDashArray = new bool[GAP_COUNT];
+    SelectSymbolGapDuration[] _dotDashArray = new SelectSymbolGapDuration[GAP_COUNT];
 
     public void Initialize(string text)
     {
@@ -59,63 +65,51 @@ public class SelectOption : MonoBehaviour
         {
             if (_morseValue[i] == '0')
             {
-                _rawImages[i].texture = _questionSelectTextContainer.NormalDotTexture;
+                _rawImages[i].texture = _questionSelectTextContainer.DotTexture;
 
             }
             else if (_morseValue[i] == '1')
             {
-                _rawImages[i].texture = _questionSelectTextContainer.NormalDashTexture;
+                _rawImages[i].texture = _questionSelectTextContainer.DashTexture;
             }
+            if (_dotDashArray.Length > i)
+            {
+                if ((_morseValue[i] == '0' && _morseValue[i + 1] == '1') || (_morseValue[i] == '1' && _morseValue[i + 1] == '0'))
+                {
+                    _dotDashArray[i] = SelectSymbolGapDuration.Dot_Dash;
+                }
+                else if (_morseValue[i] == '1' && _morseValue[i + 1] == '1')
+                {
+                    _dotDashArray[i] = SelectSymbolGapDuration.Dash_Dash;
+                }
+                else if (_morseValue[i] == '0' && _morseValue[i + 1] == '0')
+                {
+                    _dotDashArray[i] = SelectSymbolGapDuration.Dot_Dot;
+                }
+
+            }
+
             _rawImages[i].SetNativeSize();
         }
         if (_text != null)
             _text.color = _normalColor;
 
-
-
-
-        for (int i = 0; i < GAP_COUNT; i++)
+        float totalX = 0;
+        foreach (SelectSymbolGapDuration gap in _dotDashArray)
         {
-            _dotDashArray[i] = false;
+            totalX += (float)gap;
         }
 
-        int count = 0;
-
-        for (int i = 0; i < _morseValue.Length; i++)
-        {
-            if (_morseValue[i] == '1')
-            {
-                if (i - 1 >= 0)
-                    _dotDashArray[i - 1] = true;
-                if (i < _dotDashArray.Length)
-                    _dotDashArray[i] = true;
-
-            }
-        }
-
-
-        foreach (bool dotDash in _dotDashArray)
-        {
-            if (dotDash)
-            {
-                count++;
-            }
-        }
-
-        float totalX = (GAP_COUNT - count) * DEFAULT_X_GAP + count * DEFAULT_DASH_GAP;
-        Debug.Log($"{name} /  totalX : " + totalX + " count : " + count);
 
         Vector3 startPos = Vector3.right * totalX / -2f;
+
         _rawImagesRects[0].localPosition = startPos;
         _rawImagesRects[_rawImagesRects.Length - 1].localPosition = startPos * -1f;
+        Debug.Log($"{name} /  totalX : " + totalX + " start : " + startPos.x + " end : " + startPos * -1f);
 
         for (int i = 1; i < _rawImagesRects.Length - 1; i++)
         {
-            float gapX = DEFAULT_X_GAP;
-            if (_dotDashArray[i - 1])
-            {
-                gapX = DEFAULT_DASH_GAP;
-            }
+            float gapX = (float)_dotDashArray[i - 1];
             startPos += Vector3.right * gapX;
             _rawImagesRects[i].localPosition = startPos;
             Debug.Log($"_rawImagesRects[{i}] pos : " + startPos);
@@ -132,13 +126,14 @@ public class SelectOption : MonoBehaviour
             {
                 if (_morseValue[i] == '0')
                 {
-                    _rawImages[i].texture = _questionSelectTextContainer.NormalDotTexture;
-
+                    _rawImages[i].texture = _questionSelectTextContainer.DotTexture;
                 }
                 else if (_morseValue[i] == '1')
                 {
-                    _rawImages[i].texture = _questionSelectTextContainer.NormalDashTexture;
+                    _rawImages[i].texture = _questionSelectTextContainer.DashTexture;
                 }
+                _rawImages[i].color = _normalColor;
+
             }
         }
         if (_text != null)
@@ -153,14 +148,7 @@ public class SelectOption : MonoBehaviour
         {
             for (int i = 0; i < _rawImages.Length; i++)
             {
-                if (_morseValue[i] == '0')
-                {
-                    _rawImages[i].texture = _questionSelectTextContainer.SelectedDotTexture;
-                }
-                else if (_morseValue[i] == '1')
-                {
-                    _rawImages[i].texture = _questionSelectTextContainer.SelectedDashTexture;
-                }
+                _rawImages[i].color = _selectedColor;
             }
         }
         if (_text != null)

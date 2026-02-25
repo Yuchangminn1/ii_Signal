@@ -70,6 +70,7 @@
     <Compile Include="Assets\1Script\Morse\MorseAnswerShow.cs" />
     <Compile Include="Assets\1Script\ChangeText.cs" />
     <Compile Include="Assets\1Script\1Json\JsonManager.cs" />
+    <Compile Include="Assets\1Script\Morse\MorseImageContainer_Control_RectTransform.cs" />
     <Compile Include="Assets\1Script\Morse\MorseInputTarget.cs" />
     <Compile Include="Assets\1Script\PopupManager.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceTriggers.cs" />

@@ -7,7 +7,7 @@ public enum SoundOptions
 }
 public class MorseInputTarget : MonoBehaviour
 {
-    public SoundOptions CurrentSoundOption = SoundOptions.Sound_1;
+    SoundOptions CurrentSoundOption = SoundOptions.Sound_1;
 
     RectTransform _rectTransform;
 
@@ -124,10 +124,11 @@ public class MorseInputTarget : MonoBehaviour
             FadeManager.Instance.SetAlphaOne(_rawImage);
         }
 
-        _rectTransform.SetSizeWithCurrentAnchors(
-        RectTransform.Axis.Horizontal,
-        maxWidth * fillAmount
-        );
+        _rectTransform.sizeDelta = new Vector2(maxWidth * fillAmount, _rectTransform.sizeDelta.y);
+        // _rectTransform.SetSizeWithCurrentAnchors(
+        // RectTransform.Axis.Horizontal,
+        // maxWidth * fillAmount
+        // );
         _rawImage.uvRect = new Rect(0, 0, fillAmount, 1);
 
 
@@ -135,6 +136,22 @@ public class MorseInputTarget : MonoBehaviour
         {
             IsCheck = true;
             isFilling = false;
+
+            if (CurrentSoundOption == SoundOptions.Sound_1)
+            {
+                // if (CurrentMorseType == MorseType.Dot)
+                //     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
+                // else
+                if (CurrentMorseType == MorseType.Dash)
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+            }
+            // else if (CurrentSoundOption == SoundOptions.Sound_2)
+            // {
+            //     if (CurrentMorseType == MorseType.Dot)
+            //         SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_2);
+            //     else if (CurrentMorseType == MorseType.Dash)
+            //         SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_2);
+            // }
         }
     }
 }

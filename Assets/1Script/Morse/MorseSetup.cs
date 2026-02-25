@@ -51,6 +51,7 @@ public class MorseSetup : MonoBehaviour
                 _morseColoringImage[i].SetMorseType(MorseType.Dot);
             else if (_morseData[i] == '1')
                 _morseColoringImage[i].SetMorseType(MorseType.Dash);
+
         }
 
 
@@ -70,6 +71,8 @@ public class MorseSetup : MonoBehaviour
 
 
     }
+
+
 
     void OnDisable()
     {
@@ -130,11 +133,13 @@ public class MorseSetup : MonoBehaviour
                 arduino_MorseKey.PlayMorseSound(MorseType.Dash);
             }
             _morseColoringImage[i].StartColoring();
+            yield return CoroutineReturnManager.WaitForFixedUpdate;
+
             while (_morseColoringImage[i].IsCheck == false)
             {
                 yield return CoroutineReturnManager.WaitForFixedUpdate;
             }
-            yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
+            yield return CoroutineReturnManager.GetWaitForSeconds(0.25f);
 
         }
         yield return CoroutineReturnManager.GetWaitForSeconds(1.5f);

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MorseColoringImage : MorseImage
 {
-    public SoundOptions CurrentSoundOption = SoundOptions.Sound_1;
+    SoundOptions CurrentSoundOption = SoundOptions.Sound_1;
 
     protected float maxWidth = 1f;
 
@@ -175,6 +175,15 @@ public class MorseColoringImage : MorseImage
         {
             IsCheck = true;
             isFilling = false;
+
+            if (CurrentSoundOption == SoundOptions.Sound_1)
+            {
+                // if (CurrentMorseType == MorseType.Dot)
+                //     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
+                // else
+                if (CurrentMorseType == MorseType.Dash)
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+            }
 
         }
     }

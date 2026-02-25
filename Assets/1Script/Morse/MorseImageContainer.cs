@@ -10,9 +10,7 @@ public class MorseImageContainer : MonoBehaviour
 {
 
 
-
-
-    MorseInputImage[] morseInputImages;
+    protected MorseInputImage[] morseInputImages;
 
     public ResetUIOn resetUIOn;
 
@@ -21,25 +19,25 @@ public class MorseImageContainer : MonoBehaviour
     public Graphic[] PopupUI_OffGraphics;
 
     public QuestionSelectTextContainer questionTextContainer;
-    Queue<MorseType> _morseInput = new Queue<MorseType>();
+    protected Queue<MorseType> _morseInput = new Queue<MorseType>();
 
 
-    Arduino_MorseKey arduino_MorseKey;
+    protected Arduino_MorseKey arduino_MorseKey;
 
     public SequenceScript SequenceScript;
 
-    Coroutine _morseIndexCheckCoroutine = null;
+    protected Coroutine _morseIndexCheckCoroutine = null;
 
-    float _popupDelay = 1.2f;
+    protected float _popupDelay = 1.2f;
 
 
     //Todo 저거 좀 이벤트로 쪼개기
 
-    bool isAnswer = false;
+    protected bool isAnswer = false;
 
 
 
-    int _currentIndex = 0;
+    protected int _currentIndex = 0;
 
 
 
@@ -51,8 +49,10 @@ public class MorseImageContainer : MonoBehaviour
             arduino_MorseKey.StopMorseCheck();
     }
 
-    public void CheckStart()
+    public virtual void CheckStart()
     {
+
+
         isAnswer = false;
         if (resetUIOn != null)
             arduino_MorseKey.ResetUIOn = resetUIOn;
@@ -76,7 +76,6 @@ public class MorseImageContainer : MonoBehaviour
         _morseInput.Clear();
 
         arduino_MorseKey.StartMorseCheck();
-
 
     }
 
@@ -102,7 +101,7 @@ public class MorseImageContainer : MonoBehaviour
     }
 
 
-    IEnumerator MorseIndexCheckCoroutine(MorseType morseType)
+    virtual protected IEnumerator MorseIndexCheckCoroutine(MorseType morseType)
     {
         isAnswer = false;
 
@@ -174,7 +173,7 @@ public class MorseImageContainer : MonoBehaviour
     }
 
 
-    void Start()
+    protected virtual void Start()
     {
 
         questionTextContainer = transform.parent.GetComponentInChildren<QuestionSelectTextContainer>();
@@ -197,7 +196,7 @@ public class MorseImageContainer : MonoBehaviour
 
     }
 
-    IEnumerator InputDequeue()
+    protected IEnumerator InputDequeue()
     {
         if (_morseInput.Count > 0)
         {
@@ -208,7 +207,7 @@ public class MorseImageContainer : MonoBehaviour
 
     }
 
-    public void ColoringMorseImage(MorseType morseType)
+    virtual public void ColoringMorseImage(MorseType morseType)
     {
         if (_currentIndex >= morseInputImages.Length)
         {
@@ -234,29 +233,29 @@ public class MorseImageContainer : MonoBehaviour
 
     }
 
-    public void ColoringMorseImage2(MorseType morseType)
-    {
+    // virtual public void ColoringMorseImage2(MorseType morseType)
+    // {
 
-        if (_currentIndex >= morseInputImages.Length)
-        {
-            return;
-        }
+    //     if (_currentIndex >= morseInputImages.Length)
+    //     {
+    //         return;
+    //     }
 
 
-        if (_morseIndexCheckCoroutine == null)
-        {
+    //     if (_morseIndexCheckCoroutine == null)
+    //     {
 
-            morseInputImages[_currentIndex].StartColoring(morseType);
-            _morseIndexCheckCoroutine = StartCoroutine(MorseIndexCheckCoroutine(morseType));
+    //         morseInputImages[_currentIndex].StartColoring(morseType);
+    //         _morseIndexCheckCoroutine = StartCoroutine(MorseIndexCheckCoroutine(morseType));
 
-        }
-        else
-        {
-            //Debug.Log($"코루틴 돌리는중 추가입력 {morseType} 큐에 추가");
-            _morseInput.Enqueue(morseType);
-        }
+    //     }
+    //     else
+    //     {
+    //         //Debug.Log($"코루틴 돌리는중 추가입력 {morseType} 큐에 추가");
+    //         _morseInput.Enqueue(morseType);
+    //     }
 
-    }
+    // }
 
 
 

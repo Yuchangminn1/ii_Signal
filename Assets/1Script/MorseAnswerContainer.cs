@@ -35,15 +35,6 @@ public class MorseAnswerContainer : MonoBehaviour
 
     public void SetMorse(string morseAnswer)
     {
-        _dotDashArray[0] = false;
-        _dotDashArray[1] = false;
-        _dotDashArray[2] = false;
-        Debug.Log($"{name}MorseAnswerContainer SetMorse : " + morseAnswer);
-        if (morseImages.Length != morseAnswer.Length)
-        {
-            Debug.LogError("morseImages / morseAnswer 길이 불일치");
-            return;
-        }
         for (int i = 0; i < morseAnswer.Length; i++)
         {
             if (morseAnswer[i] == '0')
@@ -55,11 +46,28 @@ public class MorseAnswerContainer : MonoBehaviour
                 morseImages[i].SetMorseType(MorseType.Dash);
             }
         }
-        int count = 0;
+        _dotDashArray[0] = false;
+        _dotDashArray[1] = false;
+        _dotDashArray[2] = false;
+        Debug.Log($"{name}MorseAnswerContainer SetMorse : " + morseAnswer);
+        if (morseImages.Length != morseAnswer.Length)
+        {
+            Debug.LogError("morseImages / morseAnswer 길이 불일치");
+            return;
+        }
 
-        _dotDashArray[0] = morseAnswer[1] == '1';
-        _dotDashArray[1] = morseAnswer[1] == '1' || morseAnswer[2] == '1';
-        _dotDashArray[2] = morseAnswer[2] == '1' || morseAnswer[3] == '1';
+        int count = 0;
+        for (int i = 0; i < morseAnswer.Length; i++)
+        {
+            if (morseAnswer[i] == '1')
+            {
+                if (i - 1 >= 0)
+                    _dotDashArray[i - 1] = true;
+                if (i < _dotDashArray.Length)
+                    _dotDashArray[i] = true;
+
+            }
+        }
 
         foreach (bool dotDash in _dotDashArray)
         {

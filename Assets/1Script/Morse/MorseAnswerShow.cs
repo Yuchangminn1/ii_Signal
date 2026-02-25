@@ -43,12 +43,13 @@ public class MorseAnswerShow : MonoBehaviour
             foreach (MorseAnswerContainer morseAnswerContainer in morseAnswerContainers)
             {
                 if (morseAnswerContainer.IsMove() == false)
-                {
-                    morseAnswerContainer.SetMorse(temp.Dequeue());
-                    yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
 
-                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 140f);
-                    yield return CoroutineReturnManager.GetWaitForSeconds(3.5f);
+                {
+                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 220f);
+                    yield return CoroutineReturnManager.WaitForFixedUpdate;
+                    morseAnswerContainer.SetMorse(temp.Dequeue());
+
+                    yield return CoroutineReturnManager.GetWaitForSeconds(2.5f);
 
                     break;
                 }

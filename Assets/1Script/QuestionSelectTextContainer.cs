@@ -6,13 +6,11 @@ using UnityEngine.UI;
 
 public class QuestionSelectTextContainer : MonoBehaviour
 {
-    public Texture NormalDotTexture;
+    public Texture DotTexture;
 
-    public Texture SelectedDotTexture;
 
-    public Texture NormalDashTexture;
+    public Texture DashTexture;
 
-    public Texture SelectedDashTexture;
 
     SelectOption[] selectOptions;
 
