@@ -83,12 +83,12 @@ public class PlayerPageController : MonoBehaviour
             value = 0;
         }
 
-        if (value == 0)
-        {
-            _onRestRequest?.Invoke();
-            PlayerData.Instance.Reset();
+        // if (value == 0)
+        // {
+        //     _onRestRequest?.Invoke();
+        //     //UserDataManager.Instance.Reset();
 
-        }
+        // }
 
         if (IsPairPageOpen)
         {
@@ -121,7 +121,7 @@ public class PlayerPageController : MonoBehaviour
         if (value == 0)
         {
             _onRestRequest?.Invoke();
-            PlayerData.Instance.Reset();
+            UserDataManager.Instance.Reset();
 
         }
         if (OnPageRequest != null)

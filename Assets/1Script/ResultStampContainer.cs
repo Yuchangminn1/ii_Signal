@@ -42,7 +42,7 @@ public class ResultStampContainer : MonoBehaviour
     public IEnumerator ShowStampCoroutine()
     {
         yield return CoroutineReturnManager.GetWaitForSeconds(1f); //페이지 전환 대기 타임
-        int stampCount = PlayerData.Instance.GetPlayer().StampCount;
+        int stampCount = UserDataManager.Instance.GetPlayer().AddPiece;
         Debug.Log($"스탬프 개수: {stampCount}");
         for (int i = 0; i < stampCount; i++)
         {

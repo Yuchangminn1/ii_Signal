@@ -98,6 +98,7 @@ public static class MorseTranslator
 
     public static string Translate(string morseData)
     {
+        Debug.Log("MorseTranslator Translate 호출 : " + morseData);
         string[] morsePatterns;
         int index = -1;
         if (PageController.Instance.CurrentPage == 4)

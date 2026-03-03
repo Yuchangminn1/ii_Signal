@@ -41,7 +41,7 @@ public class MorseSetup : MonoBehaviour
     {
         arduino_MorseKey.IsAccuracyRateCheck = true;
         arduino_MorseKey.OnAccuracyCheckAction += AccuracyCheck;
-        _morseData = PlayerData.Instance.GetPlayer().PassCode;
+        _morseData = UserDataManager.Instance.GetPlayer().PassCode;
         if (_morseData == "")
             return;
 

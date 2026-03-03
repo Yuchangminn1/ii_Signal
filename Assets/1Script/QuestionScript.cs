@@ -82,7 +82,7 @@ public class QuestionScript : MonoBehaviour
     public IEnumerator NextQuestionCoroutine()
     {
         //마지막 질문 넘어서 다음장으로
-        if (QuestionManager.Instance.CurrentIndex >= QuestionManager.Instance.QuestionInfos.Count - 1)
+        if (QuestionManager.Instance.CurrentIndex >= QuestionManager.Instance.QuestionInfos.Count)
         {
             yield return delayWait;
             endTrigger?.TriggerOn();

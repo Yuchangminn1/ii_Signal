@@ -31,7 +31,7 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
     QuestionInfo morsePass = new QuestionInfo();
 
 
-    int _currentIndex = 0;
+    int _currentIndex = 1;
 
     public int CurrentIndex
     {
@@ -52,6 +52,19 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
     public string CurrentQuestionText
     {
         get { return questionInfos[_currentIndex].Question; }
+    }
+
+    public void UpdateUserAnswer(int selection)
+    {
+        UserDataManager.Instance.RequestUserDataUpdate(CurrentIndex, selection, UserDataManager.Instance.CurrentDirection);
+    }
+
+    public void AnswerQuestion()
+    {
+        if (UserDataManager.Instance.CurrentDirection == Direction.Left)
+        {
+
+        }
     }
 
     public QuestionInfo CurrentMorsePass

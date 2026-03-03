@@ -30,6 +30,8 @@ public class MorseImageContainer : MonoBehaviour
 
     protected float _popupDelay = 1.2f;
 
+    Direction _currentDirection;
+
 
     //Todo 저거 좀 이벤트로 쪼개기
 
@@ -44,6 +46,7 @@ public class MorseImageContainer : MonoBehaviour
 
     void OnEnable()
     {
+        UserDataManager.Instance.CurrentDirection = _currentDirection;
         _morseIndexCheckCoroutine = null;
         if (arduino_MorseKey != null)
             arduino_MorseKey.StopMorseCheck();
@@ -163,7 +166,7 @@ public class MorseImageContainer : MonoBehaviour
         {
             if (isAnswer)
             {
-                PlayerData.Instance.GetPlayer().QuestionAnswerData.Enqueue(MorseTranslator.CurrentData);
+                UserDataManager.Instance.GetPlayer().QuestionAnswerData.Enqueue(MorseTranslator.CurrentData);
                 SequenceScript.TriggerFroceOn();
                 arduino_MorseKey.StopMorseCheck();
                 isAnswer = false;

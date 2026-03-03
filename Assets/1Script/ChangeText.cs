@@ -23,7 +23,7 @@ public class ChangeText : MonoBehaviour
             SoundManager.Instance.PlayEffectSound(EffectSoundNum.StepTextSound);
         }
 
-        text.text = _changeTexts[index].Replace("Name", PlayerData.Instance.GetPlayer().Name);
+        text.text = _changeTexts[index].Replace("Name", UserDataManager.Instance.GetPlayer().LastName);
 
 
     }

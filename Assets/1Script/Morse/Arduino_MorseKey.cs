@@ -47,6 +47,8 @@ public class Arduino_MorseKey : MonoBehaviour
     public Action<float> OnAccuracyCheckAction;
 
 
+
+
     bool morseInputDelay = false;
 
 
@@ -112,7 +114,7 @@ public class Arduino_MorseKey : MonoBehaviour
     {
         if (isInputCheck && _isOverInputPopupOn == false)
         {
-            if (Input.GetKeyDown(KeyCode.C))
+            if (Input.GetKeyDown(KeyCode.LeftControl))
             {
                 startTime = Time.time;
                 isPress = true;
@@ -126,7 +128,7 @@ public class Arduino_MorseKey : MonoBehaviour
                 }
             }
 
-            else if (isPress && Input.GetKey(KeyCode.C))
+            else if (isPress && Input.GetKey(KeyCode.LeftControl))
             {
                 GameManager.Instance.GoToIdleCheck();
                 if (_answer != "")
@@ -141,7 +143,7 @@ public class Arduino_MorseKey : MonoBehaviour
 
             }
 
-            else if (isPress && Input.GetKey(KeyCode.C) == false)
+            else if (isPress && Input.GetKey(KeyCode.LeftControl) == false)
             {
                 if (_inputCount > 3)
                 {
@@ -368,7 +370,7 @@ public class Arduino_MorseKey : MonoBehaviour
             if (_answer != "")
             {
                 if (PageController.Instance.CurrentPage == 5)
-                    PlayerData.Instance.GetPlayer().PassCode = _answer;
+                    UserDataManager.Instance.GetPlayer().PassCode = _answer;
 
                 yield return CoroutineReturnManager.GetWaitForSeconds(0.3f); // 입력 사운드랑 겹쳐서 완성을 1초 딜레이 
                 OnMorseTransmitEnd?.Invoke();

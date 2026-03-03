@@ -9,8 +9,10 @@ public class WaitCheck : MonoBehaviour
 
     public UnityEvent ClearTrigger = new UnityEvent();
 
-    public Graphic[] Player1_Graphic;
-    public Graphic[] Player2_Graphic;
+    public RawImage[] Player1_ColorBall;
+    public Text[] Player1_NameText;
+    public RawImage[] Player2_ColorBall;
+    public Text[] Player2_NameText;
 
     bool _isPlayer1On = false;
     public bool IsPlayer1On
@@ -82,7 +84,9 @@ public class WaitCheck : MonoBehaviour
         Player1_Trigger.TriggerFroceOn();
         IsPlayer1On = !_isPlayer1On;
 
-        FadeManager.Instance.TargetFade(Player1_Graphic, 1f);
+        FadeManager.Instance.TargetFade(Player1_ColorBall, 1f);
+        FadeManager.Instance.TargetFade(Player1_NameText, 1f);
+
 
         debugZ = null;
 
@@ -94,7 +98,8 @@ public class WaitCheck : MonoBehaviour
         Player2_Trigger.TriggerFroceOn();
         IsPlayer2On = !_isPlayer2On;
 
-        FadeManager.Instance.TargetFade(Player2_Graphic, 1f);
+        FadeManager.Instance.TargetFade(Player2_ColorBall, 1f);
+        FadeManager.Instance.TargetFade(Player2_NameText, 1f);
 
         debugX = null;
 
