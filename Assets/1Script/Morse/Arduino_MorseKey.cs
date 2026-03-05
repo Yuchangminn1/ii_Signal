@@ -369,8 +369,7 @@ public class Arduino_MorseKey : MonoBehaviour
         {
             if (_answer != "")
             {
-                if (PageController.Instance.CurrentPage == 5)
-                    UserDataManager.Instance.GetPlayer().PassCode = _answer;
+
 
                 yield return CoroutineReturnManager.GetWaitForSeconds(0.3f); // 입력 사운드랑 겹쳐서 완성을 1초 딜레이 
                 OnMorseTransmitEnd?.Invoke();

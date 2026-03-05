@@ -9,29 +9,9 @@ public enum GameMode
     Stop
 }
 
-public class GameManager : MonoBehaviour, IJsonGenericTarget
+public class GameManager : Singleton<GameManager>, IJsonGenericTarget
 {
-    public static GameManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindFirstObjectByType<GameManager>();
 
-                if (instance == null)
-                {
-                    GameObject singletonObject = new GameObject("GameManager");
-                    instance = singletonObject.AddComponent<GameManager>();
-                }
-            }
-
-            return instance;
-        }
-    }
-
-
-    static GameManager instance;
 
     Queue<IEnumerator> queueStartCreate = new Queue<IEnumerator>();
 
@@ -136,15 +116,7 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
         //     Display.displays[i].Activate();
         // }
     }
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
 
-    }
     // Update is called once per frame
     void Update()
     {
@@ -205,6 +177,8 @@ public class GameManager : MonoBehaviour, IJsonGenericTarget
         _genericData.intParams = new Dictionary<string, int>();
         _genericData.floatParams = new Dictionary<string, float>();
         _genericData.boolParams = new Dictionary<string, bool>();
+        _genericData.stringParams = new Dictionary<string, string>();
+
 
         _genericData.floatParams["resetTime"] = _resetTime;
         return _genericData;

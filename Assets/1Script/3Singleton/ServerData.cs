@@ -27,7 +27,7 @@ public class ServerData : MonoBehaviour
 
     int deviceNum = 0;
     public int DeviceNum { get { return deviceNum; } set { deviceNum = value; } }
-    string code = "18A";
+    string code = "D1";
     public string Code { get { return code; } set { code = value; } }
     public event Action onCoroutineEnd;
     public Coroutine severCoroutine;
@@ -137,13 +137,14 @@ public class ServerData : MonoBehaviour
 
     void OnDisable()
     {
-        string urlEndApp = $"http://211.110.44.104:8500/api/logApp.cfm?status=end&code={code}&device={deviceNum}&";
+        ;
+        //string urlEndApp = $"http://211.110.44.104:8500/api/logApp.cfm?status=end&code={code}&device={deviceNum}&";
 
-        var www = UnityWebRequest.Get(urlEndApp);
+        // var www = UnityWebRequest.Get(urlEndApp);
 
-        www.downloadHandler = new DownloadHandlerBuffer();
+        // www.downloadHandler = new DownloadHandlerBuffer();
 
-        www.SendWebRequest();
+        // www.SendWebRequest();
     }
 
     public void ResetCoroutine()
@@ -182,10 +183,16 @@ public class ServerData : MonoBehaviour
 
         www.downloadHandler = new DownloadHandlerBuffer();
 
-        Debug.Log("서버 요청 시작 시간" + TimeSpan.FromSeconds(Time.time).ToString(@"hh\:mm\:ss"));
+        float requestStartTime = Time.time;
+
+        //Debug.Log("서버 요청 시작 시간" + TimeSpan.FromSeconds(Time.time).ToString(@"hh\:mm\:ss"));
 
         yield return www.SendWebRequest();
-        Debug.Log("서버 요청 완료 시간" + TimeSpan.FromSeconds(Time.time).ToString(@"hh\:mm\:ss"));
+        if (Time.time - requestStartTime > 2f)
+        {
+            Debug.LogWarning($"{_url}   / 서버 요청 지연 시간: " + (Time.time - requestStartTime) + "초");
+        }
+        //Debug.Log("서버 요청 완료 시간" + TimeSpan.FromSeconds(Time.time).ToString(@"hh\:mm\:ss"));
         string jsonText = www.downloadHandler.text;
 
         //Debug.LogWarning(jsonText);

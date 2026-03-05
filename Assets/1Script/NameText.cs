@@ -9,7 +9,6 @@ public class NameText : MonoBehaviour
 
     Text _text;
 
-    Direction _currentDirection;
 
 
     string currentText = "";
@@ -26,7 +25,6 @@ public class NameText : MonoBehaviour
 
     void OnEnable()
     {
-        UserDataManager.Instance.CurrentDirection = _currentDirection;
 
         if (UserDataManager.Instance.GetPlayer() != null)
         {

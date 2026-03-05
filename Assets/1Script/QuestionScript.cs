@@ -82,7 +82,7 @@ public class QuestionScript : MonoBehaviour
     public IEnumerator NextQuestionCoroutine()
     {
         //마지막 질문 넘어서 다음장으로
-        if (QuestionManager.Instance.CurrentIndex >= QuestionManager.Instance.QuestionInfos.Count)
+        if (QuestionManager.Instance.CurrentIndex >= QuestionManager.Instance.QuestionInfos.Count - 1)
         {
             yield return delayWait;
             endTrigger?.TriggerOn();
@@ -112,7 +112,6 @@ public class QuestionScript : MonoBehaviour
 
         yield return delayWait;
         ResetContainer?.SetActive(true);
-
         QuestionText.SetText(QuestionManager.Instance.QuestionInfos[QuestionManager.Instance.CurrentIndex].Question);
         FadeManager.Instance.TargetFade(_resetContainerCanvasGroup, 1f, FadeManager.Instance.FadeDuration);
 

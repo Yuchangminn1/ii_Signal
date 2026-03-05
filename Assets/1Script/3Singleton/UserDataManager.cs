@@ -35,7 +35,8 @@ public class Player
         _direction = direction;
         _colorBallType = (ColorBallType)Enum.Parse(typeof(ColorBallType), colorCode);
         _pieceCount = pieceCount;
-        SetAnswers();
+        partnerPassCode = "";
+        //SetAnswers();
         Debug.Log($"{_lastName}의 색상 타입이{colorCode} /  {_colorBallType}로 설정되었습니다. {_pieceCount}개의 피스를 가지고 있습니다.");
 
     }
@@ -58,11 +59,13 @@ public class Player
 
     int _addPiece = 0;
 
-    int[] _answers;
+    //int[] _answers;
 
 
 
     string passCode;
+    string partnerPassCode;
+
 
     Direction _direction;
 
@@ -73,17 +76,17 @@ public class Player
         set { _colorBallType = value; }
     }
 
-    public void SetAnswers()
-    {
-        Debug.Log("질문 수에 맞춰 답변 배열 초기화: " + QuestionManager.Instance.QuestionInfos.Count);
-        _answers = new int[QuestionManager.Instance.QuestionInfos.Count];
-    }
+    // public void SetAnswers()
+    // {
+    //     Debug.Log("질문 수에 맞춰 답변 배열 초기화: " + QuestionManager.Instance.QuestionInfos.Count);
+    //     _answers = new int[QuestionManager.Instance.QuestionInfos.Count];
+    // }
 
-    public int[] Answers
-    {
-        get { return _answers; }
-        set { _answers = value; }
-    }
+    // public int[] Answers
+    // {
+    //     get { return _answers; }
+    //     set { _answers = value; }
+    // }
     public int AddPiece
     {
         get { return _addPiece; }
@@ -101,8 +104,15 @@ public class Player
         get { return passCode; }
         set { passCode = value; }
     }
+    public string PartnerPassCode
+    {
+        get { return partnerPassCode; }
+        set { partnerPassCode = value; }
+    }
+    public Queue<string> AnswerData = new Queue<string>();
 
-    public Queue<string> QuestionAnswerData = new Queue<string>();
+    public Queue<string> PartnerAnswerData = new Queue<string>();
+
 
     public string FirstName
     {
@@ -158,7 +168,7 @@ public class Player
 
 }
 
-public class UserDataManager : MonoBehaviour
+public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 {
 
     private static UserDataManager instance;
@@ -173,20 +183,32 @@ public class UserDataManager : MonoBehaviour
         }
     }
 
+    bool _isUsingRoom = false;
+
+    public bool IsUsingRoom
+    {
+        get { return _isUsingRoom; }
+    }
+
+
     private Dictionary<string, string> userDataCache = null;
     Player[] player = new Player[2];
 
+    Coroutine userInitializeCoroutine = null;
 
 
     private Action onUserUIDSet;
 
     public Direction CurrentDirection = Direction.Left;
 
+    bool _isLeftplayer = false;
+
     const int contentNum = 4;
 
     public int ContentNum { get { return contentNum; } }
 
     public List<int[]> GoalIndexint = new List<int[]>();
+    JsonGenericUpData _genericData = new JsonGenericUpData();
 
 
     public int[] stamp { get; private set; } = new int[contentNum];
@@ -232,7 +254,18 @@ public class UserDataManager : MonoBehaviour
         Debug.Log($"RequestUserDataUpdate: question={_question}, value={_value}, direction={direction}, contentCode={contentCode}");
         yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/updateValue.cfm?idx_user={userDataCache["IDX_USER"]}&q_no={_question}&side={side}&code={contentCode}&value={_value}", Answer);
     }
+    public IEnumerator IsUserTagRequest()
+    {
+        yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/checkRoomState.cfm?code={ServerData.Instance.Code}", RoomUsingTest);
+    }
 
+    public IEnumerator RequestUserTagAll()
+    {
+        yield return StartCoroutine(IsUserTagRequest());
+        yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
+        if (_isUsingRoom)
+            yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/getCurrentRoomUser.cfm?code={ServerData.Instance.Code}", ParseCurrentSessionData);
+    }
 
 
     public IEnumerator RequestInitializeUserData(string userUID)
@@ -261,15 +294,132 @@ public class UserDataManager : MonoBehaviour
         Debug.Log("Server : " + _an);
     }
 
-    public bool IsUser()
+    public void RoomUsingTest(string message)
     {
-        if (userDataCache != null && userDataCache.Count > 0)
+        string[] lines = message.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        string trimmed = null;
+
+        foreach (string rawLine in lines)
         {
-            return true;
+            string line = rawLine.Trim();
+            if (string.IsNullOrEmpty(line))
+            {
+                continue;
+            }
+
+            if (line.StartsWith("<!--") && line.EndsWith("-->"))
+            {
+                continue;
+            }
+
+            trimmed = line;
+            break;
         }
-        return false;
+        //Debug.Log("RoomUsingTest / Server : " + trimmed);
+        if (trimmed == "EMPTY")
+        {
+            //Debug.Log("현재 세션 사용자 없음 (EMPTY)");
+        }
+        else
+        {
+            _isUsingRoom = true;
+            Debug.Log("현재 세션 사용자 있음 (HAS_USER)");
+
+        }
+
     }
 
+    // public bool IsUser()
+    // {
+    //     if (userDataCache != null && userDataCache.Count > 0)
+    //     {
+    //         return true;
+    //     }
+    //     return false;
+    // }
+    // public void TagCheck()
+    // {
+    //     if (userDataCache != null)
+    //     {
+    //         return;
+    //     }
+    // }
+    public void ParseCurrentSessionData(string responseText)
+    {
+        if (userDataCache != null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(responseText))
+        {
+            Debug.LogError("현재 세션 응답이 비어 있습니다.");
+            return;
+        }
+
+        string[] lines = responseText.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+        string trimmed = null;
+
+        foreach (string rawLine in lines)
+        {
+            string line = rawLine.Trim();
+            if (string.IsNullOrEmpty(line))
+            {
+                continue;
+            }
+
+            if (line.StartsWith("<!--") && line.EndsWith("-->"))
+            {
+                continue;
+            }
+
+            trimmed = line;
+            break;
+        }
+
+        if (string.IsNullOrEmpty(trimmed))
+        {
+            Debug.LogError("현재 세션 응답에서 유효한 데이터 라인을 찾지 못했습니다.");
+            return;
+        }
+
+        if (trimmed.Equals("EMPTY", StringComparison.OrdinalIgnoreCase))
+        {
+            // isCurrentSessionEmpty = true;
+            // userDataCache = new Dictionary<string, string>
+            // {
+            //     { "STATE", "EMPTY" }
+            // };
+            Debug.Log("현재 세션 사용자 없음 (EMPTY)");
+            return;
+        }
+
+        string[] parts = trimmed.Split(',');
+        if (parts.Length < 3)
+        {
+            Debug.LogError("현재 세션 응답 형식 오류: " + trimmed);
+            return;
+        }
+
+        string idxContentText = parts[2].Trim();
+        if (!int.TryParse(idxContentText, out int idxContent))
+        {
+            Debug.LogError("현재 세션 IDX_CONTENT 파싱 오류: " + idxContentText);
+            return;
+        }
+
+        userDataCache = new Dictionary<string, string>
+        {
+            { "UID", parts[0].Trim() },
+            { "CODE", parts[1].Trim() },
+            { "IDX_CONTENT", idxContent.ToString() },
+            { "STATE", "HAS_USER" }
+        };
+
+        userInitializeCoroutine = StartCoroutine(RequestInitializeUserDataTest(userDataCache["UID"]));
+
+        Debug.Log($"현재 세션 캐시 완료: uid={userDataCache["UID"]}, code={userDataCache["CODE"]}, idx_content={userDataCache["IDX_CONTENT"]}");
+    }
     public void ParseJsonData(string jsonText)
     {
         Debug.Log("ParseJsonData : " + jsonText);
@@ -350,6 +500,8 @@ public class UserDataManager : MonoBehaviour
     {
         player[0] = null;
         player[1] = null;
+        _isUsingRoom = false;
+        userDataCache = null;
     }
     public void TestKey()
     {
@@ -413,5 +565,28 @@ public class UserDataManager : MonoBehaviour
         userDataCache = null;
     }
 
+    public void Initialize(JsonGenericUpData data)
+    {
+        _genericData = data;
+        data.boolParams.TryGetValue("isLeftPlayer", out _isLeftplayer);
+        if (_isLeftplayer)
+        {
+            CurrentDirection = Direction.Left;
+        }
+        else
+        {
+            CurrentDirection = Direction.Right;
+        }
+    }
+    public JsonGenericUpData Data()
+    {
+        _genericData.intParams = new Dictionary<string, int>();
+        _genericData.floatParams = new Dictionary<string, float>();
+        _genericData.boolParams = new Dictionary<string, bool>();
+        _genericData.stringParams = new Dictionary<string, string>();
 
+
+        _genericData.boolParams["isLeftPlayer"] = _isLeftplayer;
+        return _genericData;
+    }
 }

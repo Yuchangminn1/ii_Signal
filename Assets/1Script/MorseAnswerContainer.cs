@@ -92,7 +92,7 @@ public class MorseAnswerContainer : MonoBehaviour
             }
             startPos += Vector3.right * gapX;
             morseImages[i].SetLocalPosition(startPos);
-            Debug.Log($"morseImages[{i}] pos : " + startPos);
+            //Debug.Log($"morseImages[{i}] pos : " + startPos);
         }
 
 

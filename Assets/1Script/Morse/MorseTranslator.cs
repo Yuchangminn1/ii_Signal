@@ -25,12 +25,7 @@ public class MorseTranslatorData
 public static class MorseTranslator
 {
 
-    // public const float DefaultDotTime = 0.5f;
 
-    // public const float DefaultDashTime = 1.5f;
-    // public const float MaxDotTime = 1.0f;
-
-    // public const float MaxDashTime = 2.0f;
 
     public const float DefaultDotTime = 0.1f;
 

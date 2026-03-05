@@ -35,10 +35,10 @@ public class MorseAnswerShow : MonoBehaviour
 
     public IEnumerator MoveOrderCoroutine()
     {
-        Queue<string> temp = UserDataManager.Instance.GetPlayer().QuestionAnswerData;
+        Queue<string> temp = UserDataManager.Instance.GetPlayer().PartnerAnswerData;
         temp.Dequeue(); //첫번째는 테스트코드
 
-        while (temp.Count > 1) //마지막은 암호코드라 무시 
+        while (temp.Count > 0) //마지막은 암호코드라 무시 
         {
             foreach (MorseAnswerContainer morseAnswerContainer in morseAnswerContainers)
             {
@@ -67,7 +67,7 @@ public class MorseAnswerShow : MonoBehaviour
                 {
                     break;
                 }
-                if (i == morseAnswerContainers.Length - 1)
+                if (i == morseAnswerContainers.Length)
                 {
                     isEnd = true;
                 }

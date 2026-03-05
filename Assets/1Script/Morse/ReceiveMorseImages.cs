@@ -24,14 +24,14 @@ public class ReceiveMorseImages : MorseImage
 
     public IEnumerator SpawnSoundCoroutine()
     {
-        if (IsDebug)
-        {
-            Debug.Log($"{name} /  {_rectTransform.position.x}");
-        }
+        // if (IsDebug)
+        // {
+        //     Debug.Log($"{name} /  {_rectTransform.position.x}");
+        // }
         while (_rectTransform.position.x > SoundPosX)
         {
-            if (IsDebug)
-                Debug.Log($"{name} /  {_rectTransform.position.x}");
+            // if (IsDebug)
+            //     Debug.Log($"{name} /  {_rectTransform.position.x}");
 
             yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
         }

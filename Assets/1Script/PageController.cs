@@ -49,6 +49,8 @@ public class PageController : Singleton<PageController>
 
     public void RequestResetOpenPage(int pageNum)
     {
+        if (pageNum == 0)
+            NetworkManager.Instance.SendData($"Reset");
         if (pageResetCoroutine == null)
         {
             pageResetCoroutine = StartCoroutine(RequestResetOpenPageCoroutine(pageNum));

@@ -92,7 +92,7 @@ public class JsonManager : MonoBehaviour
 
         // _rawImageLoader.Load();
 
-        // _genericLoader.Load();
+        _genericLoader.Load();
 
         _questionLoader.Load();
         _morsePass.Load();
@@ -124,11 +124,11 @@ public class JsonManager : MonoBehaviour
         //     //Debug.Log("Register RawImage: " + t.gameObject.name);
         //     _rawImageLoader.Register(t.gameObject.name, t);
         // }
-        // var tempGenericTargets = FindObjectsOfType<MonoBehaviour>().OfType<IJsonGenericTarget>();
-        // foreach (IJsonGenericTarget t in tempGenericTargets)
-        // {
-        //     _genericLoader.Register(((Component)t).gameObject.name, t);
-        // }
+        var tempGenericTargets = FindObjectsOfType<MonoBehaviour>().OfType<IJsonGenericTarget>();
+        foreach (IJsonGenericTarget t in tempGenericTargets)
+        {
+            _genericLoader.Register(((Component)t).gameObject.name, t);
+        }
         var tempQuestionTargets = FindObjectsOfType<MonoBehaviour>().OfType<IQuestionTarget>();
         foreach (IQuestionTarget t in tempQuestionTargets)
         {

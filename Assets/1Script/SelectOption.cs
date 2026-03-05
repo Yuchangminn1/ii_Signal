@@ -105,14 +105,14 @@ public class SelectOption : MonoBehaviour
 
         _rawImagesRects[0].localPosition = startPos;
         _rawImagesRects[_rawImagesRects.Length - 1].localPosition = startPos * -1f;
-        Debug.Log($"{name} /  totalX : " + totalX + " start : " + startPos.x + " end : " + startPos * -1f);
+        //        Debug.Log($"{name} /  totalX : " + totalX + " start : " + startPos.x + " end : " + startPos * -1f);
 
         for (int i = 1; i < _rawImagesRects.Length - 1; i++)
         {
             float gapX = (float)_dotDashArray[i - 1];
             startPos += Vector3.right * gapX;
             _rawImagesRects[i].localPosition = startPos;
-            Debug.Log($"_rawImagesRects[{i}] pos : " + startPos);
+            // Debug.Log($"_rawImagesRects[{i}] pos : " + startPos);
         }
 
     }

@@ -2,7 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+enum InputSymbolGapDuration2
+{
+    Dot_Dot = 125,
+    Dot_Dash = 223,
+    Dash_Dash = 257
+}
 public class MorseSetup : MonoBehaviour
 {
     MorseColoringImage[] _morseColoringImage;
@@ -41,7 +46,7 @@ public class MorseSetup : MonoBehaviour
     {
         arduino_MorseKey.IsAccuracyRateCheck = true;
         arduino_MorseKey.OnAccuracyCheckAction += AccuracyCheck;
-        _morseData = UserDataManager.Instance.GetPlayer().PassCode;
+        _morseData = UserDataManager.Instance.GetPlayer().PartnerPassCode;
         if (_morseData == "")
             return;
 

@@ -8,13 +8,17 @@ public class EnterCheck : MonoBehaviour
 
     public SequenceScript NextPageTrigger;
 
+    public SequenceScript TagFirst;
+
+
     Coroutine _checkCoroutine = null;
 
-    WaitForSeconds _checkWait = new WaitForSeconds(1f);
 
     PlayerPageController _pageController;
 
     bool isAllChecked = false;
+
+    bool _isUsing = false;
 
 
     void OnEnable()
@@ -39,10 +43,23 @@ public class EnterCheck : MonoBehaviour
 
     IEnumerator CheckCoroutine()
     {
+        while (GameManager.Instance.IsStarted == false)
+        {
+            yield return CoroutineReturnManager.GetWaitForSeconds(1f);
+        }
+
         while (isAllChecked == false)
         {
-            yield return _checkWait;
-            //Debug.Log($"플레이어 데이터 수 {PlayerDatas.Instance.GetCurrentPlayersNum()}");
+
+
+
+            yield return StartCoroutine(UserDataManager.Instance.RequestUserTagAll());
+
+            if (UserDataManager.Instance.IsUsingRoom)
+            {
+                TagFirst.TriggerFroceOn();
+            }
+
             if (UserDataManager.Instance.GetPlayer() != null)
             {
                 isAllChecked = true;
@@ -56,9 +73,51 @@ public class EnterCheck : MonoBehaviour
                 }
             }
 
+
+            yield return CoroutineReturnManager.GetWaitForSeconds(1f);
+
+
+
         }
         NextPageTrigger?.TriggerFroceOn();
 
         _checkCoroutine = null;
     }
+
+    // IEnumerator CheckCoroutine()
+    // {
+    //     while (isAllChecked == false)
+    //     {
+    //         yield return CoroutineReturnManager.GetWaitForSeconds(1f);
+
+    //         while (GameManager.Instance.IsStarted == false)
+    //         {
+    //             yield return CoroutineReturnManager.GetWaitForSeconds(1f);
+    //         }
+
+    //         yield return StartCoroutine(UserDataManager.Instance.RequestUserRoonIn());
+    //         if (UserDataManager.Instance.GetCurrentPlayersNum() == 2)
+    //         {
+    //             isAllChecked = true;
+
+    //         }
+    //         else
+    //         {
+    //             if (_pageController.CurrentPage != 0)
+    //             {
+    //                 _pageController.CurrentPage = 0;
+    //             }
+    //         }
+
+    //     }
+    //     if (NextPageTriggers != null)
+    //     {
+    //         for (int i = 0; i < NextPageTriggers.Length; i++)
+    //         {
+    //             NextPageTriggers[i].TriggerOn();
+    //         }
+    //     }
+
+    //     _checkCoroutine = null;
+    // }
 }

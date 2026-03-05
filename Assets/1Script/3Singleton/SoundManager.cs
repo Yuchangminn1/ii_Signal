@@ -22,41 +22,16 @@ public enum EffectSoundNum
 
 
 }
-public class SoundManager : MonoBehaviour
+public class SoundManager : Singleton<SoundManager>
 {
 
-    public static SoundManager Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindFirstObjectByType<SoundManager>();
 
-                if (instance == null)
-                {
-                    GameObject singletonObject = new GameObject("SoundManager");
-                    instance = singletonObject.AddComponent<SoundManager>();
-                }
-            }
-
-            return instance;
-        }
-    }
-    static SoundManager instance;
 
     AudioSource[] audioSources;
 
     float _soundVolume = 1f;
 
-    void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-        }
 
-    }
 
     void Start()
     {
@@ -81,7 +56,7 @@ public class SoundManager : MonoBehaviour
         AudioSource tempAudioSource = audioSources[(int)(EffectSoundNum.BGM)];
         if (tempAudioSource == null) return;
         tempAudioSource.Play();
-        tempAudioSource.volume = 0.8f;
+        tempAudioSource.volume = 0.3f;
     }
 
     public void PlayingLoopSound()

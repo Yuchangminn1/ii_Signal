@@ -31,7 +31,7 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
     QuestionInfo morsePass = new QuestionInfo();
 
 
-    int _currentIndex = 1;
+    int _currentIndex = 0;
 
     public int CurrentIndex
     {
@@ -86,6 +86,7 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
         {
             Debug.Log($"{i} : {items[i].Question}");
         }
+        questionInfos = new List<QuestionInfo>(items.Count);
         questionInfos = items;
 
         Debug.Log("로드된 질문 수: " + items.Count);
