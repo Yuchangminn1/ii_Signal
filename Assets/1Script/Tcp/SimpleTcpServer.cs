@@ -133,6 +133,8 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
             else
             {
                 Debug.Log("TCP 리셋");
+                NetworkManager.Instance.SendData($"Reset");
+
                 UserDataManager.Instance.ResetUserData();
 
                 NetworkManager.Instance.ResetRequested = true;

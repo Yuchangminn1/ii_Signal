@@ -125,8 +125,8 @@ public class PopupManager : Singleton<PopupManager>
 
         NetworkManager.Instance.SendData($"Reset");
 
-
-        NetworkManager.Instance.ResetRequested = true;
+        if (NetworkManager.Instance.IsServer)
+            NetworkManager.Instance.ResetRequested = true;
 
 
 

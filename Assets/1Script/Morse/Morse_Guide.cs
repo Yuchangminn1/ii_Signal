@@ -28,9 +28,27 @@ public class Morse_Guide : MonoBehaviour
 
     void OnEnable()
     {
+        if (GameManager.Instance.IsStarted == false)
+            return;
         _morseIndexCheckCoroutine = null;
         if (arduino_MorseKey != null)
             arduino_MorseKey.StopMorseCheck();
+
+        StartCoroutine(BackUp());
+
+    }
+
+    IEnumerator BackUp()
+    {
+        if (NetworkManager.Instance.IsServer)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
+                NetworkManager.Instance.SendData("Go");
+            }
+        }
+
     }
 
     public void CheckStart()
