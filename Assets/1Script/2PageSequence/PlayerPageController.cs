@@ -121,7 +121,6 @@ public class PlayerPageController : MonoBehaviour
         if (value == 0)
         {
             _onRestRequest?.Invoke();
-            UserDataManager.Instance.Reset();
 
         }
         if (OnPageRequest != null)

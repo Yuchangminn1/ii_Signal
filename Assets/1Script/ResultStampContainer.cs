@@ -41,15 +41,19 @@ public class ResultStampContainer : MonoBehaviour
 
     public IEnumerator ShowStampCoroutine()
     {
-        yield return CoroutineReturnManager.GetWaitForSeconds(1f); //페이지 전환 대기 타임
         int stampCount = UserDataManager.Instance.GetPlayer().AddPiece;
-        Debug.Log($"스탬프 개수: {stampCount}");
+
+        yield return CoroutineReturnManager.GetWaitForSeconds(1f); //페이지 전환 대기 타임
+        Debug.Log($"ShowStampCoroutine 스탬프 개수: {stampCount}");
         for (int i = 0; i < stampCount; i++)
         {
             answerStamps[i].SetCorrectStamp();
             yield return CoroutineReturnManager.GetWaitForSeconds(0.8f);
         }
         sequenceScript?.TriggerFroceOn();
+
+        StartCoroutine(UserDataManager.Instance.RequestPieceDataUpdate());
+
         showStampCoroutine = null;
     }
 }

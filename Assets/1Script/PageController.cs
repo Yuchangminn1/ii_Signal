@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PageController : Singleton<PageController>
@@ -11,9 +9,7 @@ public class PageController : Singleton<PageController>
 
     Coroutine pageResetCoroutine = null;
 
-    WaitForSeconds _requestResetCoroutine = CoroutineReturnManager.GetWaitForSeconds(0.5f);
 
-    WaitForSeconds _setupDelay = CoroutineReturnManager.GetWaitForSeconds(3f);
     override protected void Awake()
     {
         base.Awake();
@@ -21,6 +17,7 @@ public class PageController : Singleton<PageController>
     void Update()
     {
         //OpenPage - > CurrentPage프로퍼티 호출로 변경
+
 
 
         if (Input.inputString.Length > 0)
@@ -47,10 +44,43 @@ public class PageController : Singleton<PageController>
 
     }
 
+
+    IEnumerator ResetCheckCoroutine()
+    {
+        while (true)
+        {
+            if (NetworkManager.Instance.ResetRequested)
+            {
+
+                if (IsIdle() == false)
+                {
+                    UserDataManager.Instance.ResetUserData();
+
+                    yield return CoroutineReturnManager.GetWaitForSeconds(2f);
+
+                    pageResetCoroutine = StartCoroutine(RequestResetOpenPageCoroutine(0));
+                }
+                NetworkManager.Instance.ResetRequested = false;
+            }
+            yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
+        }
+    }
+
     public void RequestResetOpenPage(int pageNum)
     {
         if (pageNum == 0)
-            NetworkManager.Instance.SendData($"Reset");
+        {
+            if (IsIdle())
+            {
+                return;
+            }
+            NetworkManager.Instance.IsTutorialRead = false;
+
+        }
+
+
+
+
         if (pageResetCoroutine == null)
         {
             pageResetCoroutine = StartCoroutine(RequestResetOpenPageCoroutine(pageNum));
@@ -60,18 +90,21 @@ public class PageController : Singleton<PageController>
 
     IEnumerator RequestResetOpenPageCoroutine(int pageNum)
     {
+        Debug.Log("RequestResetOpenPageCoroutine Start: " + pageNum);
 
         foreach (var playerController in playerControllers)
         {
             playerController.OpenShow(pageNum);
         }
-        yield return _requestResetCoroutine;
+        yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
         pageResetCoroutine = null;
 
     }
     void Start()
     {
         playerControllers = GetComponentsInChildren<PlayerPageController>();
+
+        StartCoroutine(ResetCheckCoroutine());
         GameManager.Instance?.AddProgramStart(StartPrograms());
     }
 

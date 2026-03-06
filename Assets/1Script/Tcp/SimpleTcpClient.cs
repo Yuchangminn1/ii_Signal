@@ -25,64 +25,10 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SendMessageToTcpServer("준비완료");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            SendMessageToTcpServer("0번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SendMessageToTcpServer("1번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SendMessageToTcpServer("2번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            SendMessageToTcpServer("3번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            SendMessageToTcpServer("4번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            SendMessageToTcpServer("5번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            SendMessageToTcpServer("6번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            SendMessageToTcpServer("7번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            SendMessageToTcpServer("8번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            SendMessageToTcpServer("9번");
-        }
+
     }
 
-    public void Space()
-    {
-        SendMessageToTcpServer("준비완료");
-    }
-    public void input1()
-    {
-        SendMessageToTcpServer("1번");
-    }
-    public void input2()
-    {
-        SendMessageToTcpServer("2번");
-    }
+
     public void ConnectToTcpServer()
     {
         try
@@ -178,8 +124,23 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     public void ReadData(string data)
     {
         bool isMorseData = false;
+        if (data == "Go")
+        {
+            NetworkManager.Instance.IsTutorialRead = true;
+            return;
+        }
+        else if (data.Length == 2 && data[0] == 'S')
+        {
+            Debug.Log("Stamp Count: " + data);
 
-        if (data.Length == 4)
+            UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece = int.Parse(data.Substring(1, 1));
+            UserDataManager.Instance.GetPlayer(Direction.Right).AddPiece = UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece;
+            Debug.Log("AddPiece Set: " + UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece);
+            return;
+
+        }
+
+        else if (data.Length == 4)
         {
             Debug.Log("data.Length == 4 Received Data: " + data);
             isMorseData = true;
@@ -192,6 +153,26 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                     break;
                 }
             }
+        }
+
+        else if (data == "Reset")
+        {
+            Debug.Log("data.Length == Reset Received Data: " + data);
+            NetworkManager.Instance.StopEndResetRequest();
+
+            if (PageController.Instance.IsIdle())
+            {
+                Debug.Log("TCP 리셋 - 이미 Idle 상태");
+                return;
+            }
+            else
+            {
+                Debug.Log("TCP 리셋");
+
+                NetworkManager.Instance.ResetRequested = true;
+            }
+            return;
+
         }
         else if (data.Length == 5)
         {
@@ -217,22 +198,11 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             }
 
         }
-        else if (data == "Reset")
+        else if (data == "Go")
         {
-            Debug.Log("data.Length == Reset Received Data: " + data);
 
-            if (PageController.Instance.IsIdle())
-            {
-                Debug.Log("TCP 리셋 - 이미 Idle 상태");
-                return;
-            }
-            else
-            {
-                Debug.Log("TCP 리셋");
-                PageController.Instance.RequestResetOpenPage(0);
-            }
+            NetworkManager.Instance.IsTutorialRead = true;
             return;
-
         }
 
         if (isMorseData)

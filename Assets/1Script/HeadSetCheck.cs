@@ -13,6 +13,15 @@ public class HeadSetCheck : MonoBehaviour
 
     public void CheckStart()
     {
+        if (gameObject.activeInHierarchy == false)
+            return;
         sequenceScript?.TriggerOn();
+
+    }
+
+    public void SendGo()
+    {
+        if (NetworkManager.Instance.IsServer == false)
+            NetworkManager.Instance.SendData("Go");
     }
 }

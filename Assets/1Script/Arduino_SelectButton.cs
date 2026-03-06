@@ -15,6 +15,9 @@ public class Arduino_SelectButton : Arduino
 
 
 
+
+
+
     public Action _onButtonPressed;
 
 
@@ -30,6 +33,7 @@ public class Arduino_SelectButton : Arduino
         if (received == _onMessage)
         {
             _onButtonPressed?.Invoke();
+            SoundManager.Instance.PlayEffectSound(EffectSoundNum.ArduinoButtonSound);
             Debug.Log($"버튼 눌림 : {ButtonDirection}");
         }
 

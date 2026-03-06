@@ -98,6 +98,9 @@ public class QuestionScript : MonoBehaviour
 
         }
 
+
+
+
         QuestionManager.Instance.CurrentIndex++;
 
         FadeManager.Instance.SetAlphaZero(QuestionText.GetTextComponent());
@@ -112,6 +115,7 @@ public class QuestionScript : MonoBehaviour
 
         yield return delayWait;
         ResetContainer?.SetActive(true);
+
         QuestionText.SetText(QuestionManager.Instance.QuestionInfos[QuestionManager.Instance.CurrentIndex].Question);
         FadeManager.Instance.TargetFade(_resetContainerCanvasGroup, 1f, FadeManager.Instance.FadeDuration);
 

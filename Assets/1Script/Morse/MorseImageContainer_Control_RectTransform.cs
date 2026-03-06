@@ -19,6 +19,19 @@ public class MorseImageContainer_Control_RectTransform : MorseImageContainer
 
 
 
+    override public void Reset()
+    {
+        base.Reset();
+
+        for (int i = 0; i < _dotDashArray.Length; i++)
+        {
+            _dotDashArray[i] = InputSymbolGapDuration.Dot_Dot;
+        }
+        currentMorseInput = "";
+    }
+
+
+
 
 
     protected override void Start()

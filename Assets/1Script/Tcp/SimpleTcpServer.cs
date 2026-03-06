@@ -15,6 +15,8 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
 
 
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,50 +29,6 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SendMessageToClient("준비완료");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            SendMessageToClient("0번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SendMessageToClient("1번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SendMessageToClient("2번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            SendMessageToClient("3번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            SendMessageToClient("4번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            SendMessageToClient("5번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-        {
-            SendMessageToClient("6번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            SendMessageToClient("7번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-        {
-            SendMessageToClient("8번");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-        {
-            SendMessageToClient("9번");
-        }
     }
 
     private void ListenForIncommingRequests()
@@ -153,7 +111,37 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
     {
         bool isMorseData = false;
 
-        if (data.Length == 4)
+        if (NetworkManager.Instance.EndWait && data == "End")
+        {
+            NetworkManager.Instance.EndNReset();
+            return;
+
+        }
+        else if (data == "Go")
+        {
+            NetworkManager.Instance.IsTutorialRead = true;
+
+            return;
+        }
+
+        else if (data == "Reset")
+        {
+            if (PageController.Instance.IsIdle())
+            {
+                Debug.Log("TCP 리셋 - 이미 Idle 상태");
+            }
+            else
+            {
+                Debug.Log("TCP 리셋");
+                UserDataManager.Instance.ResetUserData();
+
+                NetworkManager.Instance.ResetRequested = true;
+
+            }
+            return;
+
+        }
+        else if (data.Length == 4)
         {
             isMorseData = true;
 
@@ -193,29 +181,12 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
         }
         else
         {
-            Debug.Log("DataLength is not 4");
+            Debug.Log("처리 안하는 입력: " + data);
         }
 
         if (isMorseData)
             UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
-        else if (data == "Reset")
-        {
-            if (PageController.Instance.IsIdle())
-            {
-                Debug.Log("TCP 리셋 - 이미 Idle 상태");
-                return;
-            }
-            else
-            {
-                Debug.Log("TCP 리셋");
-                PageController.Instance.RequestResetOpenPage(0);
-            }
 
-        }
-        else
-        {
-            Debug.Log("처리 안하는 입력: " + data);
-        }
     }
 
 }

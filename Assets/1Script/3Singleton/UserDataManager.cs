@@ -59,7 +59,7 @@ public class Player
 
     int _addPiece = 0;
 
-    //int[] _answers;
+    int[] _answers;
 
 
 
@@ -82,11 +82,11 @@ public class Player
     //     _answers = new int[QuestionManager.Instance.QuestionInfos.Count];
     // }
 
-    // public int[] Answers
-    // {
-    //     get { return _answers; }
-    //     set { _answers = value; }
-    // }
+    public int[] Answers
+    {
+        get { return _answers; }
+        set { _answers = value; }
+    }
     public int AddPiece
     {
         get { return _addPiece; }
@@ -258,7 +258,11 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     {
         yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/checkRoomState.cfm?code={ServerData.Instance.Code}", RoomUsingTest);
     }
+    public IEnumerator ResetUserCoroutine()
+    {
+        yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/resetStart.cfm?idx_user={userDataCache["IDX_USER"]}&code={ServerData.Instance.Code}", Answer);
 
+    }
     public IEnumerator RequestUserTagAll()
     {
         yield return StartCoroutine(IsUserTagRequest());
@@ -283,15 +287,74 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     public IEnumerator RequestUserContentEnd()
     {
         if (userDataCache == null) yield break;
+        yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/exitRoom.cfm?code={ServerData.Instance.Code}&idx_user={userDataCache["IDX_USER"]}", Answer);
+
+    }
+
+    public IEnumerator RequestPieceDataUpdate()
+    {
+        if (userDataCache == null) yield break;
+        yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/updatePiece.cfm?idx_user={userDataCache["IDX_USER"]}&code={ServerData.Instance.Code}&value={player[0].AddPiece}", Answer);
+
+    }
+    public void ResetUserData()
+    {
+        if (userDataCache == null) return;
+        if (NetworkManager.Instance.IsServer)
+        {
+            StartCoroutine(ResetUserCoroutine());
+        }
+        ClearRoom();
+    }
+
+    public void ClearRoom()
+    {
+        if (userDataCache == null) return;
+        if (NetworkManager.Instance.IsServer)
+            StartCoroutine(RequestUserContentEnd());
+        Reset();
+    }
 
 
-        yield return ServerData.Instance.RequestDataCoroutine("http://211.110.44.104:8500/api/" + $"updateValue.cfm?idx_user={userDataCache["IDX_USER"]}&uid={userDataCache["UID"]}&code={ServerData.Instance.Code}&question={33}&value={1}&device={ServerData.Instance.DeviceNum}", Answer);
-
+    public void EndRequest()
+    {
+        if (userDataCache == null) return;
+        if (NetworkManager.Instance.IsServer)
+            StartCoroutine(ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/updateTime.cfm?idx_user={userDataCache["IDX_USER"]}&option=end&code={ServerData.Instance.Code}", Answer));
     }
 
     public void Answer(string _an)
     {
         Debug.Log("Server : " + _an);
+    }
+
+    public bool IsLastContent()
+    {
+        string[] contentCodes = { "A1", "B1", "C1", "D1" };
+
+        bool result = true;
+
+        foreach (var code in contentCodes)
+        {
+            if (code == ServerData.Instance.Code)
+            {
+                continue; // 현재 콘텐츠는 검사에서 제외
+            }
+            string pieceValue = FindValue("PIECE_" + code);
+            if (pieceValue == null || pieceValue == "null")
+            {
+                Debug.Log($"IsLastContent: END_{code} 값이 없습니다.");
+                result = false;
+                break;
+            }
+            else
+            {
+                Debug.Log($"IsLastContent: END_{code} 값 = {pieceValue}");
+
+            }
+
+        }
+        return result;
     }
 
     public void RoomUsingTest(string message)
@@ -519,23 +582,43 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
         foreach (var code in contentCodes)
         {
+            if (code == ServerData.Instance.Code)
+            {
+                continue; // 현재 콘텐츠는 피스 계산에서 제외
+            }
             Debug.Log($"코드 {code}의 피스 {FindValue("PIECE_" + code)}");
 
             pieceCount += int.TryParse(FindValue("PIECE_" + code), out int result) ? result : 0;
 
         }
+        Debug.Log($"SetPlayers 유저 할당");
 
         player[0] = new Player(FindValue("RESERVATION_LAST_NAME_LEFT"), Direction.Left, FindValue("COLOR_LEFT"), pieceCount);
         player[1] = new Player(FindValue("RESERVATION_LAST_NAME_RIGHT"), Direction.Right, FindValue("COLOR_RIGHT"), pieceCount);
+        player[0].AddPiece = Random.Range(1, 6);
+        player[1].AddPiece = player[0].AddPiece;
 
 
-
-        player[0].AddPiece = UnityEngine.Random.Range(1, 6);
-        player[1].AddPiece = player[0].PieceCount;
 
 
         QuestionManager.Instance.CurrentIndex = 0;
 
+    }
+
+
+    public void TCPAddPiece()
+    {
+        Debug.Log("TCPAddPiece");
+        if (NetworkManager.Instance.IsServer)
+        {
+
+            string addPieceData = "S" + player[0].AddPiece;
+            NetworkManager.Instance.SendData(addPieceData);
+        }
+        else
+        {
+            Debug.Log("클라이언트에서는 AddPiece를 설정하지 않습니다.");
+        }
     }
     public Player GetPlayer(Direction direction)
     {

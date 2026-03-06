@@ -122,7 +122,13 @@ public class PopupManager : Singleton<PopupManager>
         {
             yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
         }
-        PageController.Instance.RequestResetOpenPage(0);
+
+        NetworkManager.Instance.SendData($"Reset");
+
+
+        NetworkManager.Instance.ResetRequested = true;
+
+
 
         _popupCoroutine = null;
     }

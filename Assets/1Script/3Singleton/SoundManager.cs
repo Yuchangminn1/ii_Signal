@@ -18,7 +18,10 @@ public enum EffectSoundNum
     MorseDashSound_2,
     MorseDashLoopSound,
     SignalReceiveSound, // 마음신호 도착음
-    SignalSendSound     // 전송음
+    SignalSendSound,     // 전송음
+    ArduinoButtonSound,     // 아두이노 버튼 사운드
+
+
 
 
 }
@@ -56,14 +59,14 @@ public class SoundManager : Singleton<SoundManager>
         AudioSource tempAudioSource = audioSources[(int)(EffectSoundNum.BGM)];
         if (tempAudioSource == null) return;
         tempAudioSource.Play();
-        tempAudioSource.volume = 0.3f;
+        tempAudioSource.volume = 0.1f;
     }
 
     public void PlayingLoopSound()
     {
         if (audioSources != null && audioSources.Length > 0)
         {
-            AudioSource tempAudioSource = audioSources[(int)(EffectSoundNum.MorseDashLoopSound)];
+            AudioSource tempAudioSource = audioSources[(int)(EffectSoundNum.MorseDashSound_1)];
             if (tempAudioSource != null)
             {
                 if (tempAudioSource.isPlaying == false)
@@ -79,7 +82,7 @@ public class SoundManager : Singleton<SoundManager>
     {
         if (audioSources != null && audioSources.Length > 0)
         {
-            AudioSource tempAudioSource = audioSources[(int)(EffectSoundNum.MorseDashLoopSound)];
+            AudioSource tempAudioSource = audioSources[(int)(EffectSoundNum.MorseDashSound_1)];
             if (tempAudioSource != null)
             {
                 if (tempAudioSource.isPlaying)
@@ -118,13 +121,11 @@ public class SoundManager : Singleton<SoundManager>
             return;
         }
 
-        if (soundVolume == 1) soundVolume = _soundVolume;
-
         AudioSource tempAudioSource = audioSources[(int)effectSoundNum];
         if (tempAudioSource != null)
         {
-            tempAudioSource.volume = soundVolume;
-            tempAudioSource.Stop();
+            //tempAudioSource.Stop();
+            ;
         }
         //  Debug.Log("Stopped sound: " + effectSoundNum.ToString() + " with volume: " + soundVolume);
 

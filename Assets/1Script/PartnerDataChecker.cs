@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PartnerDataChecker : MonoBehaviour
@@ -14,18 +12,24 @@ public class PartnerDataChecker : MonoBehaviour
 
     void OnEnable()
     {
-        if (GameManager.Instance.IsStarted)
-        {
-            StartCoroutine(CheckCoroutine());
-        }
+        // if (GameManager.Instance.IsStarted)
+        // {
+        //     StartCoroutine(CheckCoroutine());
+        // }
     }
     void OnDisable()
     {
         StopCoroutine(CheckCoroutine());
     }
+
+    public void ArrivePartnerDataCheck()
+    {
+        StartCoroutine(CheckCoroutine());
+    }
     // 코루틴 0.5~ 1초 사이로 체크해서 시퀀스 스크립트 넘기는거 작성
     IEnumerator CheckCoroutine()
     {
+        yield return CoroutineReturnManager.GetWaitForSeconds(2f);
         //상대방 답변 갯수 체크
         int answerCount = 0;
         while (UserDataManager.Instance.GetPlayer().PartnerPassCode == "")

@@ -139,19 +139,19 @@ public class MorseInputTarget : MonoBehaviour
 
             if (CurrentSoundOption == SoundOptions.Sound_1)
             {
-                // if (CurrentMorseType == MorseType.Dot)
-                //     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
+                if (CurrentMorseType == MorseType.Dot)
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
                 // else
                 if (CurrentMorseType == MorseType.Dash)
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
             }
-            // else if (CurrentSoundOption == SoundOptions.Sound_2)
-            // {
-            //     if (CurrentMorseType == MorseType.Dot)
-            //         SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_2);
-            //     else if (CurrentMorseType == MorseType.Dash)
-            //         SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_2);
-            // }
+            else if (CurrentSoundOption == SoundOptions.Sound_2)
+            {
+                if (CurrentMorseType == MorseType.Dot)
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_2);
+                else if (CurrentMorseType == MorseType.Dash)
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_2);
+            }
         }
     }
 }

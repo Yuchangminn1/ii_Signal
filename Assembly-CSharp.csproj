@@ -106,6 +106,7 @@
     <Compile Include="Assets\1Script\StampCountText.cs" />
     <Compile Include="Assets\1Script\Tcp\NetworkManager.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
+    <Compile Include="Assets\1Script\TutorialStart.cs" />
     <Compile Include="Assets\1Script\SoundObject.cs" />
     <Compile Include="Assets\1Script\MorseAnswerContainer.cs" />
     <Compile Include="Assets\1Script\Morse\Arduino_MorseKey.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Assets\1Script\1Json\JsonLoaderBase.cs" />
     <Compile Include="Assets\1Script\WaitCheck.cs" />
     <Compile Include="Assets\1Script\NameText.cs" />
+    <Compile Include="Assets\1Script\NextGuider.cs" />
     <Compile Include="Assets\1Script\QuestionScript.cs" />
     <Compile Include="Assets\1Script\PartnerDataChecker.cs" />
     <Compile Include="Assets\1Script\Morse\MorseSetup.cs" />

@@ -80,7 +80,7 @@ public class MorseImageContainer : MonoBehaviour
 
     }
 
-    public void Reset()
+    virtual public void Reset()
     {
         Debug.Log("Reset");
 
@@ -162,6 +162,9 @@ public class MorseImageContainer : MonoBehaviour
 
     public void SelectAnswer()
     {
+        if (gameObject.activeInHierarchy == false)
+            return;
+
         if (isAnswer)
         {
             string currentData = MorseTranslator.CurrentData;
@@ -178,6 +181,7 @@ public class MorseImageContainer : MonoBehaviour
             {
                 NetworkManager.Instance.SendData(currentData);
             }
+
 
             UserDataManager.Instance.GetPlayer().AnswerData.Enqueue(currentData);
             Debug.Log($"AnswerData 수  : {UserDataManager.Instance.GetPlayer().AnswerData.Count}");

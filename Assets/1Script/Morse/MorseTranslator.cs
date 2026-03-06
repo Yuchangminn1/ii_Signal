@@ -27,10 +27,10 @@ public static class MorseTranslator
 
 
 
-    public const float DefaultDotTime = 0.1f;
+    public const float DefaultDotTime = 0.2f;
 
-    public const float DefaultDashTime = 0.3f;
-    public const float MaxDotTime = 0.2f;
+    public const float DefaultDashTime = 0.5f;
+    public const float MaxDotTime = 0.3f;
 
     public const float MaxDashTime = 1.0f;
 
@@ -73,11 +73,11 @@ public static class MorseTranslator
                 Debug.LogError("MorseTranslator Translate 오류 : morseData가 0또는 1이 아님");
             }
 
-            if (difference < 0.5f)
+            if (difference < 0.05f)
             {
                 ;
             }
-            else if (difference < 1f)
+            else if (difference < 0.1f)
             {
                 accuracy -= 5f;
             }

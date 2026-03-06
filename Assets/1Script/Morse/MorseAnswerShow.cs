@@ -67,12 +67,12 @@ public class MorseAnswerShow : MonoBehaviour
                 {
                     break;
                 }
-                if (i == morseAnswerContainers.Length)
+                if (i == morseAnswerContainers.Length - 1)
                 {
                     isEnd = true;
                 }
             }
-            yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+            yield return CoroutineReturnManager.GetWaitForSeconds(0.4f);
             GameManager.Instance.GoToIdleCheck();
         }
 

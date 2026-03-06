@@ -15,10 +15,41 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
     [Header("Select Network Role")]
     JsonGenericUpData _genericData = new JsonGenericUpData();
 
+    public bool EndWait = false;
+
+    Coroutine _requestCoroutine = null;
+    public bool IsTutorialRead = false;
+
     ITCP tcpComponent;
 
+    public bool ResetRequested { get; set; } = false;
+
     bool _isServer = false;
+
+    public bool IsServer => _isServer;
+
     string ipAddress = "";
+
+    Coroutine toggleCoroutine = null;
+
+    public void ChangeIsTutorialRead()
+    {
+        if (toggleCoroutine == null)
+            toggleCoroutine = StartCoroutine(ToggleCoroutine());
+    }
+
+
+    IEnumerator ToggleCoroutine()
+    {
+        IsTutorialRead = true;
+
+        yield return new WaitForSeconds(0.5f);
+        IsTutorialRead = false;
+
+        toggleCoroutine = null;
+
+
+    }
 
 
 
@@ -72,6 +103,12 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
         return _genericData;
     }
 
+    public void SetEndWait()
+    {
+        if (IsServer)
+            EndWait = true;
+    }
+
     public void SendData(string data)
     {
         if (tcpComponent != null)
@@ -83,6 +120,46 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
             Debug.LogError("TCP 컴포넌트가 없습니다.");
         }
     }
+
+    public void EndResetRequest()
+    {
+        if (IsServer == false)
+        {
+            if (_requestCoroutine == null)
+                _requestCoroutine = StartCoroutine(EndResetRequestCoroutine());
+        }
+
+    }
+
+    public void StopEndResetRequest()
+    {
+        if (_requestCoroutine != null)
+        {
+            StopCoroutine(_requestCoroutine);
+            _requestCoroutine = null;
+        }
+    }
+
+    public void EndNReset()
+    {
+        ResetRequested = true;
+        SendData("Reset");
+        EndWait = false;
+    }
+
+
+    IEnumerator EndResetRequestCoroutine()
+    {
+        yield return CoroutineReturnManager.GetWaitForSeconds(5f);
+
+        while (true)
+        {
+            SendData("End");
+            yield return CoroutineReturnManager.GetWaitForSeconds(1f);
+        }
+
+    }
+
 
 
 }

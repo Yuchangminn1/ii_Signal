@@ -2,7 +2,7 @@
   "GameManager": {
     "intParams": {},
     "floatParams": {
-      "resetTime": 22222222222222222222220.0
+      "resetTime": 20.0
     },
     "boolParams": {},
     "stringParams": {}
