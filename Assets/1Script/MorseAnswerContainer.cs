@@ -19,6 +19,8 @@ public class MorseAnswerContainer : MonoBehaviour
     // else 85
     bool[] _dotDashArray = new bool[3];
 
+    Coroutine playSoundCoroutine = null;
+
 
     void Start()
     {
@@ -110,8 +112,36 @@ public class MorseAnswerContainer : MonoBehaviour
             moveCoroutine = null;
         }
         moveCoroutine = StartCoroutine(MoveStartCoroutine(endPos, moveSpeed));
+        if (playSoundCoroutine == null)
+            playSoundCoroutine = StartCoroutine(PlaySound());
     }
 
+    IEnumerator PlaySound()
+    {
+        foreach (MorseImage morseImage in morseImages)
+        {
+            if (morseImage.CurrentMorseType == MorseType.Dot)
+            {
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
+                yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDotTime);
+                SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
+
+                yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+
+            }
+            else if (morseImage.CurrentMorseType == MorseType.Dash)
+            {
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+                yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDashTime);
+                SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+                yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+
+            }
+        }
+        playSoundCoroutine = null;
+
+
+    }
     IEnumerator MoveStartCoroutine(Vector2 endPos, float moveSpeed)
     {
         while (_rectTransform.localPosition.x > endPos.x)

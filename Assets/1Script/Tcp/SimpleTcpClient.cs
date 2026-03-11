@@ -124,6 +124,9 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     public void ReadData(string data)
     {
         bool isMorseData = false;
+        GameManager.Instance.GoToIdleCheck();
+
+
         if (data == "Go")
         {
             NetworkManager.Instance.IsTutorialRead = true;

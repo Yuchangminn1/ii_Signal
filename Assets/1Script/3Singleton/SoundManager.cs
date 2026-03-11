@@ -124,8 +124,7 @@ public class SoundManager : Singleton<SoundManager>
         AudioSource tempAudioSource = audioSources[(int)effectSoundNum];
         if (tempAudioSource != null)
         {
-            //tempAudioSource.Stop();
-            ;
+            tempAudioSource.Stop();
         }
         //  Debug.Log("Stopped sound: " + effectSoundNum.ToString() + " with volume: " + soundVolume);
 

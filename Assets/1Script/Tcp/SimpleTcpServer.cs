@@ -111,6 +111,8 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
     {
         bool isMorseData = false;
 
+        GameManager.Instance.GoToIdleCheck();
+
         if (NetworkManager.Instance.EndWait && data == "End")
         {
             NetworkManager.Instance.EndNReset();
@@ -122,6 +124,16 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
             NetworkManager.Instance.IsTutorialRead = true;
 
             return;
+        }
+        else if (data.Length == 2 && data[0] == 'S')
+        {
+            Debug.Log("Stamp Count: " + data);
+
+            UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece = int.Parse(data.Substring(1, 1));
+            UserDataManager.Instance.GetPlayer(Direction.Right).AddPiece = UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece;
+            Debug.Log("AddPiece Set: " + UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece);
+            return;
+
         }
 
         else if (data == "Reset")

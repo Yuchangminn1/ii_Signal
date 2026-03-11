@@ -25,6 +25,8 @@ public class MorseSetup : MonoBehaviour
 
     Coroutine _coloringCheckCoroutine = null;
 
+    Coroutine _hindSoundCoroutine = null;
+
     string[] rateTextList = new string[3] { "% 일치", "% 일치1", "% 일치2" };
     string[] resultTextList = new string[2] { "합니다. 다시 입력해 주세요.", "합니다." };
 
@@ -46,6 +48,11 @@ public class MorseSetup : MonoBehaviour
     {
         arduino_MorseKey.IsAccuracyRateCheck = true;
         arduino_MorseKey.OnAccuracyCheckAction += AccuracyCheck;
+        if (_hindSoundCoroutine != null)
+        {
+            StopCoroutine(_hindSoundCoroutine);
+        }
+        _hindSoundCoroutine = StartCoroutine(PlayMorseHintSoundCorotuine());
         _morseData = UserDataManager.Instance.GetPlayer().PartnerPassCode;
         if (_morseData == "")
             return;
@@ -73,6 +80,43 @@ public class MorseSetup : MonoBehaviour
 
 
         arduino_MorseKey.StartMorseCheck();
+
+
+    }
+
+    IEnumerator PlayMorseHintSoundCorotuine()
+    {
+        if (_morseData == "")
+        {
+            Debug.Log("_morseData IS Empty");
+            yield break;
+        }
+
+        while (true)
+        {
+            for (int i = 0; i < _morseData.Length; i++)
+            {
+                if (_morseData[i] == '0')
+                {
+                    SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
+                    yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDotTime);
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
+
+
+                    yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+
+
+                }
+                else if (_morseData[i] == '1')
+                {
+                    SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+                    yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDashTime);
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+                    yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+                }
+            }
+            yield return CoroutineReturnManager.GetWaitForSeconds(3f);
+        }
 
 
     }
@@ -110,10 +154,21 @@ public class MorseSetup : MonoBehaviour
         }
         else
         {
-            ResultText.text = resultTextList[1];
+            StopCoroutine(_hindSoundCoroutine);
+            SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+            SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
 
-            ColoringMorseImage();
+            StartCoroutine(DelayToPlay());
         }
+    }
+
+    IEnumerator DelayToPlay()
+    {
+        yield return CoroutineReturnManager.GetWaitForSeconds(1.0f);
+
+        ResultText.text = resultTextList[1];
+
+        ColoringMorseImage();
     }
 
     public void ColoringMorseImage()

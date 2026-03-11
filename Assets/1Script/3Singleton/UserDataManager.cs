@@ -29,15 +29,18 @@ public enum ColorBallType
 
 public class Player
 {
+    public const int defaultValue = -1;
     public Player(string name, Direction direction, string colorCode, int pieceCount)
     {
-        _lastName = name;
+        _firstName = name;
+
         _direction = direction;
         _colorBallType = (ColorBallType)Enum.Parse(typeof(ColorBallType), colorCode);
         _pieceCount = pieceCount;
+        _addPiece = defaultValue;
         partnerPassCode = "";
         //SetAnswers();
-        Debug.Log($"{_lastName}의 색상 타입이{colorCode} /  {_colorBallType}로 설정되었습니다. {_pieceCount}개의 피스를 가지고 있습니다.");
+        Debug.Log($"{_firstName}의 색상 타입이{colorCode} /  {_colorBallType}로 설정되었습니다. {_pieceCount}개의 피스를 가지고 있습니다.");
 
     }
     string _firstName;
@@ -147,7 +150,7 @@ public class Player
         set
         {
             _score = value;
-            Debug.Log($"{_lastName}의 점수가 {_score}로 설정되었습니다.");
+            Debug.Log($"{_firstName}의 점수가 {_score}로 설정되었습니다.");
         }
     }
     public int LedTagIndex
@@ -593,10 +596,10 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         }
         Debug.Log($"SetPlayers 유저 할당");
 
-        player[0] = new Player(FindValue("RESERVATION_LAST_NAME_LEFT"), Direction.Left, FindValue("COLOR_LEFT"), pieceCount);
-        player[1] = new Player(FindValue("RESERVATION_LAST_NAME_RIGHT"), Direction.Right, FindValue("COLOR_RIGHT"), pieceCount);
-        player[0].AddPiece = Random.Range(1, 6);
-        player[1].AddPiece = player[0].AddPiece;
+        player[0] = new Player(FindValue("RESERVATION_FIRST_NAME_LEFT"), Direction.Left, FindValue("COLOR_LEFT"), pieceCount);
+        player[1] = new Player(FindValue("RESERVATION_FIRST_NAME_RIGHT"), Direction.Right, FindValue("COLOR_RIGHT"), pieceCount);
+        // player[0].AddPiece = Random.Range(1, 6);
+        // player[1].AddPiece = player[0].AddPiece;
 
 
 
@@ -609,16 +612,16 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     public void TCPAddPiece()
     {
         Debug.Log("TCPAddPiece");
-        if (NetworkManager.Instance.IsServer)
+        if (player[0].AddPiece == Player.defaultValue)
         {
 
+            player[0].AddPiece = Random.Range(1, 6);
+            player[1].AddPiece = player[0].AddPiece;
             string addPieceData = "S" + player[0].AddPiece;
             NetworkManager.Instance.SendData(addPieceData);
         }
-        else
-        {
-            Debug.Log("클라이언트에서는 AddPiece를 설정하지 않습니다.");
-        }
+
+
     }
     public Player GetPlayer(Direction direction)
     {

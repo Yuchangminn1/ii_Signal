@@ -36,15 +36,14 @@ public class ReceiveMorseImages : MorseImage
             yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
         }
 
-        if (_currentMorseType == MorseType.Dot)
-        {
-            SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_2);
-        }
-        else if (_currentMorseType == MorseType.Dash)
-        {
-            SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_2);
-
-        }
+        // if (_currentMorseType == MorseType.Dot)
+        // {
+        //     SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
+        // }
+        // else if (_currentMorseType == MorseType.Dash)
+        // {
+        //     SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+        // }
     }
     override public void Reset()
     {

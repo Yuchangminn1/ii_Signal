@@ -44,6 +44,9 @@ public class Arduino_MorseKey : MonoBehaviour
 
     Action<MorseType> onMorseInput;
 
+    Action<MorseType> onDashColoring;
+
+
     public Action<float> OnAccuracyCheckAction;
 
 
@@ -145,6 +148,8 @@ public class Arduino_MorseKey : MonoBehaviour
 
             else if (isPress && Input.GetKey(KeyCode.LeftControl) == false)
             {
+                NetworkManager.Instance.SendData($"M");
+
                 if (_inputCount > 3)
                 {
                     if ((Time.time - startTime) / MorseTranslator.InputResetTime >= 1f)

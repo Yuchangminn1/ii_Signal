@@ -77,7 +77,6 @@ public class PopupManager : Singleton<PopupManager>
     {
         if (_popupCoroutine == null)
             _popupCoroutine = StartCoroutine(PopUpCoroutine());
-
     }
     public IEnumerator PopUpCoroutine()
     {

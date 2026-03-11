@@ -40,10 +40,10 @@ public class NameText : MonoBehaviour
     public void SetText(string textData = "")
     {
         if (textData != "")
-            _text.text = textData.Replace("Name", UserDataManager.Instance.GetPlayer().LastName);
+            _text.text = textData.Replace("Name", UserDataManager.Instance.GetPlayer().FirstName);
 
         else if (_text.text == "")
-            _text.text = currentText.Replace("Name", UserDataManager.Instance.GetPlayer().LastName);
+            _text.text = currentText.Replace("Name", UserDataManager.Instance.GetPlayer().FirstName);
     }
 
 

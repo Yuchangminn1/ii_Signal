@@ -34,8 +34,9 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
 
     public void ChangeIsTutorialRead()
     {
-        if (toggleCoroutine == null)
-            toggleCoroutine = StartCoroutine(ToggleCoroutine());
+        if (toggleCoroutine != null)
+            StopCoroutine(toggleCoroutine);
+        toggleCoroutine = StartCoroutine(ToggleCoroutine());
     }
 
 

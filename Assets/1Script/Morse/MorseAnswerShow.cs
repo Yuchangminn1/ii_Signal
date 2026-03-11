@@ -45,7 +45,7 @@ public class MorseAnswerShow : MonoBehaviour
                 if (morseAnswerContainer.IsMove() == false)
 
                 {
-                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 220f);
+                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 180f);
                     yield return CoroutineReturnManager.WaitForFixedUpdate;
                     morseAnswerContainer.SetMorse(temp.Dequeue());
 

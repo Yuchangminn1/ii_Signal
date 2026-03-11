@@ -14,7 +14,7 @@ public class StampCountText : MonoBehaviour
     void OnEnable()
     {
 
-        SetUpText();
+
     }
 
     public void SetUpText()
