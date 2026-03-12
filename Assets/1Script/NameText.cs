@@ -9,6 +9,8 @@ public class NameText : MonoBehaviour
 
     Text _text;
 
+    string originText = "";
+
 
 
     string currentText = "";
@@ -25,10 +27,13 @@ public class NameText : MonoBehaviour
 
     void OnEnable()
     {
+        if (originText == "")
+            originText = currentText;
+
 
         if (UserDataManager.Instance.GetPlayer() != null)
         {
-            SetText();
+            SetText(originText);
         }
     }
 

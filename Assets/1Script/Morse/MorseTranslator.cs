@@ -32,9 +32,9 @@ public static class MorseTranslator
     public const float DefaultDashTime = 0.8f;
     public const float MaxDotTime = 0.49f;
 
-    public const float MaxDashTime = 2.0f;
+    public const float MaxDashTime = 3.0f;
 
-    public const float InputResetTime = 3f;
+    public const float InputResetTime = 3.1f;
 
     public const float OverInputTime = 5f;
 
@@ -53,6 +53,9 @@ public static class MorseTranslator
 
     public static float Accuracy(string morseData, float[] pressTimes)
     {
+
+        Debug.Log("체크 모스 호출 : " + morseData);
+        Debug.Log("체크 프레스 타임 : " + string.Join(", ", pressTimes));
         float[] outputPressTimes = new float[4];
         float accuracy = 100f;
 
@@ -69,9 +72,10 @@ public static class MorseTranslator
             }
             else
             {
-                difference = 0f;
-                Debug.LogError("MorseTranslator Translate 오류 : morseData가 0또는 1이 아님");
+                difference = 10f;
+                Debug.LogWarning("Invalid Morse Data: " + morseData[i]);
             }
+            Debug.Log($"Difference for index {i}: {difference}");
 
             if (difference < 0.5f)
             {

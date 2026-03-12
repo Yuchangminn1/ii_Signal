@@ -22,5 +22,29 @@
     "floatParams": {},
     "boolParams": { "isLeftPlayer": false },
     "stringParams": {}
+  },
+
+  "SoundManager": {
+    "intParams": {},
+    "floatParams": {
+      "baseVolume": 0.05,
+      "BGM": 0.1,
+      "SaveSound": 1.0,
+      "SoulPieceSound": 1.0,
+      "ConfirmSound": 1.0,
+      "PopupSound": 1.0,
+      "ActiveSound": 1.0,
+      "StepTextSound": 1.0,
+      "MorseDotSound_1": 3.0,
+      "MorseDashSound_1": 1.5,
+      "MorseDotSound_2": 1.0,
+      "MorseDashSound_2": 1.0,
+      "SignalReceiveSound": 1.0,
+      "SignalSendSound": 1.0,
+      "ArduinoButtonSound": 1.0,
+      "MorseResetSound": 1.0
+    },
+    "boolParams": {},
+    "stringParams": {}
   }
 }

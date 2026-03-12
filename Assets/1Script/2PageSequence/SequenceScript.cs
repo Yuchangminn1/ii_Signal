@@ -101,6 +101,8 @@ public abstract class SequenceScript : MonoBehaviour
             //Debug.Log($"{this.name}Wait isTrigger");
             yield return waitFixedUpdate;
         }
+        NetworkManager.Instance.SendData($"M");
+
         isWaiting = false;
 
         //Debug.Log($"{this.name} Trigger");

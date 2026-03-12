@@ -44,17 +44,16 @@ public class Arduino_MorseKey : MonoBehaviour
 
     Action<MorseType> onMorseInput;
 
-    Action<MorseType> onDashColoring;
 
+    public Action OnRedInputs;
+
+    //Action onFailedInput;
+
+    //Action<MorseType> onDashColoring;
 
     public Action<float> OnAccuracyCheckAction;
 
-
-
-
-    bool morseInputDelay = false;
-
-
+    //bool morseInputDelay = false;
 
     bool _isAccuracyRateCheck = false;
 
@@ -76,6 +75,7 @@ public class Arduino_MorseKey : MonoBehaviour
 
     bool isPress = false;
 
+    float[] pressTimes = new float[4];
 
     float startTime = 0f;
 
@@ -98,6 +98,10 @@ public class Arduino_MorseKey : MonoBehaviour
 
 
     int _inputCount = 0;
+
+    public Action<float> OnUpdateDashVar;
+
+    public Action<int> ShadowDash;
 
     Coroutine _coloringWaitCoroutine = null;
 
@@ -127,7 +131,15 @@ public class Arduino_MorseKey : MonoBehaviour
                     //게이지 바 컷인 떄문에 확 올라가는거 방지할려는 임시방편
                     //TODO 수정
                     if (ResetUIOn?.StartResetUIOn() == true)
+                    {
+                        SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseResetSound);
                         startTime += 0.5f;
+                    }
+                    else if (_answer != "")
+                    {
+                        SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseResetSound);
+
+                    }
                 }
             }
 
@@ -136,12 +148,20 @@ public class Arduino_MorseKey : MonoBehaviour
                 GameManager.Instance.GoToIdleCheck();
                 if (_answer != "")
                 {
-                    ResetUIOn?.ResetBarUpdate((Time.time - startTime) / MorseTranslator.InputResetTime);
+                    if ((Time.time - startTime) / MorseTranslator.InputResetTime > 0)
+                        ResetUIOn?.ResetBarUpdate((Time.time - startTime) / MorseTranslator.InputResetTime);
                 }
+
                 if (Time.time - startTime >= MorseTranslator.OverInputTime)
                 {
                     OverInputProcess();
                 }
+                if (Time.time - startTime >= MorseTranslator.MaxDotTime && Time.time - startTime < MorseTranslator.MaxDotTime + 0.1f)
+                {
+                    ShadowDash?.Invoke(_inputCount);
+                }
+
+
 
 
             }
@@ -161,7 +181,7 @@ public class Arduino_MorseKey : MonoBehaviour
                         ResetUIOn?.ResetBarUpdate(0f);
                     }
                 }
-                if (PageController.Instance.CurrentPage == 4 || PageController.Instance.CurrentPage == 5)
+                if (PageController.Instance.CurrentPage == 4 || PageController.Instance.CurrentPage == 5 || PageController.Instance.CurrentPage == 6)
                 {
 
 
@@ -177,7 +197,6 @@ public class Arduino_MorseKey : MonoBehaviour
                     Reset();
                     return;
                 }
-
                 MorseTransmit(Time.time - startTime);
 
                 CheckMorse();
@@ -210,6 +229,10 @@ public class Arduino_MorseKey : MonoBehaviour
     public void MorseTransmit(float pressTime)
     {
         GameManager.Instance.GoToIdleCheck();
+        if (_inputCount < 4)
+        {
+            pressTimes[_inputCount] = pressTime;
+        }
 
         if (_answer != "" || _inputCount >= 4)
         {
@@ -223,16 +246,13 @@ public class Arduino_MorseKey : MonoBehaviour
             _currentMorseInputData[_inputCount].SetMorseInputData(false, pressTime);
             onMorseInput?.Invoke(MorseType.Dot);
         }
-        else if (MorseTranslator.MaxDashTime >= pressTime)
+        else
         {
             Debug.Log($"DASH");
             _currentMorseInputData[_inputCount].SetMorseInputData(true, pressTime);
             onMorseInput?.Invoke(MorseType.Dash);
         }
-        else
-        {
-            return;
-        }
+
         if (_isGuide == false)
         {
 
@@ -340,11 +360,9 @@ public class Arduino_MorseKey : MonoBehaviour
         _morseData = "";
 
 
-        float[] pressTimes = new float[4];
         while (_morseQueue.Count > 0)
         {
             MorseInputData morseInputData = _morseQueue.Dequeue();
-            pressTimes[pressTimes.Length - _morseQueue.Count - 1] = morseInputData.PressTime;
             if (morseInputData.IsDash)
             {
                 _morseData += '1';
@@ -367,7 +385,7 @@ public class Arduino_MorseKey : MonoBehaviour
 
         if (IsAccuracyRateCheck)
         {
-            OnAccuracyCheckAction?.Invoke(MorseTranslator.Accuracy(_morseData, pressTimes));
+            OnAccuracyCheckAction?.Invoke(MorseTranslator.Accuracy(UserDataManager.Instance.GetPlayer().PartnerPassCode, pressTimes));
 
         }
         else
@@ -382,6 +400,11 @@ public class Arduino_MorseKey : MonoBehaviour
             }
             else
             {
+                //TODO 빨간색 변하기
+                // onFailedInput?.Invoke();
+                OnRedInputs?.Invoke();
+                yield return CoroutineReturnManager.GetWaitForSeconds(1f);
+                // yield return CoroutineReturnManager.GetWaitForSeconds(1f);
                 Reset();
             }
 
@@ -415,6 +438,10 @@ public class Arduino_MorseKey : MonoBehaviour
         ResetUIOn = null;
         OnMorseTransmitEnd = null;
         isInputCheck = false;
+
+        ShadowDash = null;
+
+        OnUpdateDashVar = null;
 
         _isAccuracyRateCheck = false;
 

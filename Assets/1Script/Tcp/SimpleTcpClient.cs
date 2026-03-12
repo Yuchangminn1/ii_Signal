@@ -163,6 +163,7 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             Debug.Log("data.Length == Reset Received Data: " + data);
             NetworkManager.Instance.StopEndResetRequest();
 
+
             if (PageController.Instance.IsIdle())
             {
                 Debug.Log("TCP 리셋 - 이미 Idle 상태");
@@ -171,6 +172,7 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             else
             {
                 Debug.Log("TCP 리셋");
+                NetworkManager.Instance.SendData($"Reset");
 
                 NetworkManager.Instance.ResetRequested = true;
             }

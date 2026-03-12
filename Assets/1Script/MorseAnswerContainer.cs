@@ -123,18 +123,18 @@ public class MorseAnswerContainer : MonoBehaviour
             if (morseImage.CurrentMorseType == MorseType.Dot)
             {
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
-                yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDotTime);
+                yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDotTime / 2);
                 SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
 
-                yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+                yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
 
             }
             else if (morseImage.CurrentMorseType == MorseType.Dash)
             {
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
-                yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDashTime);
+                yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDashTime / 2);
                 SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
-                yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+                yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
 
             }
         }

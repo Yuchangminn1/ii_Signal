@@ -186,6 +186,8 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         }
     }
 
+    public bool IsTestData = false;
+
     bool _isUsingRoom = false;
 
     public bool IsUsingRoom
@@ -305,9 +307,10 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         if (userDataCache == null) return;
         if (NetworkManager.Instance.IsServer)
         {
+            ClearRoom();
+
             StartCoroutine(ResetUserCoroutine());
         }
-        ClearRoom();
     }
 
     public void ClearRoom()
@@ -324,7 +327,11 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         if (userDataCache == null) return;
         if (NetworkManager.Instance.IsServer)
             StartCoroutine(ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/updateTime.cfm?idx_user={userDataCache["IDX_USER"]}&option=end&code={ServerData.Instance.Code}", Answer));
+
+        ClearRoom();
     }
+
+
 
     public void Answer(string _an)
     {
@@ -381,7 +388,6 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
             trimmed = line;
             break;
         }
-        //Debug.Log("RoomUsingTest / Server : " + trimmed);
         if (trimmed == "EMPTY")
         {
             //Debug.Log("현재 세션 사용자 없음 (EMPTY)");
@@ -395,21 +401,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
     }
 
-    // public bool IsUser()
-    // {
-    //     if (userDataCache != null && userDataCache.Count > 0)
-    //     {
-    //         return true;
-    //     }
-    //     return false;
-    // }
-    // public void TagCheck()
-    // {
-    //     if (userDataCache != null)
-    //     {
-    //         return;
-    //     }
-    // }
+
     public void ParseCurrentSessionData(string responseText)
     {
         if (userDataCache != null)
@@ -572,6 +564,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     public void TestKey()
     {
         Reset();
+        IsTestData = true;
         StartCoroutine(RequestInitializeUserDataTest("2270AE4A-ABFC-E349-1A0A5A69999CC1A8"));
 
         //SetPlayers("길동");

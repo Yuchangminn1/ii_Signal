@@ -43,6 +43,7 @@ public class EnterCheck : MonoBehaviour
 
     IEnumerator CheckCoroutine()
     {
+        UserDataManager.Instance.Reset();
         while (GameManager.Instance.IsStarted == false)
         {
             yield return CoroutineReturnManager.GetWaitForSeconds(1f);

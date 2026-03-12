@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class MorseImageContainer : MonoBehaviour
 {
 
+    Color32 errorColor = new Color32(250, 20, 20, 255);
 
     protected MorseInputImage[] morseInputImages;
 
@@ -40,7 +41,11 @@ public class MorseImageContainer : MonoBehaviour
 
     protected int _currentIndex = 0;
 
-
+    public void ShadowColoring(int index)
+    {
+        if (index < morseInputImages.Length)
+            morseInputImages[index].ShadowColoring();
+    }
 
 
     void OnEnable()
@@ -68,6 +73,10 @@ public class MorseImageContainer : MonoBehaviour
             arduino_MorseKey.OnReset += Reset;
             arduino_MorseKey.OnReset += resetUIOn.Reset;
             arduino_MorseKey.OnReset += questionTextContainer.Reset;
+
+            arduino_MorseKey.ShadowDash += ShadowColoring;
+
+            arduino_MorseKey.OnRedInputs += SetErrorColor;
 
 
             arduino_MorseKey.OnMorseTransmitEnd += questionTextContainer.SetTextColor;
@@ -100,7 +109,13 @@ public class MorseImageContainer : MonoBehaviour
 
         _currentIndex = 0;
     }
-
+    public void SetErrorColor()
+    {
+        foreach (MorseInputImage mi in morseInputImages)
+        {
+            mi.SetErrorColor(errorColor);
+        }
+    }
 
     virtual protected IEnumerator MorseIndexCheckCoroutine(MorseType morseType)
     {
@@ -125,6 +140,7 @@ public class MorseImageContainer : MonoBehaviour
         }
 
         _morseIndexCheckCoroutine = null;
+
 
     }
 
@@ -230,6 +246,7 @@ public class MorseImageContainer : MonoBehaviour
 
     }
 
+
     virtual public void ColoringMorseImage(MorseType morseType)
     {
         if (_currentIndex >= morseInputImages.Length)
@@ -240,13 +257,10 @@ public class MorseImageContainer : MonoBehaviour
 
         //TODO 급하게 막았는데 구조 좀 생각해서 수정 
         //TODO Guide모드에서 틀린 입력 들어왔을 때 인덱스 떄문에 구조 고민해야함
-
         if (_morseIndexCheckCoroutine == null)
         {
-
             morseInputImages[_currentIndex].StartColoring(morseType);
             _morseIndexCheckCoroutine = StartCoroutine(MorseIndexCheckCoroutine(morseType));
-
         }
         else
         {
@@ -255,30 +269,6 @@ public class MorseImageContainer : MonoBehaviour
         }
 
     }
-
-    // virtual public void ColoringMorseImage2(MorseType morseType)
-    // {
-
-    //     if (_currentIndex >= morseInputImages.Length)
-    //     {
-    //         return;
-    //     }
-
-
-    //     if (_morseIndexCheckCoroutine == null)
-    //     {
-
-    //         morseInputImages[_currentIndex].StartColoring(morseType);
-    //         _morseIndexCheckCoroutine = StartCoroutine(MorseIndexCheckCoroutine(morseType));
-
-    //     }
-    //     else
-    //     {
-    //         //Debug.Log($"코루틴 돌리는중 추가입력 {morseType} 큐에 추가");
-    //         _morseInput.Enqueue(morseType);
-    //     }
-
-    // }
 
 
 

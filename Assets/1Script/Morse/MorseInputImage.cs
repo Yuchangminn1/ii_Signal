@@ -8,8 +8,13 @@ public class MorseInputImage : MonoBehaviour
     MorseInputTarget _morseImageDot;
     MorseInputTarget _morseImageDash;
 
+    MorseInputTarget _morseShadow;
+
 
     public bool IsFilled = false;
+
+    public bool IsFilling = false;
+
 
     Coroutine WaitCheckCoroutine = null;
 
@@ -27,6 +32,10 @@ public class MorseInputImage : MonoBehaviour
             {
                 _morseImageDash = child;
             }
+            else if (child.CurrentMorseType == MorseType.Shadow)
+            {
+                _morseShadow = child;
+            }
             else
             {
                 Debug.LogError("타입 안정했음 ");
@@ -34,21 +43,35 @@ public class MorseInputImage : MonoBehaviour
         }
 
     }
+    public void SetErrorColor(Color32 color)
+    {
+        _morseImageDot.SetErrorColor(color);
+        _morseImageDash.SetErrorColor(color);
+        _morseShadow.SetErrorColor(color);
+    }
+
+
 
     public void Reset()
     {
         _morseImageDot.Reset();
         _morseImageDash.Reset();
+        _morseShadow.Reset();
         IsFilled = false;
     }
 
     void OnEnable()
     {
+        IsFilled = false;
+    }
 
+    public void ShadowColoring()
+    {
+        StartColoring(MorseType.Shadow);
     }
     public void StartColoring(MorseType morseType)
     {
-        IsFilled = false;
+        IsFilling = true;
         if (morseType == MorseType.Dot)
         {
             _morseImageDot.StartColoring();
@@ -64,6 +87,13 @@ public class MorseInputImage : MonoBehaviour
             if (WaitCheckCoroutine == null)
                 WaitCheckCoroutine = StartCoroutine(WaitAndCheckFill(_morseImageDash));
         }
+        else if (morseType == MorseType.Shadow)
+        {
+            _morseShadow.StartColoring();
+
+            if (WaitCheckCoroutine == null)
+                WaitCheckCoroutine = StartCoroutine(WaitAndCheckFill(_morseShadow));
+        }
 
     }
 
@@ -75,5 +105,6 @@ public class MorseInputImage : MonoBehaviour
         }
         WaitCheckCoroutine = null;
         IsFilled = true;
+        IsFilling = false;
     }
 }

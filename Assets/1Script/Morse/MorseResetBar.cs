@@ -10,10 +10,13 @@ public class MorseResetBar : MorseColoringImage
 
     override public void UpdateBar(float fillAmount)
     {
-        if (fillAmount > 0.1)
+        if (fillAmount == 0f)
         {
-            SoundManager.Instance.PlayingLoopSound();
+            SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseResetSound);
+
         }
+
+
         __remainingRectTransform.SetSizeWithCurrentAnchors(
                 RectTransform.Axis.Horizontal,
                 maxWidth * fillAmount
@@ -25,14 +28,13 @@ public class MorseResetBar : MorseColoringImage
         {
             IsCheck = true;
             isFilling = false;
-
         }
     }
 
     override public void Reset()
     {
         base.Reset();
+        SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseResetSound);
 
-        SoundManager.Instance.StopLoopSound();
     }
 }

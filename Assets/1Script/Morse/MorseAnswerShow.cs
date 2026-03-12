@@ -40,16 +40,17 @@ public class MorseAnswerShow : MonoBehaviour
 
         while (temp.Count > 0) //마지막은 암호코드라 무시 
         {
+            NetworkManager.Instance.SendData($"M");
             foreach (MorseAnswerContainer morseAnswerContainer in morseAnswerContainers)
             {
                 if (morseAnswerContainer.IsMove() == false)
 
                 {
-                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 180f);
+                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 270f);
                     yield return CoroutineReturnManager.WaitForFixedUpdate;
                     morseAnswerContainer.SetMorse(temp.Dequeue());
 
-                    yield return CoroutineReturnManager.GetWaitForSeconds(2.5f);
+                    yield return CoroutineReturnManager.GetWaitForSeconds(2.0f);
 
                     break;
                 }

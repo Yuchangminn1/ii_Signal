@@ -7,6 +7,8 @@ public enum SoundOptions
 }
 public class MorseInputTarget : MonoBehaviour
 {
+
+    Color32 CurrentColor = new Color32(90, 90, 90, 255);
     SoundOptions CurrentSoundOption = SoundOptions.Sound_1;
 
     RectTransform _rectTransform;
@@ -72,6 +74,10 @@ public class MorseInputTarget : MonoBehaviour
             {
                 fillSpeed = 1 / MorseTranslator.DefaultDashTime;
             }
+            else if (CurrentMorseType == MorseType.Shadow)
+            {
+                fillSpeed = 1 / MorseTranslator.DefaultDashTime;
+            }
         }
     }
 
@@ -99,21 +105,31 @@ public class MorseInputTarget : MonoBehaviour
     }
     public void FillingBar()
     {
+        _rawImage.color = CurrentColor;
         isFilling = true;
         if (CurrentSoundOption == SoundOptions.Sound_1)
         {
             if (CurrentMorseType == MorseType.Dot)
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
-            else if (CurrentMorseType == MorseType.Dash)
+            else if (CurrentMorseType == MorseType.Dash && PageController.Instance.CurrentPage == 6)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+            else if (CurrentMorseType == MorseType.Shadow)
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
         }
         else if (CurrentSoundOption == SoundOptions.Sound_2)
         {
             if (CurrentMorseType == MorseType.Dot)
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_2);
-            else if (CurrentMorseType == MorseType.Dash)
+            else if (CurrentMorseType == MorseType.Dash && PageController.Instance.CurrentPage == 6)
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_2);
+            else if (CurrentMorseType == MorseType.Shadow)
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_2);
         }
+    }
+
+    public void SetErrorColor(Color32 color)
+    {
+        _rawImage.color = color;
     }
 
     public void UpdateBar(float fillAmount)
@@ -142,15 +158,21 @@ public class MorseInputTarget : MonoBehaviour
                 if (CurrentMorseType == MorseType.Dot)
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
                 // else
-                if (CurrentMorseType == MorseType.Dash)
+                if (CurrentMorseType == MorseType.Dash && PageController.Instance.CurrentPage == 6)
+                {
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+                }
+                if (CurrentMorseType == MorseType.Shadow)
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
             }
             else if (CurrentSoundOption == SoundOptions.Sound_2)
             {
                 if (CurrentMorseType == MorseType.Dot)
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_2);
-                else if (CurrentMorseType == MorseType.Dash)
+                else if (CurrentMorseType == MorseType.Dash && PageController.Instance.CurrentPage == 6)
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_2);
+                if (CurrentMorseType == MorseType.Shadow)
+                    SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
             }
         }
     }

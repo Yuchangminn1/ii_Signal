@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public enum MorseType
 {
     Dot,
-    Dash
+    Dash,
+    Shadow
 }
 
 public class MorseImage : MonoBehaviour

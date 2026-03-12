@@ -54,7 +54,6 @@ public class PageController : Singleton<PageController>
 
                 if (IsIdle() == false)
                 {
-                    UserDataManager.Instance.ResetUserData();
 
                     yield return CoroutineReturnManager.GetWaitForSeconds(2f);
 
