@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 public class PageController : Singleton<PageController>
@@ -51,14 +52,32 @@ public class PageController : Singleton<PageController>
         {
             if (NetworkManager.Instance.ResetRequested)
             {
+                int count = 0;
+                UserDataManager.Instance.ResetUserData();
 
-                if (IsIdle() == false)
+                while (UserDataManager.Instance.IsUser())
                 {
-
-                    yield return CoroutineReturnManager.GetWaitForSeconds(2f);
-
-                    pageResetCoroutine = StartCoroutine(RequestResetOpenPageCoroutine(0));
+                    yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
+                    if (count > 10)
+                    {
+                        UserDataManager.Instance.ClearRoom();
+                        Debug.Log("ClearRoom");
+                        count = 0;
+                    }
+                    else
+                        count++;
                 }
+                if (NetworkManager.Instance.IsServer == false)
+                {
+                    Debug.Log("StopEndResetRequest");
+                    NetworkManager.Instance.StopEndResetRequest();
+                }
+
+                yield return CoroutineReturnManager.GetWaitForSeconds(2f);
+
+                RequestResetOpenPage(0);
+                Debug.Log("ResetRequested");
+
                 NetworkManager.Instance.ResetRequested = false;
             }
             yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);

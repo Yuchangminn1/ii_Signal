@@ -124,13 +124,31 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     public void ReadData(string data)
     {
         bool isMorseData = false;
-        GameManager.Instance.GoToIdleCheck();
 
 
-        if (data == "Go")
+        if (data.Equals("Go", StringComparison.OrdinalIgnoreCase))
         {
             NetworkManager.Instance.IsTutorialRead = true;
             return;
+        }
+        GameManager.Instance.GoToIdleCheck();
+
+        if (data.Equals("EReset", StringComparison.OrdinalIgnoreCase))
+        {
+            if (UserDataManager.Instance.IsContentEnd)
+            {
+                NetworkManager.Instance.ResetRequested = true;
+                NetworkManager.Instance.SendData("EReset");
+            }
+            return;
+
+        }
+        else if (data.Equals("Reset", StringComparison.OrdinalIgnoreCase))
+
+        {
+            NetworkManager.Instance.ResetRequested = true;
+            return;
+
         }
         else if (data.Length == 2 && data[0] == 'S')
         {
@@ -142,7 +160,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             return;
 
         }
-
         else if (data.Length == 4)
         {
             Debug.Log("data.Length == 4 Received Data: " + data);
@@ -156,28 +173,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                     break;
                 }
             }
-        }
-
-        else if (data == "Reset")
-        {
-            Debug.Log("data.Length == Reset Received Data: " + data);
-            NetworkManager.Instance.StopEndResetRequest();
-
-
-            if (PageController.Instance.IsIdle())
-            {
-                Debug.Log("TCP 리셋 - 이미 Idle 상태");
-                return;
-            }
-            else
-            {
-                Debug.Log("TCP 리셋");
-                NetworkManager.Instance.SendData($"Reset");
-
-                NetworkManager.Instance.ResetRequested = true;
-            }
-            return;
-
         }
         else if (data.Length == 5)
         {
@@ -203,12 +198,7 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             }
 
         }
-        else if (data == "Go")
-        {
 
-            NetworkManager.Instance.IsTutorialRead = true;
-            return;
-        }
 
         if (isMorseData)
         {

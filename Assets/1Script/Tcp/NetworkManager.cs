@@ -104,11 +104,11 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
         return _genericData;
     }
 
-    public void SetEndWait()
-    {
-        if (IsServer)
-            EndWait = true;
-    }
+    // public void SetEndWait()
+    // {
+    //     if (IsServer)
+    //         EndWait = true;
+    // }
 
     public void SendData(string data)
     {
@@ -122,15 +122,7 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
         }
     }
 
-    public void EndResetRequest()
-    {
-        if (IsServer == false)
-        {
-            if (_requestCoroutine == null)
-                _requestCoroutine = StartCoroutine(EndResetRequestCoroutine());
-        }
 
-    }
 
     public void StopEndResetRequest()
     {
@@ -143,23 +135,30 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
 
     public void EndNReset()
     {
-        ResetRequested = true;
-        SendData("Reset");
+        SendData("EReset");
         EndWait = false;
     }
 
+    // public void EndResetRequest()
+    // {
+    //     if (IsServer == false)
+    //     {
+    //         if (_requestCoroutine == null)
+    //             _requestCoroutine = StartCoroutine(EndResetRequestCoroutine());
+    //     }
 
-    IEnumerator EndResetRequestCoroutine()
-    {
-        yield return CoroutineReturnManager.GetWaitForSeconds(5f);
+    // }
+    // IEnumerator EndResetRequestCoroutine()
+    // {
+    //     yield return CoroutineReturnManager.GetWaitForSeconds(5f);
 
-        while (true)
-        {
-            SendData("End");
-            yield return CoroutineReturnManager.GetWaitForSeconds(1f);
-        }
+    //     while (true)
+    //     {
+    //         SendData("End");
+    //         yield return CoroutineReturnManager.GetWaitForSeconds(1f);
+    //     }
 
-    }
+    // }
 
 
 

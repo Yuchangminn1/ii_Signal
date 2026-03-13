@@ -18,6 +18,7 @@ public class PopupManager : Singleton<PopupManager>
     readonly float ResetPopupTime = 3f;
 
 
+
     PopupType _currentPopupType = PopupType.None;
 
 
@@ -124,10 +125,8 @@ public class PopupManager : Singleton<PopupManager>
 
         NetworkManager.Instance.SendData($"Reset");
 
-        if (NetworkManager.Instance.IsServer)
-            NetworkManager.Instance.ResetRequested = true;
 
-
+        NetworkManager.Instance.ResetRequested = true;
 
         _popupCoroutine = null;
     }

@@ -6,6 +6,8 @@ public class TutorialStart : MonoBehaviour
 {
     SequenceScript sequenceScript;
 
+    Coroutine startcheckCoroutine = null;
+
     void Start()
     {
         sequenceScript = GetComponent<SequenceScript>();
@@ -15,25 +17,40 @@ public class TutorialStart : MonoBehaviour
     {
         if (GameManager.Instance.IsStarted == false)
             return;
+        startcheckCoroutine = null;
 
     }
 
     public void StartCheck()
     {
-        StartCoroutine(StartTutorial());
-
+        if (startcheckCoroutine == null)
+        {
+            startcheckCoroutine = StartCoroutine(StartTutorial());
+        }
     }
+
+    public void StopCheck()
+    {
+
+
+        if (startcheckCoroutine != null)
+        {
+            StopCoroutine(startcheckCoroutine);
+            startcheckCoroutine = null;
+        }
+    }
+
 
 
     IEnumerator StartTutorial()
     {
         NetworkManager.Instance.IsTutorialRead = false;
-        if (NetworkManager.Instance.IsServer == false)
-            NetworkManager.Instance.SendData("Go");
 
-        while (NetworkManager.Instance.IsTutorialRead == false)
+        NetworkManager.Instance.SendData("Go");
+
+        while (NetworkManager.Instance.IsTutorialRead == false && gameObject.activeInHierarchy)
         {
-            yield return CoroutineReturnManager.GetWaitForSeconds(0.25f);
+            yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
             if (NetworkManager.Instance.IsServer == false)
                 NetworkManager.Instance.SendData("Go");
         }
@@ -55,7 +72,7 @@ public class TutorialStart : MonoBehaviour
         }
         sequenceScript?.TriggerFroceOn();
 
-
+        startcheckCoroutine = null;
     }
 
 }

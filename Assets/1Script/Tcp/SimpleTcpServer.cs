@@ -110,20 +110,44 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
     public void ReadData(string data)
     {
         bool isMorseData = false;
+        if (data.Equals("Go", StringComparison.OrdinalIgnoreCase))
+        {
+            NetworkManager.Instance.IsTutorialRead = true;
 
+            return;
+        }
         GameManager.Instance.GoToIdleCheck();
 
-        if (NetworkManager.Instance.EndWait && data == "End")
+        if (NetworkManager.Instance.EndWait && data.Equals("End", StringComparison.OrdinalIgnoreCase))
         {
             NetworkManager.Instance.EndNReset();
             return;
 
         }
-        else if (data == "Go")
+
+        else if (data.Equals("EReset", StringComparison.OrdinalIgnoreCase))
         {
-            NetworkManager.Instance.IsTutorialRead = true;
+            UserDataManager.Instance.IsContentEnd = true;
+            if (PageController.Instance.IsIdle())
+            {
+                Debug.Log("TCP 리셋 - 이미 Idle 상태");
+            }
+            else
+            {
+                Debug.Log("TCP 리셋");
+                //NetworkManager.Instance.SendData($"Reset");
+            }
+
 
             return;
+
+        }
+        else if (data.Equals("Reset", StringComparison.OrdinalIgnoreCase))
+        {
+
+            NetworkManager.Instance.ResetRequested = true;
+            return;
+
         }
         else if (data.Length == 2 && data[0] == 'S')
         {
@@ -132,26 +156,6 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
             UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece = int.Parse(data.Substring(1, 1));
             UserDataManager.Instance.GetPlayer(Direction.Right).AddPiece = UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece;
             Debug.Log("AddPiece Set: " + UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece);
-            return;
-
-        }
-
-        else if (data == "Reset")
-        {
-            if (PageController.Instance.IsIdle())
-            {
-                Debug.Log("TCP 리셋 - 이미 Idle 상태");
-            }
-            else
-            {
-                Debug.Log("TCP 리셋");
-                NetworkManager.Instance.SendData($"Reset");
-
-                UserDataManager.Instance.ResetUserData();
-
-                NetworkManager.Instance.ResetRequested = true;
-
-            }
             return;
 
         }

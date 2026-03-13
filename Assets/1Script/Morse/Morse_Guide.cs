@@ -59,6 +59,7 @@ public class Morse_Guide : MonoBehaviour
                 _morseColoringImages[i].SetMorseType(MorseType.Dot);
             else if (MorseData[i] == '1')
                 _morseColoringImages[i].SetMorseType(MorseType.Dash);
+
         }
 
 

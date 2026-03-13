@@ -36,7 +36,32 @@ public class MorseAnswerShow : MonoBehaviour
     public IEnumerator MoveOrderCoroutine()
     {
         Queue<string> temp = UserDataManager.Instance.GetPlayer().PartnerAnswerData;
+
+
+        if (GameManager.Instance.IsDebugMode)
+        {
+            Debug.LogWarning("Debug Mode: Using test Morse code sequence.");
+            temp = new Queue<string>();
+            temp.Enqueue("0001");
+            temp.Enqueue("0010");
+            temp.Enqueue("0100");
+            temp.Enqueue("1000");
+            temp.Enqueue("0011");
+            temp.Enqueue("0101");
+            temp.Enqueue("1001");
+            temp.Enqueue("1011");
+            temp.Enqueue("1111");
+            temp.Enqueue("1001");
+            temp.Enqueue("0101");
+            temp.Enqueue("0101");
+            temp.Enqueue("1001");
+            temp.Enqueue("1001");
+            temp.Enqueue("0101");
+            temp.Enqueue("1001");
+        }
         temp.Dequeue(); //첫번째는 테스트코드
+
+
 
         while (temp.Count > 0) //마지막은 암호코드라 무시 
         {
@@ -46,11 +71,11 @@ public class MorseAnswerShow : MonoBehaviour
                 if (morseAnswerContainer.IsMove() == false)
 
                 {
-                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 270f);
+                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 300f);
                     yield return CoroutineReturnManager.WaitForFixedUpdate;
                     morseAnswerContainer.SetMorse(temp.Dequeue());
 
-                    yield return CoroutineReturnManager.GetWaitForSeconds(2.0f);
+                    yield return CoroutineReturnManager.GetWaitForSeconds(1.5f);
 
                     break;
                 }

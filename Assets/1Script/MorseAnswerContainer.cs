@@ -123,7 +123,7 @@ public class MorseAnswerContainer : MonoBehaviour
             if (morseImage.CurrentMorseType == MorseType.Dot)
             {
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
-                yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDotTime / 2);
+                yield return CoroutineReturnManager.GetWaitForSeconds(MorseTranslator.DefaultDotTime);
                 SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
 
                 yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);

@@ -31,6 +31,7 @@ public class MorseImageContainer : MonoBehaviour
 
     protected float _popupDelay = 1.2f;
 
+    protected Coroutine _setAnswerTrueCoroutine = null;
 
 
     //Todo 저거 좀 이벤트로 쪼개기
@@ -41,10 +42,19 @@ public class MorseImageContainer : MonoBehaviour
 
     protected int _currentIndex = 0;
 
-    public void ShadowColoring(int index)
+    public virtual IEnumerator ShadowColoring(int index)
     {
         if (index < morseInputImages.Length)
             morseInputImages[index].ShadowColoring();
+        yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+        _setAnswerTrueCoroutine = null;
+
+    }
+    public void ShadowColoringStart(int index)
+    {
+        if (_setAnswerTrueCoroutine == null)
+
+            _setAnswerTrueCoroutine = StartCoroutine(ShadowColoring(index));
     }
 
 
@@ -74,7 +84,7 @@ public class MorseImageContainer : MonoBehaviour
             arduino_MorseKey.OnReset += resetUIOn.Reset;
             arduino_MorseKey.OnReset += questionTextContainer.Reset;
 
-            arduino_MorseKey.ShadowDash += ShadowColoring;
+            arduino_MorseKey.ShadowDash += ShadowColoringStart;
 
             arduino_MorseKey.OnRedInputs += SetErrorColor;
 

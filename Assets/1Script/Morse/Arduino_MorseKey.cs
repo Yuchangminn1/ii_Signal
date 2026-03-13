@@ -75,6 +75,8 @@ public class Arduino_MorseKey : MonoBehaviour
 
     bool isPress = false;
 
+    bool isLastInputNShadow = false;
+
     float[] pressTimes = new float[4];
 
     float startTime = 0f;
@@ -145,6 +147,7 @@ public class Arduino_MorseKey : MonoBehaviour
 
             else if (isPress && Input.GetKey(KeyCode.LeftControl))
             {
+
                 GameManager.Instance.GoToIdleCheck();
                 if (_answer != "")
                 {
@@ -158,7 +161,17 @@ public class Arduino_MorseKey : MonoBehaviour
                 }
                 if (Time.time - startTime >= MorseTranslator.MaxDotTime && Time.time - startTime < MorseTranslator.MaxDotTime + 0.1f)
                 {
+                    if (_inputCount == 3)
+                        isLastInputNShadow = true;
+
                     ShadowDash?.Invoke(_inputCount);
+                    if (_isGuide)
+                    {
+                        isPress = false;
+                        MorseTransmit(MorseTranslator.DefaultDashTime);
+
+                    }
+
                 }
 
 
@@ -197,7 +210,8 @@ public class Arduino_MorseKey : MonoBehaviour
                     Reset();
                     return;
                 }
-                MorseTransmit(Time.time - startTime);
+                if (_isGuide == false || (Time.time - startTime) < MorseTranslator.MaxDotTime)
+                    MorseTransmit(Time.time - startTime);
 
                 CheckMorse();
 
@@ -352,7 +366,7 @@ public class Arduino_MorseKey : MonoBehaviour
     {
         IsColoringDone = false;
 
-        while (IsColoringDone == false && IsAccuracyRateCheck == false)
+        while (IsColoringDone == false && IsAccuracyRateCheck == false && isLastInputNShadow == false)
         {
             yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
         }
@@ -417,6 +431,7 @@ public class Arduino_MorseKey : MonoBehaviour
 
     public void StartMorseCheck()
     {
+        isLastInputNShadow = false;
         if (_coloringWaitCoroutine != null)
         {
             StopCoroutine(_coloringWaitCoroutine);

@@ -84,7 +84,37 @@ public class MorseImageContainer_Control_RectTransform : MorseImageContainer
 
     }
 
-    override public void ColoringMorseImage(MorseType morseType)
+    public override IEnumerator ShadowColoring(int index)
+    {
+        if (_currentIndex - 1 >= 0)
+        {
+            if (currentMorseInput[_currentIndex - 1] == '0')
+            {
+                _dotDashArray[_currentIndex - 1] = InputSymbolGapDuration.Dot_Dash;
+                if (_dotDashArray.Length > _currentIndex)
+                    _dotDashArray[_currentIndex] = InputSymbolGapDuration.Dot_Dash;
+            }
+            else if (currentMorseInput[_currentIndex - 1] == '1')
+            {
+                _dotDashArray[_currentIndex - 1] = InputSymbolGapDuration.Dash_Dash;
+                if (_dotDashArray.Length > _currentIndex)
+                    _dotDashArray[_currentIndex] = InputSymbolGapDuration.Dot_Dash;
+
+            }
+        }
+
+
+        UpdateInputImageRectTransformPositions();
+
+        if (index < morseInputImages.Length)
+            morseInputImages[index].ShadowColoring();
+        yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
+        _setAnswerTrueCoroutine = null;
+
+
+    }
+
+    public override void ColoringMorseImage(MorseType morseType)
     {
         if (_currentIndex >= morseInputImages.Length)
         {
@@ -118,39 +148,19 @@ public class MorseImageContainer_Control_RectTransform : MorseImageContainer
                     _dotDashArray[_currentIndex - 1] = InputSymbolGapDuration.Dot_Dot;
                 }
 
-
-
-                float totalX = 0;
-
-                for (int i = 0; i < _dotDashArray.Length; i++)
-                {
-                    Debug.Log($"_dotDashArray[{i}] : " + _dotDashArray[i]);
-                    totalX += (float)_dotDashArray[i];
-                }
-                Vector3 pos = totalX / -2f * Vector3.right;
-
-                _inputImageRectTransforms[0].localPosition = pos;
-
-
-
-
-                for (int i = 0; i < _currentIndex; i++)
-                {
-                    pos += (float)_dotDashArray[i] * Vector3.right;
-                    _inputImageRectTransforms[i + 1].localPosition = pos;
-                }
+                UpdateInputImageRectTransformPositions();
             }
             else
             {
                 if (morseType == MorseType.Dash)
                 {
                     _dotDashArray[_currentIndex] = InputSymbolGapDuration.Dot_Dash;
-                    _inputImageRectTransforms[0].localPosition = ((float)InputSymbolGapDuration.Dot_Dot * 2f + (float)InputSymbolGapDuration.Dot_Dash) / -2f * Vector3.right;
+                    SetFirstInputImagePositionForFirstInput(morseType);
                 }
                 else if (morseType == MorseType.Dot)
                 {
                     _dotDashArray[_currentIndex] = InputSymbolGapDuration.Dot_Dot;
-                    _inputImageRectTransforms[0].localPosition = (float)InputSymbolGapDuration.Dot_Dot * 3f / -2f * Vector3.right;
+                    SetFirstInputImagePositionForFirstInput(morseType);
                 }
             }
 
@@ -166,6 +176,40 @@ public class MorseImageContainer_Control_RectTransform : MorseImageContainer
             _morseInput.Enqueue(morseType);
         }
 
+    }
+
+    void UpdateInputImageRectTransformPositions()
+    {
+        float totalX = 0;
+
+        for (int i = 0; i < _dotDashArray.Length; i++)
+        {
+            Debug.Log($"_dotDashArray[{i}] : " + _dotDashArray[i]);
+            totalX += (float)_dotDashArray[i];
+        }
+
+        Vector3 pos = totalX / -2f * Vector3.right;
+        _inputImageRectTransforms[0].localPosition = pos;
+
+        for (int i = 0; i < _currentIndex; i++)
+        {
+            pos += (float)_dotDashArray[i] * Vector3.right;
+            _inputImageRectTransforms[i + 1].localPosition = pos;
+        }
+    }
+
+    void SetFirstInputImagePositionForFirstInput(MorseType morseType)
+    {
+        if (morseType == MorseType.Dash)
+        {
+            _inputImageRectTransforms[0].localPosition = ((float)InputSymbolGapDuration.Dot_Dot * 2f + (float)InputSymbolGapDuration.Dot_Dash) / -2f * Vector3.right;
+            return;
+        }
+
+        if (morseType == MorseType.Dot)
+        {
+            _inputImageRectTransforms[0].localPosition = (float)InputSymbolGapDuration.Dot_Dot * 3f / -2f * Vector3.right;
+        }
     }
 
 }

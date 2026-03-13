@@ -201,6 +201,10 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
     Coroutine userInitializeCoroutine = null;
 
+    Coroutine contentEndCoroutine = null;
+
+    public bool IsContentEnd = false;
+
 
     private Action onUserUIDSet;
 
@@ -289,7 +293,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
 
 
-    public IEnumerator RequestUserContentEnd()
+    public IEnumerator RequestExitRoom()
     {
         if (userDataCache == null) yield break;
         yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/exitRoom.cfm?code={ServerData.Instance.Code}&idx_user={userDataCache["IDX_USER"]}", Answer);
@@ -306,21 +310,26 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     {
         if (userDataCache == null) return;
         if (NetworkManager.Instance.IsServer)
-        {
-            ClearRoom();
-
             StartCoroutine(ResetUserCoroutine());
-        }
+        ClearRoom();
+
     }
 
     public void ClearRoom()
     {
         if (userDataCache == null) return;
         if (NetworkManager.Instance.IsServer)
-            StartCoroutine(RequestUserContentEnd());
+            StartCoroutine(RequestExitRoom());
+
         Reset();
+
     }
 
+
+    public bool IsUser()
+    {
+        return userDataCache != null;
+    }
 
     public void EndRequest()
     {
@@ -556,10 +565,19 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     }
     public void Reset()
     {
+        IsTestData = false;
+
         player[0] = null;
         player[1] = null;
         _isUsingRoom = false;
         userDataCache = null;
+        IsContentEnd = false;
+        if (contentEndCoroutine != null)
+        {
+            StopCoroutine(contentEndCoroutine);
+            contentEndCoroutine = null;
+        }
+
     }
     public void TestKey()
     {
@@ -608,7 +626,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         if (player[0].AddPiece == Player.defaultValue)
         {
 
-            player[0].AddPiece = Random.Range(1, 6);
+            player[0].AddPiece = 5;
             player[1].AddPiece = player[0].AddPiece;
             string addPieceData = "S" + player[0].AddPiece;
             NetworkManager.Instance.SendData(addPieceData);
@@ -639,10 +657,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         }
     }
 
-    public void ResetUser()
-    {
-        userDataCache = null;
-    }
+
 
     public void Initialize(JsonGenericUpData data)
     {
@@ -667,5 +682,39 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
         _genericData.boolParams["isLeftPlayer"] = _isLeftplayer;
         return _genericData;
+    }
+
+    public void StartEndWait()
+    {
+        if (NetworkManager.Instance.IsServer == false)
+        {
+            IsContentEnd = true;
+        }
+        if (NetworkManager.Instance.IsServer && contentEndCoroutine == null)
+            contentEndCoroutine = StartCoroutine(EndWaitCoroutine());
+    }
+
+    public IEnumerator EndWaitCoroutine()
+    {
+
+        while (IsContentEnd == false)
+        {
+            NetworkManager.Instance.SendData("EReset");
+
+            yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
+        }
+        EndRequest();
+        yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
+
+
+
+
+        NetworkManager.Instance.ResetRequested = true;
+
+
+
+        contentEndCoroutine = null;
+
+
     }
 }
