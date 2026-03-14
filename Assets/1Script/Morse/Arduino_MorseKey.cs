@@ -125,6 +125,8 @@ public class Arduino_MorseKey : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
+                GameManager.Instance.GoToIdleCheck();
+
                 startTime = Time.time;
                 isPress = true;
 
@@ -148,7 +150,6 @@ public class Arduino_MorseKey : MonoBehaviour
             else if (isPress && Input.GetKey(KeyCode.LeftControl))
             {
 
-                GameManager.Instance.GoToIdleCheck();
                 if (_answer != "")
                 {
                     if ((Time.time - startTime) / MorseTranslator.InputResetTime > 0)
@@ -161,16 +162,21 @@ public class Arduino_MorseKey : MonoBehaviour
                 }
                 if (Time.time - startTime >= MorseTranslator.MaxDotTime && Time.time - startTime < MorseTranslator.MaxDotTime + 0.1f)
                 {
-                    if (_inputCount == 3)
-                        isLastInputNShadow = true;
-
-                    ShadowDash?.Invoke(_inputCount);
-                    if (_isGuide)
+                    if (_inputCount < 4)
                     {
-                        isPress = false;
-                        MorseTransmit(MorseTranslator.DefaultDashTime);
+                        OnUpdateDashVar?.Invoke(Time.time - startTime);
+                        if (_inputCount == 3)
+                            isLastInputNShadow = true;
 
+                        ShadowDash?.Invoke(_inputCount);
+                        if (_isGuide)
+                        {
+                            isPress = false;
+                            MorseTransmit(MorseTranslator.DefaultDashTime);
+
+                        }
                     }
+
 
                 }
 

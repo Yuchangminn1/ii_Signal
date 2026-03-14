@@ -61,15 +61,8 @@ public class MorseSetup : MonoBehaviour
     {
         arduino_MorseKey.IsAccuracyRateCheck = true;
         arduino_MorseKey.OnAccuracyCheckAction += AccuracyCheck;
-        if (UserDataManager.Instance.IsTestData)
-        {
-            _morseData = "0101";
-            UserDataManager.Instance.GetPlayer().PartnerPassCode = _morseData;
-        }
-        else
-            _morseData = UserDataManager.Instance.GetPlayer().PartnerPassCode;
-        if (_morseData == "")
-            return;
+
+        _morseData = UserDataManager.Instance.GetPlayer().PartnerPassCode;
 
         for (int i = 0; i < _morseColoringImage.Length; i++)
         {
@@ -80,7 +73,7 @@ public class MorseSetup : MonoBehaviour
 
         }
 
-
+        PlayMorseHintSound();
         if (arduino_MorseKey == null)
         {
             return;
@@ -107,6 +100,8 @@ public class MorseSetup : MonoBehaviour
             arduino_MorseKey.OnReset -= Reset;
             arduino_MorseKey.StopMorseCheck();
         }
+
+
     }
 
     IEnumerator PlayMorseHintSoundCorotuine()
@@ -180,6 +175,11 @@ public class MorseSetup : MonoBehaviour
         }
         else
         {
+            if (_hindSoundCoroutine != null)
+            {
+                StopCoroutine(_hindSoundCoroutine);
+                _hindSoundCoroutine = null;
+            }
             FadeManager.Instance.SetAlphaZero(RetryGuideText);
 
             rateTextCanvasgroup.alpha = 1f;
@@ -199,6 +199,7 @@ public class MorseSetup : MonoBehaviour
 
     public IEnumerator rateFailedCoroutine(string q, float rate)
     {
+
 
         StopCheck();
         arduino_MorseKey.Reset();

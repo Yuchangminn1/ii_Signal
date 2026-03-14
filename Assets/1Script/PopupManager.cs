@@ -17,6 +17,8 @@ public class PopupManager : Singleton<PopupManager>
     readonly float ResetPopupDelay = 10f;
     readonly float ResetPopupTime = 3f;
 
+    public bool IsPopupOn = false;
+
 
 
     PopupType _currentPopupType = PopupType.None;
@@ -74,25 +76,30 @@ public class PopupManager : Singleton<PopupManager>
         }
     }
 
-    public void ResetPopUpOpen()
+    public void PopUpOpen()
     {
-        if (_popupCoroutine == null)
-            _popupCoroutine = StartCoroutine(PopUpCoroutine());
+        Debug.LogError("팝업 오픈");
+        if (_popupCoroutine != null)
+            StopCoroutine(_popupCoroutine);
+        _popupCoroutine = StartCoroutine(PopUpCoroutine());
     }
-    public IEnumerator PopUpCoroutine()
+    IEnumerator PopUpCoroutine()
     {
+        IsPopupOn = true;
+        Debug.LogError("팝업 코루틴");
+
         CurrentPopupType = PopupType.PleaseInput;
         SetPleaseInputText(CurrentPopupType);
         float startTime = Time.time;
 
         if (CurrentPopupType != PopupType.None)
         {
-            FadeManager.Instance.TargetFade(_popupCanvasGroup, 1f);
+            FadeManager.Instance.SetAlphaOne(_popupCanvasGroup);
             while (Time.time - startTime < ResetPopupTime)
             {
                 yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
             }
-            FadeManager.Instance.TargetFade(_popupCanvasGroup, 0f);
+            FadeManager.Instance.SetAlphaZero(_popupCanvasGroup);
         }
         yield return CoroutineReturnManager.WaitForFixedUpdate;
 
@@ -106,13 +113,13 @@ public class PopupManager : Singleton<PopupManager>
         SetPleaseInputText(CurrentPopupType);
         if (CurrentPopupType != PopupType.None)
         {
-            FadeManager.Instance.TargetFade(_popupCanvasGroup, 1f);
+            FadeManager.Instance.SetAlphaOne(_popupCanvasGroup);
             startTime = Time.time;
             while (Time.time - startTime < ResetPopupTime)
             {
                 yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
             }
-            FadeManager.Instance.TargetFade(_popupCanvasGroup, 0f);
+            FadeManager.Instance.SetAlphaZero(_popupCanvasGroup);
         }
         yield return CoroutineReturnManager.WaitForFixedUpdate;
 
@@ -133,12 +140,16 @@ public class PopupManager : Singleton<PopupManager>
 
     public void ClosePopup()
     {
-        if (_popupCoroutine != null)
-            StopCoroutine(_popupCoroutine);
-        _popupCoroutine = null;
-        CurrentPopupType = PopupType.None;
-        FadeManager.Instance.TargetFade(_popupCanvasGroup, 0f);
+        if (IsPopupOn)
+        {
+            if (_popupCoroutine != null)
+                StopCoroutine(_popupCoroutine);
+            CurrentPopupType = PopupType.None;
+            FadeManager.Instance.SetAlphaZero(_popupCanvasGroup);
+            IsPopupOn = false;
+            Debug.LogError("팝업 오프");
 
+        }
     }
 
 }

@@ -91,6 +91,7 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
             Debug.Log("Game Not Started Yet");
             return;
         }
+        Debug.Log("Attempting to play sound: " + effectSoundNum.ToString());
 
 
         if (audioSources[(int)effectSoundNum] != null)

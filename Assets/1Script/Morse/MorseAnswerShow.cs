@@ -37,28 +37,8 @@ public class MorseAnswerShow : MonoBehaviour
     {
         Queue<string> temp = UserDataManager.Instance.GetPlayer().PartnerAnswerData;
 
+        Debug.Log($"받은 모스 수 temp count : {temp.Count}");
 
-        if (GameManager.Instance.IsDebugMode)
-        {
-            Debug.LogWarning("Debug Mode: Using test Morse code sequence.");
-            temp = new Queue<string>();
-            temp.Enqueue("0001");
-            temp.Enqueue("0010");
-            temp.Enqueue("0100");
-            temp.Enqueue("1000");
-            temp.Enqueue("0011");
-            temp.Enqueue("0101");
-            temp.Enqueue("1001");
-            temp.Enqueue("1011");
-            temp.Enqueue("1111");
-            temp.Enqueue("1001");
-            temp.Enqueue("0101");
-            temp.Enqueue("0101");
-            temp.Enqueue("1001");
-            temp.Enqueue("1001");
-            temp.Enqueue("0101");
-            temp.Enqueue("1001");
-        }
         temp.Dequeue(); //첫번째는 테스트코드
 
 
@@ -71,11 +51,11 @@ public class MorseAnswerShow : MonoBehaviour
                 if (morseAnswerContainer.IsMove() == false)
 
                 {
-                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 300f);
+                    morseAnswerContainer.MoveStart(moveStartPos, moveEndPos, 400f);
                     yield return CoroutineReturnManager.WaitForFixedUpdate;
                     morseAnswerContainer.SetMorse(temp.Dequeue());
 
-                    yield return CoroutineReturnManager.GetWaitForSeconds(1.5f);
+                    yield return CoroutineReturnManager.GetWaitForSeconds(1.0f);
 
                     break;
                 }

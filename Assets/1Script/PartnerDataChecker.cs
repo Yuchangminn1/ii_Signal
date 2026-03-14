@@ -32,10 +32,12 @@ public class PartnerDataChecker : MonoBehaviour
         yield return CoroutineReturnManager.GetWaitForSeconds(2f);
         //상대방 답변 갯수 체크
         int answerCount = 0;
-        while (UserDataManager.Instance.GetPlayer().PartnerPassCode == "")
+        while (UserDataManager.Instance.IsUser() && UserDataManager.Instance.GetPlayer().PartnerPassCode == "")
         {
+            if (UserDataManager.Instance.IsUser() == false)
+                yield break;
             yield return CoroutineReturnManager.GetWaitForSeconds(1f);
-            Debug.Log($"상대방 답변 갯수 체크 : {answerCount} 목표 {QuestionManager.Instance.QuestionInfos.Count + 1}");
+            Debug.Log($"상대방 답변 갯수 체크 : {answerCount} 목표 {QuestionManager.Instance.QuestionInfos.Count}");
             answerCount = UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count;
         }
         sequenceScript?.TriggerFroceOn();

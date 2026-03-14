@@ -173,6 +173,8 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                     break;
                 }
             }
+            UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
+
         }
         else if (data.Length == 5)
         {
@@ -198,20 +200,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             }
 
         }
-
-
-        if (isMorseData)
-        {
-            if (PageController.Instance.CurrentPage == 4)
-                UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
-
-            else
-            {
-                Debug.Log("4번 페이지가 아닌데 모스 데이터 수신: " + data);
-            }
-
-        }
-
 
         else
         {

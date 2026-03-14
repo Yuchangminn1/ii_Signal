@@ -404,7 +404,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         else
         {
             _isUsingRoom = true;
-            Debug.Log("현재 세션 사용자 있음 (HAS_USER)");
+            //Debug.Log("현재 세션 사용자 있음 (HAS_USER)");
 
         }
 
@@ -457,7 +457,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
             // {
             //     { "STATE", "EMPTY" }
             // };
-            Debug.Log("현재 세션 사용자 없음 (EMPTY)");
+            //Debug.Log("현재 세션 사용자 없음 (EMPTY)");
             return;
         }
 
@@ -583,7 +583,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     {
         Reset();
         IsTestData = true;
-        StartCoroutine(RequestInitializeUserDataTest("2270AE4A-ABFC-E349-1A0A5A69999CC1A8"));
+        StartCoroutine(RequestInitializeUserDataTest("2C39C73258"));
 
         //SetPlayers("길동");
     }
@@ -596,12 +596,12 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
         foreach (var code in contentCodes)
         {
+
+            Debug.Log($"코드 {code}의 피스 {FindValue("PIECE_" + code)}");
             if (code == ServerData.Instance.Code)
             {
                 continue; // 현재 콘텐츠는 피스 계산에서 제외
             }
-            Debug.Log($"코드 {code}의 피스 {FindValue("PIECE_" + code)}");
-
             pieceCount += int.TryParse(FindValue("PIECE_" + code), out int result) ? result : 0;
 
         }

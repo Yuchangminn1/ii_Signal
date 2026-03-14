@@ -9,6 +9,11 @@ public class MorseInputTarget : MonoBehaviour
 {
 
     Color32 CurrentColor = new Color32(90, 90, 90, 255);
+
+    Color32 WhiteColor = new Color32(236, 227, 216, 255);
+
+
+    public bool IsWhite = false;
     SoundOptions CurrentSoundOption = SoundOptions.Sound_1;
 
     RectTransform _rectTransform;
@@ -105,7 +110,12 @@ public class MorseInputTarget : MonoBehaviour
     }
     public void FillingBar()
     {
-        _rawImage.color = CurrentColor;
+        if (IsWhite)
+        {
+            _rawImage.color = WhiteColor;
+        }
+        else
+            _rawImage.color = CurrentColor;
         isFilling = true;
         if (CurrentSoundOption == SoundOptions.Sound_1)
         {

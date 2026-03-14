@@ -171,6 +171,9 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
                     break;
                 }
             }
+
+            if (isMorseData)
+                UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
         }
         else if (data.Length == 5)
         {
@@ -202,8 +205,6 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
             Debug.Log("처리 안하는 입력: " + data);
         }
 
-        if (isMorseData)
-            UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
 
     }
 

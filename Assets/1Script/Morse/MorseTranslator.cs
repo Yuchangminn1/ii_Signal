@@ -36,6 +36,8 @@ public static class MorseTranslator
 
     public const float InputResetTime = 3.1f;
 
+
+
     public const float OverInputTime = 5f;
 
     public static MorseTranslatorData _MorseTranslatorData = new MorseTranslatorData();
@@ -59,35 +61,34 @@ public static class MorseTranslator
         float[] outputPressTimes = new float[4];
         float accuracy = 100f;
 
+        bool[] AccuracyCheck = new bool[4] { false, false, false, false };
+
         for (int i = 0; i < outputPressTimes.Length; i++)
         {
             float difference;
             if (morseData[i] == '0')
             {
-                difference = Mathf.Abs(pressTimes[i] - DefaultDotTime);
+                if (pressTimes[i] <= MaxDotTime)
+                    AccuracyCheck[i] = true;
+
             }
             else if (morseData[i] == '1')
             {
-                difference = Mathf.Abs(pressTimes[i] - DefaultDashTime);
+                if (pressTimes[i] >= MaxDotTime)
+                    AccuracyCheck[i] = true;
             }
             else
             {
-                difference = 10f;
-                Debug.LogWarning("Invalid Morse Data: " + morseData[i]);
+                Debug.LogError($"Accuracy 에서 입력 에러났어요  {i}: {morseData[i]}");
             }
-            Debug.Log($"Difference for index {i}: {difference}");
 
-            if (difference < 0.5f)
+
+        }
+        foreach (bool check in AccuracyCheck)
+        {
+            if (!check)
             {
-                ;
-            }
-            else if (difference < 1.0f)
-            {
-                accuracy -= 5f;
-            }
-            else
-            {
-                accuracy -= 10f;
+                accuracy -= 25f;
             }
         }
         return accuracy;

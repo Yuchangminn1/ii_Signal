@@ -17,6 +17,8 @@ public class MorseImageContainer : MonoBehaviour
 
     public CanvasGroup[] PopupUI;
 
+    public Text GuideText;
+
     public Graphic[] PopupUI_OffGraphics;
 
     public QuestionSelectTextContainer questionTextContainer;
@@ -112,7 +114,8 @@ public class MorseImageContainer : MonoBehaviour
         {
             FadeManager.Instance.TargetFade(popupUI, 0f, FadeManager.Instance.FadeDuration);
         }
-
+        if (GuideText != null)
+            FadeManager.Instance.SetAlphaOne(GuideText);
 
         isAnswer = false;
 
