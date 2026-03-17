@@ -152,6 +152,7 @@
     <Compile Include="Assets\1Script\2PageSequence\MainPage.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SequenceCanvasFade.cs" />
     <Compile Include="Assets\1Script\Morse\MorsePassCheck.cs" />
+    <Compile Include="Assets\1Script\SoundUpload.cs" />
     <Compile Include="Assets\1Script\Tcp\SimpleTcpServer.cs" />
     <Compile Include="Assets\1Script\Morse\MorseTranslator.cs" />
     <Compile Include="Assets\1Script\3Singleton\SoundManager.cs" />

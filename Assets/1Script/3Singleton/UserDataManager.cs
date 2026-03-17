@@ -66,6 +66,8 @@ public class Player
 
     int[] _answers;
 
+    string _morseTotalData;
+    string _morsePartnerTotalData;
 
 
     string passCode;
@@ -88,6 +90,17 @@ public class Player
     // }
     public string[] CartridgeContent { get; set; }
 
+    public string MorseTotalData
+    {
+        get { return _morseTotalData; }
+        set { _morseTotalData = value; }
+    }
+
+    public string MorsePartnerTotalData
+    {
+        get { return _morsePartnerTotalData; }
+        set { _morsePartnerTotalData = value; }
+    }
     public int[] Answers
     {
         get { return _answers; }

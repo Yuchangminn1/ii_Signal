@@ -27,8 +27,8 @@ public class ResultManager : Singleton<ResultManager>
 
     public void Reset()
     {
-        LeftPlayerResultContainer.Reset();
-        RightPlayerResultContainer.Reset();
+        LeftPlayerResultContainer?.Reset();
+        RightPlayerResultContainer?.Reset();
     }
 
 
@@ -37,6 +37,10 @@ public class ResultManager : Singleton<ResultManager>
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            if(ResultCanvasGroups == null || ResultCanvasGroups.Length == 0)
+            {
+                return;
+            }
             if (ResultCanvasGroups[0].alpha > 0.8)
             {
                 for (int i = 0; i < ResultCanvasGroups.Length; i++)

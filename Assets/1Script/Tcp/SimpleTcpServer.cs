@@ -175,6 +175,7 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
             if (isMorseData)
             {
                 UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
+                UserDataManager.Instance.GetPlayer().MorsePartnerTotalData += data;
 
                 ResultManager.Instance.RightSelect(MorseTranslator.GetAnswerIndex(UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count, data));
 
@@ -205,7 +206,12 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
                     }
                 }
                 if (isMorseData)
+                {
                     UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
+                    ResultManager.Instance.RightSelect(MorseTranslator.GetAnswerIndex(UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count, data));
+                }
+
+
                 return;
             }
 

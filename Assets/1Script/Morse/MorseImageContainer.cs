@@ -209,10 +209,11 @@ public class MorseImageContainer : MonoBehaviour
             else if (QuestionManager.Instance.CurrentIndex != 0)
             {
                 NetworkManager.Instance.SendData(currentData);
+                UserDataManager.Instance.GetPlayer().MorseTotalData += currentData;
+                UserDataManager.Instance.GetPlayer().AnswerData.Enqueue(currentData);
             }
 
 
-            UserDataManager.Instance.GetPlayer().AnswerData.Enqueue(currentData);
             Debug.Log($"AnswerData 수  : {UserDataManager.Instance.GetPlayer().AnswerData.Count}");
             Debug.Log($"PartnerAnswerData 수  : {UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count}");
 
