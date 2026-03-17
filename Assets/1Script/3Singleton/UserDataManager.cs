@@ -6,6 +6,7 @@ using System.Collections;
 using Unity.VisualScripting;
 
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class UserJsonData
 {
@@ -594,6 +595,10 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         {
             TestKey2();
         }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            TestKey3();
+        }
     }
     public void Reset()
     {
@@ -626,6 +631,14 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         StartCoroutine(RequestInitializeUserDataTest("2E6997F2F8"));
         //SetPlayers("길동");
     }
+    public void TestKey3()
+    {
+        Reset();
+        IsTestData = true;
+        StartCoroutine(RequestInitializeUserDataTest("4C74356A06"));
+        //SetPlayers("길동");
+    }
+
     public void SetCartridge(string _an)
     {
         contentCodes = _an.Split(',');
@@ -680,6 +693,19 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
             }
 
         }
+
+
+        string relationValue = FindValue("RELATION");
+
+        Debug.Log($"SetPlayers: relationValue={relationValue}, pieceCount={pieceCount}, isLastContent={isLastContent}");
+
+        int relation = 1;
+        if (!string.IsNullOrWhiteSpace(relationValue) && !relationValue.Equals("null", StringComparison.OrdinalIgnoreCase))
+        {
+            int.TryParse(relationValue.Trim(), out relation);
+        }
+
+        QuestionManager.Instance.SetCartridge(relation);
 
 
 

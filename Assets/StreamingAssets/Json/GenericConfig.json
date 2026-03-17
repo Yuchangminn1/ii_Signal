@@ -11,16 +11,16 @@
   "NetworkManager": {
     "intParams": {},
     "floatParams": {},
-    "boolParams": { "isServer": true },
+    "boolParams": { "isServer": false },
     "stringParams": {
-      "ipAddress": "192.168.0.94"
+      "ipAddress": "192.168.0.50"
     }
   },
 
   "UserDataManager": {
     "intParams": {},
     "floatParams": {},
-    "boolParams": { "isLeftPlayer": true },
+    "boolParams": { "isLeftPlayer": false },
     "stringParams": {}
   },
 

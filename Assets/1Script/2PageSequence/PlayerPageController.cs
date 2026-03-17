@@ -217,6 +217,11 @@ public class PlayerPageController : MonoBehaviour
 
     public void DebugTrigger()
     {
+        if (GameManager.Instance.IsStarted == false)
+        {
+            Debug.Log("Game Not Started Yet");
+            return;
+        }
         GetCurrentPage().CurrentIndexTriggerON();
     }
 
