@@ -20,7 +20,7 @@ public class NextGuider : MonoBehaviour
 
     public void CheckIsLast()
     {
-        if (UserDataManager.Instance.IsLastContent())
+        if (UserDataManager.Instance.GetPlayer().IsAllContentPlayed)
         {
             FadeManager.Instance.SetAlphaOne(lastImage);
             text.text = lastText;

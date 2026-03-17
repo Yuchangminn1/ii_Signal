@@ -78,7 +78,6 @@ public class PopupManager : Singleton<PopupManager>
 
     public void PopUpOpen()
     {
-        Debug.LogError("팝업 오픈");
         if (_popupCoroutine != null)
             StopCoroutine(_popupCoroutine);
         _popupCoroutine = StartCoroutine(PopUpCoroutine());
@@ -86,7 +85,6 @@ public class PopupManager : Singleton<PopupManager>
     IEnumerator PopUpCoroutine()
     {
         IsPopupOn = true;
-        Debug.LogError("팝업 코루틴");
 
         CurrentPopupType = PopupType.PleaseInput;
         SetPleaseInputText(CurrentPopupType);
@@ -147,7 +145,6 @@ public class PopupManager : Singleton<PopupManager>
             CurrentPopupType = PopupType.None;
             FadeManager.Instance.SetAlphaZero(_popupCanvasGroup);
             IsPopupOn = false;
-            Debug.LogError("팝업 오프");
 
         }
     }

@@ -24,9 +24,6 @@ public class MorseTranslatorData
 }
 public static class MorseTranslator
 {
-
-
-
     public const float DefaultDotTime = 0.15f;
 
     public const float DefaultDashTime = 0.8f;
@@ -65,7 +62,6 @@ public static class MorseTranslator
 
         for (int i = 0; i < outputPressTimes.Length; i++)
         {
-            float difference;
             if (morseData[i] == '0')
             {
                 if (pressTimes[i] <= MaxDotTime)
@@ -92,6 +88,42 @@ public static class MorseTranslator
             }
         }
         return accuracy;
+
+    }
+
+    public static int GetAnswerIndex(int questionIndex, string morseData)
+    {
+        Debug.Log("MorseTranslator Translate 호출 : " + morseData);
+        string[] morsePatterns;
+        int index = -1;
+        if (PageController.Instance.CurrentPage == 4)
+        {
+            morsePatterns = QuestionManager.Instance.GetMorsePattern(questionIndex);
+
+            index = System.Array.IndexOf(morsePatterns, morseData);
+        }
+        else if (PageController.Instance.CurrentPage == 5)
+        {
+            morsePatterns = new string[]
+              {
+                "0100", "0000", "1100", "1000", "1101",
+                "1110", "0111", "0011", "1011", "1010",
+                "0010", "0001", "0101", "0110", "1111"
+              };
+            index = System.Array.IndexOf(morsePatterns, morseData);
+        }
+
+        if (index != -1)
+        {
+            _currentData = morseData;
+            _currentDataIndex = index;
+        }
+        else
+        {
+            _currentData = "";
+            _currentDataIndex = -1;
+        }
+        return _currentDataIndex;
 
     }
 
@@ -129,6 +161,7 @@ public static class MorseTranslator
         }
         return _currentData;
     }
+
 
 
 }

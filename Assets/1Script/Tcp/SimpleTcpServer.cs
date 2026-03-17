@@ -173,7 +173,15 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
             }
 
             if (isMorseData)
+            {
                 UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
+
+                ResultManager.Instance.RightSelect(MorseTranslator.GetAnswerIndex(UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count, data));
+
+                //MorseTranslator.GetAnswerIndex(UserDataManager.Instance.GetPlayer().MorsePattern, data);
+                // ResultManager.Instance.RightSelect(data);
+
+            }
         }
         else if (data.Length == 5)
         {
@@ -196,6 +204,8 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
                         break;
                     }
                 }
+                if (isMorseData)
+                    UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
                 return;
             }
 

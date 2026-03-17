@@ -7,48 +7,71 @@ using UnityEngine.UI;
 public class NameText : MonoBehaviour
 {
 
-    Text _text;
+    protected Text _text;
 
-    string originText = "";
-
-
-
-    string currentText = "";
+    protected string originText = "";
 
 
 
     void Start()
     {
         _text = GetComponent<Text>();
-        currentText = _text.text;
-        _text.text = "";
+        originText = _text.text;
+
     }
 
 
-    void OnEnable()
+    protected virtual void OnEnable()
     {
+        if (_text == null)
+            return;
         if (originText == "")
-            originText = currentText;
-
+        {
+            _text.text = originText;
+        }
 
         if (UserDataManager.Instance.GetPlayer() != null)
         {
             SetText(originText);
         }
     }
-
     public Text GetTextComponent()
     {
         return _text;
     }
 
-    public void SetText(string textData = "")
+    public virtual void SetText(string textData = "")
     {
-        if (textData != "")
-            _text.text = textData.Replace("Name", UserDataManager.Instance.GetPlayer().FirstName);
 
-        else if (_text.text == "")
-            _text.text = currentText.Replace("Name", UserDataManager.Instance.GetPlayer().FirstName);
+        if (GameManager.Instance.IsStarted == false || _text == null || UserDataManager.Instance.IsUser() == false)
+        {
+            return;
+        }
+
+        if (textData == "")
+        {
+            textData = originText;
+        }
+        if (textData.Contains("PartnerFullName"))
+        {
+            _text.text = textData.Replace("PartnerFullName", UserDataManager.Instance.GetPartnerPlayer().LastName + UserDataManager.Instance.GetPartnerPlayer().FirstName);
+
+        }
+
+        else if (textData.Contains("FullName"))
+        {
+            _text.text = textData.Replace("FullName", UserDataManager.Instance.GetPlayer().LastName + UserDataManager.Instance.GetPlayer().FirstName);
+        }
+
+        else if (textData.Contains("PartnerName"))
+        {
+            _text.text = textData.Replace("PartnerName", UserDataManager.Instance.GetPartnerPlayer().FirstName);
+        }
+        else if (textData.Contains("Name"))
+        {
+            _text.text = textData.Replace("Name", UserDataManager.Instance.GetPlayer().FirstName);
+        }
+
     }
 
 

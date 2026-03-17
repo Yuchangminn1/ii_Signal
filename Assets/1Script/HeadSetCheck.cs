@@ -15,7 +15,7 @@ public class HeadSetCheck : MonoBehaviour
     {
         if (gameObject.activeInHierarchy == false)
             return;
-        sequenceScript?.TriggerOn();
+        sequenceScript?.TriggerFroceOn();
 
     }
 

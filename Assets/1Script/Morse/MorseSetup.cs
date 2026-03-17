@@ -28,6 +28,8 @@ public class MorseSetup : MonoBehaviour
 
     public CanvasGroup rateTextCanvasgroup;
 
+    CanvasGroup _canvasgroup;
+
     Coroutine _coloringCheckCoroutine = null;
 
     Coroutine _hindSoundCoroutine = null;
@@ -41,6 +43,9 @@ public class MorseSetup : MonoBehaviour
 
         arduino_MorseKey = GetComponentInParent<Arduino_MorseKey>();
 
+
+
+        _canvasgroup = GetComponent<CanvasGroup>();
 
     }
 
@@ -70,7 +75,6 @@ public class MorseSetup : MonoBehaviour
                 _morseColoringImage[i].SetMorseType(MorseType.Dot);
             else if (_morseData[i] == '1')
                 _morseColoringImage[i].SetMorseType(MorseType.Dash);
-
         }
 
         PlayMorseHintSound();
@@ -175,6 +179,7 @@ public class MorseSetup : MonoBehaviour
         }
         else
         {
+
             if (_hindSoundCoroutine != null)
             {
                 StopCoroutine(_hindSoundCoroutine);
@@ -185,11 +190,7 @@ public class MorseSetup : MonoBehaviour
             rateTextCanvasgroup.alpha = 1f;
             RateText.color = acTextColor[0];
             RateText.text = q + rate.ToString("F0") + "%";
-            if (_hindSoundCoroutine != null)
-            {
-                StopCoroutine(_hindSoundCoroutine);
-                _hindSoundCoroutine = null;
-            }
+
             SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
             SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
 
@@ -203,7 +204,7 @@ public class MorseSetup : MonoBehaviour
 
         StopCheck();
         arduino_MorseKey.Reset();
-
+        _canvasgroup.alpha = 1f;
         rateTextCanvasgroup.alpha = 1f;
         RateText.color = acTextColor[1];
         RateText.text = q + rate.ToString("F0") + "%";
@@ -213,6 +214,8 @@ public class MorseSetup : MonoBehaviour
         yield return CoroutineReturnManager.GetWaitForSeconds(1.0f);
         FadeManager.Instance.SetAlphaZero(RetryGuideText);
 
+
+
         CheckStart();
 
 
@@ -220,7 +223,9 @@ public class MorseSetup : MonoBehaviour
 
     IEnumerator DelayToPlay()
     {
-        yield return CoroutineReturnManager.GetWaitForSeconds(2.0f);
+        _canvasgroup.alpha = 1f;
+
+        yield return CoroutineReturnManager.GetWaitForSeconds(1.0f);
 
         ColoringMorseImage();
     }
@@ -239,14 +244,14 @@ public class MorseSetup : MonoBehaviour
 
         for (int i = 0; i < _morseColoringImage.Length; i++)
         {
-            if (_morseData[i] == '0')
-            {
-                arduino_MorseKey.PlayMorseSound(MorseType.Dot);
-            }
-            else if (_morseData[i] == '1')
-            {
-                arduino_MorseKey.PlayMorseSound(MorseType.Dash);
-            }
+            // if (_morseData[i] == '0')
+            // {
+            //     arduino_MorseKey.PlayMorseSound(MorseType.Dot);
+            // }
+            // else if (_morseData[i] == '1')
+            // {
+            //     arduino_MorseKey.PlayMorseSound(MorseType.Dash);
+            // }
             _morseColoringImage[i].StartColoring();
             yield return CoroutineReturnManager.WaitForFixedUpdate;
 

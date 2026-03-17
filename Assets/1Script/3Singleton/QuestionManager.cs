@@ -28,7 +28,9 @@ public class QuestionInfo
 public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMorsePassTarget
 {
     List<QuestionInfo> questionInfos = new List<QuestionInfo>(16);
+    List<QuestionInfo>[] _cachedCartridges;
     QuestionInfo morsePass = new QuestionInfo();
+    int _cartridge = 1;
 
 
     int _currentIndex = 0;
@@ -47,6 +49,17 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
     public string[] CurrentMorsePattern
     {
         get { return questionInfos[_currentIndex].MorsePattern; }
+    }
+
+
+    public string[] GetMorsePattern(int index)
+    {
+        if (index < 0 || index >= questionInfos.Count)
+        {
+            Debug.LogWarning($"GetMorsePattern: Index {index} is out of range.");
+            return new string[0];
+        }
+        return questionInfos[index].MorsePattern;
     }
 
     public string CurrentQuestionText
@@ -72,7 +85,13 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
         get { return morsePass; }
     }
 
-
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            UpdateCartridge();
+        }
+    }
 
 
     public List<QuestionInfo> QuestionInfos
@@ -82,19 +101,63 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
     public void Initialize(List<QuestionInfo> items)
     {
+        questionInfos.Clear();
+        CurrentIndex = 0;
+
+        if (items == null || items.Count == 0)
+        {
+            Debug.LogWarning("로드된 질문 데이터가 비어 있습니다.");
+            return;
+        }
+
         for (int i = 0; i < items.Count; i++)
         {
             Debug.Log($"{i} : {items[i].Question}");
         }
-        questionInfos = new List<QuestionInfo>(items.Count);
-        questionInfos = items;
+        questionInfos.AddRange(items);
 
-        Debug.Log("로드된 질문 수: " + items.Count);
+        Debug.Log($"질문 데이터 교체 적용 완료: {questionInfos.Count}");
     }
 
     public List<QuestionInfo> Data()
     {
         return questionInfos;
+    }
+
+    public int Cartridge
+    {
+        get { return _cartridge; }
+    }
+
+    public void InitializeCartridges(List<QuestionInfo>[] cartridges)
+    {
+        _cachedCartridges = cartridges;
+        Debug.Log($"총 {_cachedCartridges.Length}개 카트리지 캐싱 완료");
+    }
+
+    public void UpdateCartridge()
+    {
+        if (_cachedCartridges == null || _cachedCartridges.Length == 0)
+        {
+            Debug.LogWarning("카트리지 데이터가 없습니다.");
+            return;
+        }
+        _cartridge++;
+        if (_cartridge > _cachedCartridges.Length)
+        {
+            Debug.Log("모든 카트리지를 완료했습니다.");
+            _cartridge = 0;
+        }
+        SetCartridge(_cartridge);
+    }
+
+    public void SetCartridge(int value)
+    {
+        if (_cachedCartridges == null) return;
+
+        int index = Mathf.Clamp(value - 1, 0, _cachedCartridges.Length - 1);
+        _cartridge = index + 1;
+        Initialize(_cachedCartridges[index]);
     }
 
     public void Initialize(QuestionInfo items)

@@ -23,8 +23,12 @@ public class EnterCheck : MonoBehaviour
 
     void OnEnable()
     {
-        isAllChecked = false;
-        _checkCoroutine = StartCoroutine(CheckCoroutine());
+        if (GameManager.Instance.IsStarted)
+        {
+            isAllChecked = false;
+            _checkCoroutine = StartCoroutine(CheckCoroutine());
+        }
+
     }
     void OnDisable()
     {

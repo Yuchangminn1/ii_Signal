@@ -135,6 +135,10 @@ public abstract class SequenceScript : MonoBehaviour
     {
         isTrigger = true;
         isWaiting = true;
+        if (_triggerForceOnCoroutine != null)
+        {
+            StopCoroutine(_triggerForceOnCoroutine);
+        }
         _triggerForceOnCoroutine = StartCoroutine(TriggerForceOnCoroutine());
 
     }

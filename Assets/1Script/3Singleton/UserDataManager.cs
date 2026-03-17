@@ -30,17 +30,19 @@ public enum ColorBallType
 public class Player
 {
     public const int defaultValue = -1;
-    public Player(string name, Direction direction, string colorCode, int pieceCount)
+    public Player(string lastName, string firstName, Direction direction, string colorCode, int pieceCount, bool isAllContentPlayed)
     {
-        _firstName = name;
+        _firstName = firstName;
+        _lastName = lastName;
 
         _direction = direction;
         _colorBallType = (ColorBallType)Enum.Parse(typeof(ColorBallType), colorCode);
         _pieceCount = pieceCount;
         _addPiece = defaultValue;
         partnerPassCode = "";
+        IsAllContentPlayed = isAllContentPlayed;
         //SetAnswers();
-        Debug.Log($"{_firstName}의 색상 타입이{colorCode} /  {_colorBallType}로 설정되었습니다. {_pieceCount}개의 피스를 가지고 있습니다.");
+        Debug.Log($"{_lastName} {_firstName}의 색상 타입이{colorCode} /  {_colorBallType}로 설정되었습니다. {_pieceCount}개의 피스를 가지고 있습니다. 모든 콘텐츠 플레이 여부: {IsAllContentPlayed}");
 
     }
     string _firstName;
@@ -84,6 +86,7 @@ public class Player
     //     Debug.Log("질문 수에 맞춰 답변 배열 초기화: " + QuestionManager.Instance.QuestionInfos.Count);
     //     _answers = new int[QuestionManager.Instance.QuestionInfos.Count];
     // }
+    public string[] CartridgeContent { get; set; }
 
     public int[] Answers
     {
@@ -195,7 +198,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         get { return _isUsingRoom; }
     }
 
-
+    const int PlayAbleContentNum = 4;
     private Dictionary<string, string> userDataCache = null;
     Player[] player = new Player[2];
 
@@ -219,10 +222,14 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     public List<int[]> GoalIndexint = new List<int[]>();
     JsonGenericUpData _genericData = new JsonGenericUpData();
 
+    string[] contentCodes;
 
     public int[] stamp { get; private set; } = new int[contentNum];
 
     public int deviceNum = 1;
+
+
+    public bool IsLastContent = false;
 
     public void AddUserUIDSet(Action action)
     {
@@ -263,6 +270,16 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         Debug.Log($"RequestUserDataUpdate: question={_question}, value={_value}, direction={direction}, contentCode={contentCode}");
         yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/updateValue.cfm?idx_user={userDataCache["IDX_USER"]}&q_no={_question}&side={side}&code={contentCode}&value={_value}", Answer);
     }
+
+    public IEnumerator UploadImageRequest()
+    {
+        string url = $"http://192.168.0.252:8500/api/uploadFile.cfm?idx_user={userDataCache["IDX_USER"]}&uid={userDataCache["UID_LEFT"]}&code={ServerData.Instance.Code}&type=jpg&count1";
+
+        Debug.Log("UploadImageRequest URL: " + url);
+
+        yield return ServerData.Instance.RequestDataCoroutine($"url", RoomUsingTest);
+
+    }
     public IEnumerator IsUserTagRequest()
     {
         yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/checkRoomState.cfm?code={ServerData.Instance.Code}", RoomUsingTest);
@@ -290,7 +307,11 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     {
         yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/getUser.cfm?uid={userUID}", ParseJsonData);
     }
-
+    public IEnumerator RequestCartridgeInfo()
+    {
+        if (userDataCache == null) yield break;
+        yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/getCartridgeContent.cfm?cartridge={userDataCache["CARTRIDGE"]}", SetCartridge);
+    }
 
 
     public IEnumerator RequestExitRoom()
@@ -347,34 +368,29 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         Debug.Log("Server : " + _an);
     }
 
-    public bool IsLastContent()
-    {
-        string[] contentCodes = { "A1", "B1", "C1", "D1" };
+    // public bool IsLastContentChecker()
+    // {
 
-        bool result = true;
+    //     string[] contentCodes = { "A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3", "D1", "D2", "D3" };
+    //     int clearContentCount = 0;
 
-        foreach (var code in contentCodes)
-        {
-            if (code == ServerData.Instance.Code)
-            {
-                continue; // 현재 콘텐츠는 검사에서 제외
-            }
-            string pieceValue = FindValue("PIECE_" + code);
-            if (pieceValue == null || pieceValue == "null")
-            {
-                Debug.Log($"IsLastContent: END_{code} 값이 없습니다.");
-                result = false;
-                break;
-            }
-            else
-            {
-                Debug.Log($"IsLastContent: END_{code} 값 = {pieceValue}");
-
-            }
-
-        }
-        return result;
-    }
+    //     foreach (var code in contentCodes)
+    //     {
+    //         if (code == ServerData.Instance.Code)
+    //         {
+    //             continue; // 현재 콘텐츠는 검사에서 제외
+    //         }
+    //         string pieceValue = FindValue("PIECE_" + code);
+    //         if (pieceValue != null && pieceValue != "null")
+    //         {
+    //             Debug.Log($"IsLastContent: END_{code} 값 = {pieceValue}");
+    //             clearContentCount++;
+    //         }
+    //     }
+    //     Debug.Log($"IsLastContent: 현재까지 클리어된 콘텐츠 수 = {clearContentCount} / {PlayAbleContentNum}");
+    //     IsLastContent = PlayAbleContentNum - 1 == clearContentCount;
+    //     return IsLastContent; // 현재 콘텐츠를 제외한 나머지 콘텐츠가 모두 클리어된 경우 마지막 콘텐츠로 간주
+    // }
 
     public void RoomUsingTest(string message)
     {
@@ -526,8 +542,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
                 if (onUserUIDSet != null) onUserUIDSet.Invoke();
             }
 
-            SetPlayers();
-
+            StartCoroutine(RequestCartridgeInfo());
 
 
             //SetPlayer
@@ -562,16 +577,21 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         {
             TestKey();
         }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            TestKey2();
+        }
     }
     public void Reset()
     {
         IsTestData = false;
-
+        IsLastContent = false;
         player[0] = null;
         player[1] = null;
         _isUsingRoom = false;
         userDataCache = null;
         IsContentEnd = false;
+        ResultManager.Instance.Reset();
         if (contentEndCoroutine != null)
         {
             StopCoroutine(contentEndCoroutine);
@@ -584,36 +604,74 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         Reset();
         IsTestData = true;
         StartCoroutine(RequestInitializeUserDataTest("2C39C73258"));
-
         //SetPlayers("길동");
+    }
+    public void TestKey2()
+    {
+        Reset();
+        IsTestData = true;
+        StartCoroutine(RequestInitializeUserDataTest("2E6997F2F8"));
+        //SetPlayers("길동");
+    }
+    public void SetCartridge(string _an)
+    {
+        contentCodes = _an.Split(',');
+        for (int i = 0; i < contentCodes.Length; i++)
+            contentCodes[i] = contentCodes[i].Trim();
+
+        Debug.Log("CartridgeContent : " + string.Join(", ", contentCodes));
+
+        SetPlayers();
     }
 
     public void SetPlayers()
     {
-        string[] contentCodes = { "A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3", "D1", "D2", "D3" };
-
         int pieceCount = 0;
+
+        string pieceValue;
+
+        bool isLastContent = true;
+
 
         foreach (var code in contentCodes)
         {
+            pieceValue = FindValue("PIECE_" + code);
 
-            Debug.Log($"코드 {code}의 피스 {FindValue("PIECE_" + code)}");
+            if (string.IsNullOrEmpty(pieceValue) || pieceValue == "null")
+            {
+                Debug.Log($"코드 {code}의 PIECE_{code} 값이 없습니다. 피스 수 계산에서 0으로 간주됩니다.");
+                continue;
+            }
+
+            Debug.Log($"코드 {code}의 피스 {pieceValue}");
+
             if (code == ServerData.Instance.Code)
             {
-                continue; // 현재 콘텐츠는 피스 계산에서 제외
+                continue;
             }
-            pieceCount += int.TryParse(FindValue("PIECE_" + code), out int result) ? result : 0;
+            pieceCount += int.TryParse(pieceValue, out int result) ? result : 0;
+        }
+
+        foreach (var code in contentCodes)
+        {
+            if (code == ServerData.Instance.Code)
+            {
+                continue;
+            }
+            string endValue = FindValue("END_" + code);
+            if (string.IsNullOrEmpty(endValue) || endValue == "null")
+            {
+                Debug.Log($"코드 {code}의 END_{code} 값이 없습니다.마지막 체험이 아님");
+                isLastContent = false;
+                break;
+            }
 
         }
-        Debug.Log($"SetPlayers 유저 할당");
-
-        player[0] = new Player(FindValue("RESERVATION_FIRST_NAME_LEFT"), Direction.Left, FindValue("COLOR_LEFT"), pieceCount);
-        player[1] = new Player(FindValue("RESERVATION_FIRST_NAME_RIGHT"), Direction.Right, FindValue("COLOR_RIGHT"), pieceCount);
-        // player[0].AddPiece = Random.Range(1, 6);
-        // player[1].AddPiece = player[0].AddPiece;
 
 
 
+        player[0] = new Player(FindValue("RESERVATION_LAST_NAME_LEFT"), FindValue("RESERVATION_FIRST_NAME_LEFT"), Direction.Left, FindValue("COLOR_LEFT"), pieceCount, isLastContent);
+        player[1] = new Player(FindValue("RESERVATION_LAST_NAME_RIGHT"), FindValue("RESERVATION_FIRST_NAME_RIGHT"), Direction.Right, FindValue("COLOR_RIGHT"), pieceCount, isLastContent);
 
         QuestionManager.Instance.CurrentIndex = 0;
 
@@ -657,7 +715,17 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         }
     }
 
-
+    public Player GetPartnerPlayer()
+    {
+        if (CurrentDirection == Direction.Left)
+        {
+            return player[1];
+        }
+        else
+        {
+            return player[0];
+        }
+    }
 
     public void Initialize(JsonGenericUpData data)
     {

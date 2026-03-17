@@ -206,7 +206,7 @@ public class MorseImageContainer : MonoBehaviour
                 NetworkManager.Instance.SendData(sendMessage);
 
             }
-            else
+            else if (QuestionManager.Instance.CurrentIndex != 0)
             {
                 NetworkManager.Instance.SendData(currentData);
             }

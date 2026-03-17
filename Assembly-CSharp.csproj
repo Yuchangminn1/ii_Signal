@@ -84,8 +84,10 @@
     <Compile Include="Assets\1Script\CoroutineReturnManager.cs" />
     <Compile Include="Assets\1Script\Morse\MorseInputImage.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\Test\Rotate.cs" />
+    <Compile Include="Assets\1Script\QuestionText.cs" />
     <Compile Include="Assets\1Script\LinkScript.cs" />
     <Compile Include="Assets\1Script\1Json\TextLoader.cs" />
+    <Compile Include="Assets\1Script\PhotoCompositor.cs" />
     <Compile Include="Assets\1Script\MorseColoringImage.cs" />
     <Compile Include="Assets\1Script\LoopVideo.cs" />
     <Compile Include="Assets\1Script\Buttons\IdleButton.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="Assets\1Script\Buttons\ExitButton.cs" />
     <Compile Include="Assets\1Script\Tcp\SimpleTcpClient.cs" />
     <Compile Include="Assets\1Script\WaitngUI.cs" />
+    <Compile Include="Assets\1Script\ResultManager.cs" />
     <Compile Include="Assets\1Script\1Json\GenericLoader.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\MultiKeyDictionary.cs" />
     <Compile Include="Assets\1Script\3Singleton\UserDataManager.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="Assets\1Script\2PageSequence\SequenceFade.cs" />
     <Compile Include="Assets\1Script\ColorBallImage.cs" />
     <Compile Include="Assets\1Script\PageController.cs" />
+    <Compile Include="Assets\1Script\ResultSelector.cs" />
     <Compile Include="Assets\1Script\StampCountText.cs" />
     <Compile Include="Assets\1Script\Tcp\NetworkManager.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
@@ -112,6 +116,7 @@
     <Compile Include="Assets\1Script\Morse\Arduino_MorseKey.cs" />
     <Compile Include="Assets\1Script\HeadSetCheck.cs" />
     <Compile Include="Assets\1Script\Morse\MorseImage.cs" />
+    <Compile Include="Assets\1Script\ResultChangeText.cs" />
     <Compile Include="Assets\1Script\MorseAudioInput.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterMessageReceiver.cs" />
     <Compile Include="Assets\1Script\2PageSequence\PlayerPageController.cs" />
@@ -119,6 +124,7 @@
     <Compile Include="Assets\1Script\2PageSequence\SequenceVideoPlayer.cs" />
     <Compile Include="Assets\1Script\1Json\JsonLoaderBase.cs" />
     <Compile Include="Assets\1Script\WaitCheck.cs" />
+    <Compile Include="Assets\1Script\ResultContainer.cs" />
     <Compile Include="Assets\1Script\NameText.cs" />
     <Compile Include="Assets\1Script\NextGuider.cs" />
     <Compile Include="Assets\1Script\QuestionScript.cs" />
@@ -132,6 +138,7 @@
     <Compile Include="Assets\1Script\3Singleton\CoroutineRunner.cs" />
     <Compile Include="Assets\1Script\GraphicMove.cs" />
     <Compile Include="Assets\1Script\RawImageFaderGroup.cs" />
+    <Compile Include="Assets\1Script\ResultSelectorText.cs" />
     <Compile Include="Assets\1Script\ResultStampContainer.cs" />
     <Compile Include="Assets\1Script\EnterCheck.cs" />
     <Compile Include="Assets\1Script\ResetUIOn.cs" />

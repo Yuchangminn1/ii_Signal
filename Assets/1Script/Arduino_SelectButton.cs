@@ -30,7 +30,7 @@ public class Arduino_SelectButton : Arduino
 
         else
         {
-            Debug.Log($"{received} / 이건 무슨 입력이여 ?");
+            Debug.Log($"{received} ");
         }
     }
     void Update()

@@ -12,6 +12,7 @@ public class QuestionSelectTextContainer : MonoBehaviour
     public Texture DashTexture;
 
 
+
     SelectOption[] selectOptions;
 
     CanvasGroup _canvasGroup;
@@ -59,12 +60,27 @@ public class QuestionSelectTextContainer : MonoBehaviour
     public void SetTextColor()
     {
         int index = MorseTranslator.CurrentDataIndex;
-        StartCoroutine(UserDataManager.Instance.RequestUserDataUpdate(QuestionManager.Instance.CurrentIndex, index + 1, UserDataManager.Instance.GetPlayer().Direction));
 
 
         if (index < 0 || index >= selectOptions.Length)
             return;
         selectOptions[index].Select();
+    }
+
+    public void SaveAnswer()
+    {
+        if (QuestionManager.Instance.CurrentIndex != 0)
+        {
+            int index = MorseTranslator.CurrentDataIndex;
+
+            StartCoroutine(UserDataManager.Instance.RequestUserDataUpdate(QuestionManager.Instance.CurrentIndex, index + 1, UserDataManager.Instance.GetPlayer().Direction));
+            if (NetworkManager.Instance.IsServer)
+            {
+                ResultManager.Instance.LeftSelect(index);
+            }
+        }
+
+
     }
 
     public void Reset()

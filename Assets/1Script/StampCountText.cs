@@ -9,10 +9,16 @@ public class StampCountText : MonoBehaviour
 
     public bool isTotal = false;
 
+    string originText = "";
+
+
+
     Text _text;
 
     void OnEnable()
     {
+        if (originText == "")
+            originText = GetComponent<Text>().text;
 
 
     }
@@ -25,12 +31,12 @@ public class StampCountText : MonoBehaviour
         {
             if (isTotal)
             {
-                _text.text = _text.text.Replace("Count", (UserDataManager.Instance.GetPlayer().PieceCount + UserDataManager.Instance.GetPlayer().AddPiece).ToString());
+                _text.text = originText.Replace("Count", (UserDataManager.Instance.GetPlayer().PieceCount + UserDataManager.Instance.GetPlayer().AddPiece).ToString());
                 Debug.Log($"Total Stamp Count: {UserDataManager.Instance.GetPlayer().PieceCount + UserDataManager.Instance.GetPlayer().AddPiece}");
 
             }
             else
-                _text.text = _text.text.Replace("Count", UserDataManager.Instance.GetPlayer().AddPiece.ToString());
+                _text.text = originText.Replace("Count", UserDataManager.Instance.GetPlayer().AddPiece.ToString());
 
         }
 

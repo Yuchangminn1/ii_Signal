@@ -4,6 +4,7 @@ using UnityEngine;
 public interface IQuestionTarget
 {
     void Initialize(List<QuestionInfo> items);
+    void InitializeCartridges(List<QuestionInfo>[] cartridges);
     List<QuestionInfo> Data();
 }
 

@@ -122,6 +122,8 @@ public class Arduino : MonoBehaviour
     }
     protected void OnApplicationQuit()
     {
+        if (stream == null)
+            return;
         if (stream.IsOpen) stream.Close();
     }
     protected IEnumerator ReadMessage()

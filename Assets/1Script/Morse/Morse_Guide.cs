@@ -96,10 +96,10 @@ public class Morse_Guide : MonoBehaviour
 
     IEnumerator MorseIndexCheckCoroutine(MorseType morseType)
     {
-        if (morseType == MorseType.Dot)
-            arduino_MorseKey.PlayMorseSound(MorseType.Dot);
-        else if (morseType == MorseType.Dash)
-            arduino_MorseKey.PlayMorseSound(MorseType.Dash);
+        // if (morseType == MorseType.Dot)
+        //     arduino_MorseKey.PlayMorseSound(MorseType.Dot);
+        // else if (morseType == MorseType.Dash)
+        //     arduino_MorseKey.PlayMorseSound(MorseType.Dash);
 
 
 

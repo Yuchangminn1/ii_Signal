@@ -86,6 +86,8 @@ public class QuestionScript : MonoBehaviour
         {
             yield return delayWait;
             endTrigger?.TriggerOn();
+            QuestionManager.Instance.CurrentIndex++;
+
             yield break;
         }
         if (QuestionManager.Instance.CurrentIndex == 0)

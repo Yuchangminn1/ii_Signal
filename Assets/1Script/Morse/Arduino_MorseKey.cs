@@ -53,6 +53,8 @@ public class Arduino_MorseKey : MonoBehaviour
 
     public Action<float> OnAccuracyCheckAction;
 
+    bool _isOpenOverInputPopup = false;
+
     //bool morseInputDelay = false;
 
     bool _isAccuracyRateCheck = false;
@@ -169,7 +171,7 @@ public class Arduino_MorseKey : MonoBehaviour
                             isLastInputNShadow = true;
 
                         ShadowDash?.Invoke(_inputCount);
-                        if (_isGuide)
+                        if (_isGuide && PageController.Instance.CurrentPage == 3)
                         {
                             isPress = false;
                             MorseTransmit(MorseTranslator.DefaultDashTime);
@@ -293,11 +295,15 @@ public class Arduino_MorseKey : MonoBehaviour
     }
     public IEnumerator OverInputCoroutine()
     {
-        _isOverInputPopupOn = true;
-        if (OverInputPopup.alpha < 0.9f)
+
+        if (_isOverInputPopupOn == false)
+        {
+            _isOverInputPopupOn = true;
+
+            SoundManager.Instance.PlayEffectSound(EffectSoundNum.PopupSound);
             FadeManager.Instance.SetAlphaOne(OverInputPopup);
+        }
         float starttime = Time.time;
-        SoundManager.Instance.PlayEffectSound(EffectSoundNum.PopupSound);
 
         while (Time.time - starttime < _overInputPopupTime)
         {
@@ -305,6 +311,7 @@ public class Arduino_MorseKey : MonoBehaviour
         }
         FadeManager.Instance.SetAlphaZero(OverInputPopup);
         _isOverInputPopupOn = false;
+
 
         _overInputCoroutine = null;
     }

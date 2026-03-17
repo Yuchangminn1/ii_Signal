@@ -39,10 +39,6 @@ public class MorseAnswerShow : MonoBehaviour
 
         Debug.Log($"받은 모스 수 temp count : {temp.Count}");
 
-        temp.Dequeue(); //첫번째는 테스트코드
-
-
-
         while (temp.Count > 0) //마지막은 암호코드라 무시 
         {
             NetworkManager.Instance.SendData($"M");
