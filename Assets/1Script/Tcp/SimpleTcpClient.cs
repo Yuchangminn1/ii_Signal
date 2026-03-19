@@ -89,7 +89,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
 
                         ReadData(serverMessage);
 
-                        Debug.Log("Server : " + serverMessage);
                     }
                 }
             }
@@ -136,7 +135,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
 
                 // Write byte array to socketConnection stream.
                 stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
-                Debug.Log("Client sent: " + clientMessage);
             }
         }
         catch (SocketException socketException)
@@ -242,10 +240,7 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                 catch (Exception e) { Debug.LogError($"[TCP ReadData] 5자리 데이터 처리 에러: {e.Message}"); }
                 return;
             }
-            else
-            {
-                Debug.Log("처리 안하는 입력: " + data);
-            }
+
         }
         catch (Exception e)
         {

@@ -109,7 +109,6 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
     {
         if (GameManager.Instance.IsStarted == false)
         {
-            Debug.Log("Game Not Started Yet");
             return;
         }
         if (effectSoundNum == EffectSoundNum.MorseDashSound_1 && Time.time - _soundStartTimes[(int)(EffectSoundNum.MorseResetSound)] < 0.15f)

@@ -43,12 +43,26 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
     public string[] CurrentSelection
     {
-        get { return questionInfos[_currentIndex].Selection; }
+        get
+        {
+            if (questionInfos == null || questionInfos.Count == 0 || _currentIndex < 0 || _currentIndex >= questionInfos.Count)
+            {
+                return new string[0];
+            }
+            return questionInfos[_currentIndex].Selection;
+        }
     }
 
     public string[] CurrentMorsePattern
     {
-        get { return questionInfos[_currentIndex].MorsePattern; }
+        get
+        {
+            if (questionInfos == null || questionInfos.Count == 0 || _currentIndex < 0 || _currentIndex >= questionInfos.Count)
+            {
+                return new string[0];
+            }
+            return questionInfos[_currentIndex].MorsePattern;
+        }
     }
 
 
@@ -64,7 +78,14 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
     public string CurrentQuestionText
     {
-        get { return questionInfos[_currentIndex].Question; }
+        get
+        {
+            if (questionInfos == null || questionInfos.Count == 0 || _currentIndex < 0 || _currentIndex >= questionInfos.Count)
+            {
+                return string.Empty;
+            }
+            return questionInfos[_currentIndex].Question;
+        }
     }
 
     public void UpdateUserAnswer(int selection)
@@ -101,20 +122,17 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
     public void Initialize(List<QuestionInfo> items)
     {
-        questionInfos.Clear();
         CurrentIndex = 0;
 
         if (items == null || items.Count == 0)
         {
+            questionInfos = new List<QuestionInfo>(0);
             Debug.LogWarning("로드된 질문 데이터가 비어 있습니다.");
             return;
         }
 
-        for (int i = 0; i < items.Count; i++)
-        {
-            Debug.Log($"{i} : {items[i].Question}");
-        }
-        questionInfos.AddRange(items);
+        // 카트리지 전환 시 전체 복사를 피해서 GC/CPU 부담을 줄인다.
+        questionInfos = items;
 
         Debug.Log($"질문 데이터 교체 적용 완료: {questionInfos.Count}");
     }
@@ -131,6 +149,13 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
     public void InitializeCartridges(List<QuestionInfo>[] cartridges)
     {
+        if (cartridges == null || cartridges.Length == 0)
+        {
+            _cachedCartridges = null;
+            Debug.LogWarning("캐싱할 카트리지 데이터가 없습니다.");
+            return;
+        }
+
         _cachedCartridges = cartridges;
         Debug.Log($"총 {_cachedCartridges.Length}개 카트리지 캐싱 완료");
     }
@@ -153,9 +178,15 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
     public void SetCartridge(int value)
     {
-        if (_cachedCartridges == null) return;
+        if (_cachedCartridges == null || _cachedCartridges.Length == 0) return;
 
         int index = Mathf.Clamp(value - 1, 0, _cachedCartridges.Length - 1);
+        if (_cachedCartridges[index] == null)
+        {
+            Debug.LogWarning($"카트리지 {index + 1} 데이터가 비어 있습니다.");
+            return;
+        }
+
         _cartridge = index + 1;
         Initialize(_cachedCartridges[index]);
     }
@@ -164,9 +195,6 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
     {
         morsePass = items;
 
-        Debug.Log("로드된 질문: " + morsePass.Question);
-        Debug.Log("로드된 선택지 수: " + morsePass.Selection.Length);
-        Debug.Log("로드된 모스 패턴 수: " + morsePass.MorsePattern.Length);
     }
 
     QuestionInfo IMorsePassTarget.Data()
