@@ -5,7 +5,7 @@ using UnityEngine;
 public interface ITCP
 {
     void SendData(string data);
-
+    bool IsConnected { get; }
 }
 
 
@@ -27,6 +27,24 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
     bool _isServer = false;
 
     public bool IsServer => _isServer;
+
+    // 네트워크 연결 상태 추적
+    private bool _isConnected = false;
+    public bool IsConnected
+    {
+        get => _isConnected;
+        private set
+        {
+            if (_isConnected != value)
+            {
+                _isConnected = value;
+                if (!value)
+                {
+                    OnConnectionLost();
+                }
+            }
+        }
+    }
 
     string ipAddress = "";
 
@@ -112,6 +130,12 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
 
     public void SendData(string data)
     {
+        if (!IsConnected)
+        {
+            Debug.LogWarning($"[TCP] 연결 상태가 아닙니다. 데이터 전송 불가: {data}");
+            return;
+        }
+
         if (tcpComponent != null)
         {
             tcpComponent.SendData(data);
@@ -120,6 +144,48 @@ public class NetworkManager : Singleton<NetworkManager>, IJsonGenericTarget, ITC
         {
             Debug.LogError("TCP 컴포넌트가 없습니다.");
         }
+    }
+
+    /// <summary>
+    /// TCP 연결이 성공했을 때 호출 (TCP 컴포넌트에서 호출)
+    /// </summary>
+    public void OnConnectionEstablished()
+    {
+        IsConnected = true;
+        Debug.Log("[TCP] 연결 성공");
+    }
+
+    /// <summary>
+    /// TCP 연결이 끊어졌을 때 처리
+    /// </summary>
+    private void OnConnectionLost()
+    {
+        Debug.LogError("[TCP] 네트워크 연결이 끊어졌습니다!");
+
+        // 진행 중인 Coroutine 중단
+        if (_requestCoroutine != null)
+        {
+            StopCoroutine(_requestCoroutine);
+            _requestCoroutine = null;
+        }
+
+        if (toggleCoroutine != null)
+        {
+            StopCoroutine(toggleCoroutine);
+            toggleCoroutine = null;
+        }
+
+        // 게임 상태 초기화
+        EndWait = false;
+        ResetRequested = false;
+    }
+
+    /// <summary>
+    /// TCP 연결이 끊어졌을 때 외부에서 명시적으로 호출
+    /// </summary>
+    public void SetConnectionLost()
+    {
+        IsConnected = false;
     }
 
 

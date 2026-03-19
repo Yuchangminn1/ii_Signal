@@ -20,7 +20,7 @@
   "UserDataManager": {
     "intParams": {},
     "floatParams": {},
-    "boolParams": { "isLeftPlayer": false },
+    "boolParams": { "isLeftPlayer": true },
     "stringParams": {}
   },
 

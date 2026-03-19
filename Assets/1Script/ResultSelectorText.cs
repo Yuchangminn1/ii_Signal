@@ -26,6 +26,8 @@ public class ResultSelectorText : ResultSelector
     public override void Reset()
     {
         base.Reset();
+        if (_text == null || _text.Length == 0)
+            return;
         FadeManager.Instance.SetAlphaZero(_text);
     }
 

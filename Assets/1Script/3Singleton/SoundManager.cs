@@ -34,6 +34,8 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
     float _baseVolume = 0.6f;
     float[] _volumes = new float[System.Enum.GetValues(typeof(EffectSoundNum)).Length];
 
+    float[] _soundStartTimes = new float[System.Enum.GetValues(typeof(EffectSoundNum)).Length];
+
 
 
 
@@ -80,6 +82,7 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
         {
             return;
         }
+
         audioSources[(int)(EffectSoundNum.MorseResetSound)].Stop();
 
     }
@@ -93,6 +96,7 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
         }
         Debug.Log("Attempting to play sound: " + effectSoundNum.ToString());
 
+        _soundStartTimes[(int)(EffectSoundNum.MorseResetSound)] = Time.time;
 
         if (audioSources[(int)effectSoundNum] != null)
         {
@@ -108,6 +112,12 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
             Debug.Log("Game Not Started Yet");
             return;
         }
+        if (effectSoundNum == EffectSoundNum.MorseDashSound_1 && Time.time - _soundStartTimes[(int)(EffectSoundNum.MorseResetSound)] < 0.15f)
+        {
+            Debug.Log("Dash 너무 짧은 시간에 false");
+            return;
+        }
+        Debug.Log("Attempting to stop sound: " + effectSoundNum.ToString());
 
         if (audioSources[(int)effectSoundNum] != null)
         {

@@ -15,6 +15,8 @@ public class ResultSelector : MonoBehaviour
 
     public virtual void Reset()
     {
+        if (_rawImage == null || _rawImage.Length == 0)
+            return;
         FadeManager.Instance.SetAlphaZero(_rawImage);
     }
 

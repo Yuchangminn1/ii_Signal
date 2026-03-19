@@ -46,6 +46,7 @@ public class MorseImageContainer : MonoBehaviour
 
     public virtual IEnumerator ShadowColoring(int index)
     {
+
         if (index < morseInputImages.Length)
             morseInputImages[index].ShadowColoring();
         yield return CoroutineReturnManager.GetWaitForSeconds(0.2f);
@@ -54,6 +55,7 @@ public class MorseImageContainer : MonoBehaviour
     }
     public void ShadowColoringStart(int index)
     {
+
         if (_setAnswerTrueCoroutine == null)
 
             _setAnswerTrueCoroutine = StartCoroutine(ShadowColoring(index));

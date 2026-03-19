@@ -65,7 +65,7 @@ public class GameManager : Singleton<GameManager>, IJsonGenericTarget
             resetDelay = new WaitForSeconds(_resetTime);
         }
 
-        Debug.Log("ClosePopup 초기화 코루틴에서 호출");
+        //Debug.Log("ClosePopup 초기화 코루틴에서 호출");
 
         PopupManager.Instance?.ClosePopup();
         //Debug.Log("Resetting Page in " + _resetTime + " seconds...");
@@ -79,8 +79,8 @@ public class GameManager : Singleton<GameManager>, IJsonGenericTarget
             resetCoroutine = null;
             yield break;
         }
-        Debug.Log($"경과 시간{Time.time - startTime}  / 리셋타임 {_resetTime} / 페이지 아이들? {PageController.Instance.IsIdle()}");
-        Debug.Log("PopUpOpen 초기화 코루틴에서 호출");
+        //Debug.Log($"경과 시간{Time.time - startTime}  / 리셋타임 {_resetTime} / 페이지 아이들? {PageController.Instance.IsIdle()}");
+        //Debug.Log("PopUpOpen 초기화 코루틴에서 호출");
 
         PopupManager.Instance?.PopUpOpen();
 

@@ -66,6 +66,7 @@ public class MorseInputTarget : MonoBehaviour
             {
                 _currentFillAmount = 0;
                 UpdateBar(_currentFillAmount);
+
             }
             FadeManager.Instance.SetAlphaZero(_rawImage);
             IsCheck = false;
@@ -106,6 +107,7 @@ public class MorseInputTarget : MonoBehaviour
 
             }
             UpdateBar(_currentFillAmount);
+
         }
     }
     public void FillingBar()
@@ -117,14 +119,22 @@ public class MorseInputTarget : MonoBehaviour
         else
             _rawImage.color = CurrentColor;
         isFilling = true;
+
         if (CurrentSoundOption == SoundOptions.Sound_1)
         {
+
             if (CurrentMorseType == MorseType.Dot)
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
             else if (CurrentMorseType == MorseType.Dash && PageController.Instance.CurrentPage == 6)
+            {
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+            }
             else if (CurrentMorseType == MorseType.Shadow)
+            {
+
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+
+            }
         }
         else if (CurrentSoundOption == SoundOptions.Sound_2)
         {
@@ -158,7 +168,7 @@ public class MorseInputTarget : MonoBehaviour
         _rawImage.uvRect = new Rect(0, 0, fillAmount, 1);
 
 
-        if (fillAmount >= 1f)
+        if (isFilling && fillAmount >= 1f)
         {
             IsCheck = true;
             isFilling = false;
@@ -170,10 +180,15 @@ public class MorseInputTarget : MonoBehaviour
                 // else
                 if (CurrentMorseType == MorseType.Dash && PageController.Instance.CurrentPage == 6)
                 {
+                    Debug.Log("Stop1");
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
                 }
                 if (CurrentMorseType == MorseType.Shadow)
+                {
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+
+                    Debug.Log("Stop2");
+                }
             }
             else if (CurrentSoundOption == SoundOptions.Sound_2)
             {

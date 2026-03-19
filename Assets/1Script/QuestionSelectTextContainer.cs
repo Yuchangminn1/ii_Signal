@@ -74,10 +74,8 @@ public class QuestionSelectTextContainer : MonoBehaviour
             int index = MorseTranslator.CurrentDataIndex;
 
             StartCoroutine(UserDataManager.Instance.RequestUserDataUpdate(QuestionManager.Instance.CurrentIndex, index + 1, UserDataManager.Instance.GetPlayer().Direction));
-            if (NetworkManager.Instance.IsServer)
-            {
-                ResultManager.Instance.LeftSelect(index);
-            }
+            ResultManager.Instance.Select(index);
+
         }
 
 

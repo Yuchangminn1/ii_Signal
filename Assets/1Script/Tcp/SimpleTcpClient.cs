@@ -11,9 +11,12 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     // System.Net.Sockets.TcpClient와 이름 충돌을 피하기 위해 클래스 이름을 변경했습니다.
     private TcpClient socketConnection;
     private Thread clientReceiveThread;
+    private bool _isConnected = false;
 
     string serverIp = "192.168.219.103";
     public string ServerIp { get => serverIp; set => serverIp = value; }
+
+    public bool IsConnected => _isConnected && socketConnection != null && socketConnection.Connected;
 
 
     // Start is called before the first frame update
@@ -33,6 +36,9 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     {
         try
         {
+            // MainThreadDispatcher 초기화
+            MainThreadDispatcher.EnsureCreated();
+
             clientReceiveThread = new Thread(new ThreadStart(ListenForData));
             clientReceiveThread.IsBackground = true;
             clientReceiveThread.Start();
@@ -51,6 +57,14 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             {
                 // 사용자의 ifconfig 정보(en0)에 따라 IP 주소를 192.0.0.2로 설정
                 socketConnection = new TcpClient(serverIp, 8052);
+                _isConnected = true;
+
+                // NetworkManager에 연결 성공 알림
+                MainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    NetworkManager.Instance.OnConnectionEstablished();
+                });
+
                 Debug.Log("Connected to Server!");
 
                 using (NetworkStream stream = socketConnection.GetStream())
@@ -65,6 +79,11 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                         if (serverMessage == null)
                         {
                             Debug.Log("Server disconnected.");
+                            _isConnected = false;
+                            MainThreadDispatcher.RunOnMainThread(() =>
+                            {
+                                NetworkManager.Instance.SetConnectionLost();
+                            });
                             break;
                         }
 
@@ -76,10 +95,20 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             }
             catch (SocketException socketException)
             {
-                Debug.Log("Retrying to connect to server... " + socketException.Message);
+                _isConnected = false;
+                MainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    NetworkManager.Instance.SetConnectionLost();
+                });
+                Debug.Log("Socket Exception - Retrying to connect to server... " + socketException.Message);
             }
             catch (Exception e)
             {
+                _isConnected = false;
+                MainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    NetworkManager.Instance.SetConnectionLost();
+                });
                 Debug.Log("Exception: " + e.Message);
             }
 
@@ -123,87 +152,104 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
 
     public void ReadData(string data)
     {
-        bool isMorseData = false;
-
-
-        if (data.Equals("Go", StringComparison.OrdinalIgnoreCase))
+        try
         {
-            NetworkManager.Instance.IsTutorialRead = true;
-            return;
-        }
-        GameManager.Instance.GoToIdleCheck();
+            bool isMorseData = false;
 
-        if (data.Equals("EReset", StringComparison.OrdinalIgnoreCase))
-        {
-            if (UserDataManager.Instance.IsContentEnd)
+            if (data.Equals("Go", StringComparison.OrdinalIgnoreCase))
             {
-                NetworkManager.Instance.ResetRequested = true;
-                NetworkManager.Instance.SendData("EReset");
-            }
-            return;
-
-        }
-        else if (data.Equals("Reset", StringComparison.OrdinalIgnoreCase))
-
-        {
-            NetworkManager.Instance.ResetRequested = true;
-            return;
-
-        }
-        else if (data.Length == 2 && data[0] == 'S')
-        {
-            Debug.Log("Stamp Count: " + data);
-
-            UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece = int.Parse(data.Substring(1, 1));
-            UserDataManager.Instance.GetPlayer(Direction.Right).AddPiece = UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece;
-            Debug.Log("AddPiece Set: " + UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece);
-            return;
-
-        }
-        else if (data.Length == 4)
-        {
-            Debug.Log("data.Length == 4 Received Data: " + data);
-            isMorseData = true;
-
-            foreach (char c in data)
-            {
-                if (c != '0' && c != '1')
-                {
-                    isMorseData = false;
-                    break;
-                }
-            }
-            UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
-
-        }
-        else if (data.Length == 5)
-        {
-            Debug.Log("data.Length == 5 Received Data: " + data);
-
-            if (data.StartsWith("P"))
-            {
-                data = data.Substring(1, 4);
-                Debug.Log("PassCode Data Received: " + data);
-                UserDataManager.Instance.GetPlayer().PartnerPassCode = data;
-                Debug.Log("PassCode Set: " + UserDataManager.Instance.GetPlayer().PartnerPassCode);
-                isMorseData = true;
-
-                foreach (char c in data)
-                {
-                    if (c != '0' && c != '1')
-                    {
-                        isMorseData = false;
-                        break;
-                    }
-                }
+                NetworkManager.Instance.IsTutorialRead = true;
                 return;
             }
 
-        }
+            try { GameManager.Instance.GoToIdleCheck(); }
+            catch (Exception e) { Debug.LogError($"[TCP ReadData] GameManager.GoToIdleCheck 에러: {e.Message}"); }
 
-        else
+            if (data.Equals("EReset", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    if (UserDataManager.Instance.IsContentEnd)
+                    {
+                        NetworkManager.Instance.ResetRequested = true;
+                        NetworkManager.Instance.SendData("EReset");
+                    }
+                }
+                catch (Exception e) { Debug.LogError($"[TCP ReadData] EReset 처리 에러: {e.Message}"); }
+                return;
+            }
+            else if (data.Equals("Reset", StringComparison.OrdinalIgnoreCase))
+            {
+                try { NetworkManager.Instance.ResetRequested = true; }
+                catch (Exception e) { Debug.LogError($"[TCP ReadData] Reset 처리 에러: {e.Message}"); }
+                return;
+            }
+            else if (data.Length == 2 && data[0] == 'S')
+            {
+                try
+                {
+                    Debug.Log("Stamp Count: " + data);
+                    UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece = int.Parse(data.Substring(1, 1));
+                    UserDataManager.Instance.GetPlayer(Direction.Right).AddPiece = UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece;
+                    Debug.Log("AddPiece Set: " + UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece);
+                }
+                catch (Exception e) { Debug.LogError($"[TCP ReadData] Stamp 처리 에러: {e.Message}"); }
+                return;
+            }
+            else if (data.Length == 4)
+            {
+                try
+                {
+                    Debug.Log("data.Length == 4 Received Data: " + data);
+                    isMorseData = true;
+
+                    foreach (char c in data)
+                    {
+                        if (c != '0' && c != '1')
+                        {
+                            isMorseData = false;
+                            break;
+                        }
+                    }
+                    UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
+                }
+                catch (Exception e) { Debug.LogError($"[TCP ReadData] 4자리 데이터 처리 에러: {e.Message}"); }
+            }
+            else if (data.Length == 5)
+            {
+                try
+                {
+                    Debug.Log("data.Length == 5 Received Data: " + data);
+
+                    if (data.StartsWith("P"))
+                    {
+                        data = data.Substring(1, 4);
+                        Debug.Log("PassCode Data Received: " + data);
+                        UserDataManager.Instance.GetPlayer().PartnerPassCode = data;
+                        Debug.Log("PassCode Set: " + UserDataManager.Instance.GetPlayer().PartnerPassCode);
+                        isMorseData = true;
+
+                        foreach (char c in data)
+                        {
+                            if (c != '0' && c != '1')
+                            {
+                                isMorseData = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e) { Debug.LogError($"[TCP ReadData] 5자리 데이터 처리 에러: {e.Message}"); }
+                return;
+            }
+            else
+            {
+                Debug.Log("처리 안하는 입력: " + data);
+            }
+        }
+        catch (Exception e)
         {
-            Debug.Log("처리 안하는 입력: " + data);
+            Debug.LogError($"[TCP ReadData] 예상치 못한 에러: {e.Message}\n{e.StackTrace}");
         }
     }
 

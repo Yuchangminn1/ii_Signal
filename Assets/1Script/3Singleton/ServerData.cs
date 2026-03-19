@@ -174,36 +174,43 @@ public class ServerData : MonoBehaviour
     // }
 
 
-
     public IEnumerator RequestDataCoroutine(string _url, Action<string> _callback)
     {
-        var www = UnityWebRequest.Get(_url);
+        const int maxRetryCount = 10;
+        string lastError = string.Empty;
 
-        www.timeout = 10;
-
-        www.downloadHandler = new DownloadHandlerBuffer();
-
-        float requestStartTime = Time.time;
-
-        //Debug.Log("서버 요청 시작 시간" + TimeSpan.FromSeconds(Time.time).ToString(@"hh\:mm\:ss"));
-
-        yield return www.SendWebRequest();
-        if (Time.time - requestStartTime > 2f)
+        for (int retry = 1; retry <= maxRetryCount; retry++)
         {
-            Debug.LogWarning($"{_url}   / 서버 요청 지연 시간: " + (Time.time - requestStartTime) + "초");
+            using (var www = UnityWebRequest.Get(_url))
+            {
+                www.timeout = 10;
+                www.downloadHandler = new DownloadHandlerBuffer();
+
+                float serverTime = Time.time;
+                yield return www.SendWebRequest();
+
+                if (Time.time - serverTime > 2f)
+                {
+                    Debug.LogWarning($"{_url} / 서버 요청 지연 시간" + TimeSpan.FromSeconds(Time.time - serverTime).ToString(@"hh\:mm\:ss"));
+                }
+
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    _callback?.Invoke(www.downloadHandler.text);
+                    onCoroutineEnd?.Invoke();
+                    yield break;
+                }
+
+                lastError = www.error;
+                Debug.LogWarning($"요청 실패 재시도 ({retry}/{maxRetryCount}) : {_url} | {www.error}");
+
+                yield return new WaitForSeconds(2f);
+            }
         }
-        //Debug.Log("서버 요청 완료 시간" + TimeSpan.FromSeconds(Time.time).ToString(@"hh\:mm\:ss"));
-        string jsonText = www.downloadHandler.text;
 
-        //Debug.LogWarning(jsonText);
-
-        _callback?.Invoke(jsonText);
-
+        Debug.LogError($"요청 최종 실패 ({maxRetryCount}회) : {_url} | {lastError}");
+        _callback?.Invoke(null);
         onCoroutineEnd?.Invoke();
-
-
-
-
 
     }
 

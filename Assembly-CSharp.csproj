@@ -110,6 +110,7 @@
     <Compile Include="Assets\1Script\StampCountText.cs" />
     <Compile Include="Assets\1Script\Tcp\NetworkManager.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
+    <Compile Include="Assets\1Script\Tcp\MainThreadDispatcher.cs" />
     <Compile Include="Assets\1Script\TutorialStart.cs" />
     <Compile Include="Assets\1Script\SoundObject.cs" />
     <Compile Include="Assets\1Script\MorseAnswerContainer.cs" />

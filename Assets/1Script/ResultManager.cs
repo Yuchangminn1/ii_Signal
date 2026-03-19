@@ -6,10 +6,9 @@ using UnityEngine.UI;
 public class ResultManager : Singleton<ResultManager>
 {
 
-    public ResultContainer LeftPlayerResultContainer;
-    public ResultContainer RightPlayerResultContainer;
+    public ResultContainer PlayerResultContainer;
 
-    public CanvasGroup[] ResultCanvasGroups;
+    public CanvasGroup ResultCanvasGroup;
 
 
     Direction currentDirection;
@@ -27,8 +26,7 @@ public class ResultManager : Singleton<ResultManager>
 
     public void Reset()
     {
-        LeftPlayerResultContainer?.Reset();
-        RightPlayerResultContainer?.Reset();
+        PlayerResultContainer?.Reset();
     }
 
 
@@ -37,37 +35,28 @@ public class ResultManager : Singleton<ResultManager>
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(ResultCanvasGroups == null || ResultCanvasGroups.Length == 0)
+            if (ResultCanvasGroup == null)
             {
                 return;
             }
-            if (ResultCanvasGroups[0].alpha > 0.8)
+            if (ResultCanvasGroup.alpha > 0.8)
             {
-                for (int i = 0; i < ResultCanvasGroups.Length; i++)
-                {
-                    FadeManager.Instance.SetAlphaZero(ResultCanvasGroups[i]);
-                }
+                FadeManager.Instance.SetAlphaZero(ResultCanvasGroup);
             }
             else
             {
-                for (int i = 0; i < ResultCanvasGroups.Length; i++)
-                {
-                    FadeManager.Instance.SetAlphaOne(ResultCanvasGroups[i]);
-                }
+                FadeManager.Instance.SetAlphaOne(ResultCanvasGroup);
             }
         }
     }
 
-    public void LeftSelect(int selectIndex)
+    public void Select(int selectIndex)
     {
 
-        LeftPlayerResultContainer.Select(selectIndex);
+        PlayerResultContainer.Select(selectIndex);
     }
 
-    public void RightSelect(int selectIndex)
-    {
-        RightPlayerResultContainer.Select(selectIndex);
-    }
+
 
 
 

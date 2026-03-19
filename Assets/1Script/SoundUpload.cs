@@ -40,15 +40,12 @@ public class SoundUpload : MonoBehaviour
         {
             if (NetworkManager.Instance.IsServer == false)
                 return;
-            LeftPlayerUpload();
-            RightPlayerUpload();
+            PlayerUpload();
         }
     }
 
-    public void LeftPlayerUpload()
+    public void PlayerUpload()
     {
-        if (NetworkManager.Instance.IsServer == false)
-            return;
         if (UserDataManager.Instance.GetPlayer().MorseTotalData.Length < 1)
         {
             Debug.LogWarning("Left player Morse data is empty. Upload skipped.");
@@ -57,18 +54,7 @@ public class SoundUpload : MonoBehaviour
         Debug.Log($"Upload Morse Wav Left Player Morse Data  : {UserDataManager.Instance.GetPlayer().MorseTotalData}");
         Startss(UserDataManager.Instance.GetPlayer().MorseTotalData);
     }
-    public void RightPlayerUpload()
-    {
-        if (NetworkManager.Instance.IsServer == false)
-            return;
-        if (UserDataManager.Instance.GetPlayer().MorsePartnerTotalData.Length < 1)
-        {
-            Debug.LogWarning("Right player Morse data is empty. Upload skipped.");
-            return;
-        }
-        Debug.Log($"Upload Morse Wav Right Player Morse Data  : {UserDataManager.Instance.GetPlayer().MorsePartnerTotalData}");
-        Startss(UserDataManager.Instance.GetPlayer().MorsePartnerTotalData);
-    }
+
 
     public void Startss(string patterns)
     {
@@ -320,9 +306,14 @@ public class SoundUpload : MonoBehaviour
         int safeUploadCount = Mathf.Max(1, uploadCount);
 
         string idxUser = UserDataManager.Instance.FindValue("IDX_USER");
+
         string uid = UserDataManager.Instance.FindValue("UID_LEFT");
+        if (NetworkManager.Instance.IsServer == false)
+        {
+            uid = UserDataManager.Instance.FindValue("UID_RIGHT");
+        }
         string code = ServerData.Instance.Code;
-        string requestUrl = $"{uploadUrl}?idx_user={idxUser}&uid={uid}&code={code}&type={uploadType}&count={safeUploadCount}";
+        string requestUrl = $"{uploadUrl}?idx_user={idxUser}&uid={uid}&code={code}&type={uploadType}";
 
         if (logUploadDebug)
         {

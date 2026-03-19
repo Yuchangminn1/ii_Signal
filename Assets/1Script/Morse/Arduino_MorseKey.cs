@@ -169,7 +169,6 @@ public class Arduino_MorseKey : MonoBehaviour
                         OnUpdateDashVar?.Invoke(Time.time - startTime);
                         if (_inputCount == 3)
                             isLastInputNShadow = true;
-
                         ShadowDash?.Invoke(_inputCount);
                         if (_isGuide && PageController.Instance.CurrentPage == 3)
                         {
@@ -429,6 +428,8 @@ public class Arduino_MorseKey : MonoBehaviour
             {
                 //TODO 빨간색 변하기
                 // onFailedInput?.Invoke();
+                yield return CoroutineReturnManager.GetWaitForSeconds(0.3f);
+
                 OnRedInputs?.Invoke();
                 yield return CoroutineReturnManager.GetWaitForSeconds(1f);
                 // yield return CoroutineReturnManager.GetWaitForSeconds(1f);

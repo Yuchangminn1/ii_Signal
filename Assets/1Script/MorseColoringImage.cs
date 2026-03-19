@@ -182,7 +182,12 @@ public class MorseColoringImage : MorseImage
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
                 // else
                 if (CurrentMorseType == MorseType.Dash)
+                {
+
+                    Debug.Log("Stop3");
                     SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+
+                }
             }
             else if (CurrentSoundOption == SoundOptions.Sound_2)
             {

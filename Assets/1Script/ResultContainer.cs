@@ -37,9 +37,11 @@ public class ResultContainer : MonoBehaviour
     {
         if (GameManager.Instance.IsStarted)
         {
+            if (resultSelectors == null || resultSelectors.Length == 0)
+                resultSelectors = GetComponentsInChildren<ResultSelector>();
             foreach (var selector in resultSelectors)
             {
-                selector.Reset();
+                selector?.Reset();
             }
             StartCoroutine(DelayTOPlay());
         }

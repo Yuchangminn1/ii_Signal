@@ -46,8 +46,7 @@ namespace My.Scripts.Utils
         [Tooltip("메인 화면과 다르게 별도로 저장/업로드할 캔버스 목록입니다.")]
         public List<Canvas> uploadCanvases = new List<Canvas>();
 
-        [Tooltip("지정한 캔버스를 렌더링할 PNG 해상도입니다.")]
-        public Vector2Int canvasCaptureResolution = new Vector2Int(2250, 4000);
+        Vector2Int canvasCaptureResolution = new Vector2Int(2250, 4000);
 
         [Header("API Retry Settings")]
         [SerializeField] private int maxRetries = 10;
@@ -90,6 +89,12 @@ namespace My.Scripts.Utils
         /// </summary>
         public void ProcessAndSave(string baseName, bool isDebug = false)
         {
+            if (IsProcessing)
+            {
+                Debug.LogWarning("[PhotoCompositor] 이전 캡처/업로드 작업이 진행 중입니다. 중복 요청은 무시합니다.");
+                return;
+            }
+
             IsProcessing = true;
 
             string safeBaseName = string.IsNullOrEmpty(baseName) ? "" : baseName;
@@ -281,16 +286,15 @@ namespace My.Scripts.Utils
 
         private Texture2D CaptureCanvasToTexture(Canvas targetCanvas)
         {
-            Canvas rootCanvas = targetCanvas.rootCanvas != null ? targetCanvas.rootCanvas : targetCanvas;
-            if (!rootCanvas.isActiveAndEnabled)
+            if (!targetCanvas.isActiveAndEnabled)
             {
-                Debug.LogWarning($"[PhotoCompositor] 비활성 캔버스는 캡처할 수 없습니다: {rootCanvas.name}");
+                Debug.LogWarning($"[PhotoCompositor] 비활성 캔버스는 캡처할 수 없습니다: {targetCanvas.name}");
                 return null;
             }
 
-            if (rootCanvas.renderMode == RenderMode.WorldSpace)
+            if (targetCanvas.renderMode == RenderMode.WorldSpace)
             {
-                Debug.LogError($"[PhotoCompositor] World Space Canvas는 현재 캡처 대상에서 지원하지 않습니다: {rootCanvas.name}");
+                Debug.LogError($"[PhotoCompositor] World Space Canvas는 현재 캡처 대상에서 지원하지 않습니다: {targetCanvas.name}");
                 return null;
             }
 
@@ -310,21 +314,27 @@ namespace My.Scripts.Utils
             captureCamera.transform.position = new Vector3(0f, 0f, -5f);
             captureCamera.targetTexture = renderTexture;
 
-            RenderMode originalRenderMode = rootCanvas.renderMode;
-            Camera originalWorldCamera = rootCanvas.worldCamera;
-            float originalPlaneDistance = rootCanvas.planeDistance;
-            int originalTargetDisplay = rootCanvas.targetDisplay;
+            RenderMode originalRenderMode = targetCanvas.renderMode;
+            Camera originalWorldCamera = targetCanvas.worldCamera;
+            float originalPlaneDistance = targetCanvas.planeDistance;
+            int originalTargetDisplay = targetCanvas.targetDisplay;
             RenderTexture previousActive = RenderTexture.active;
 
             try
             {
                 renderTexture.Create();
-                rootCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-                rootCanvas.worldCamera = captureCamera;
-                rootCanvas.planeDistance = 1f;
-                rootCanvas.targetDisplay = 0;
+                targetCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+                targetCanvas.worldCamera = captureCamera;
+                targetCanvas.planeDistance = 1f;
+                targetCanvas.targetDisplay = 0;
 
                 Canvas.ForceUpdateCanvases();
+
+                // 드라이버/플랫폼에 따라 이전 RT 내용이 남는 경우를 방지하기 위해 명시적으로 클리어합니다.
+                RenderTexture.active = renderTexture;
+                GL.Clear(true, true, Color.clear);
+                RenderTexture.active = previousActive;
+
                 captureCamera.Render();
 
                 RenderTexture.active = renderTexture;
@@ -336,10 +346,10 @@ namespace My.Scripts.Utils
             finally
             {
                 RenderTexture.active = previousActive;
-                rootCanvas.renderMode = originalRenderMode;
-                rootCanvas.worldCamera = originalWorldCamera;
-                rootCanvas.planeDistance = originalPlaneDistance;
-                rootCanvas.targetDisplay = originalTargetDisplay;
+                targetCanvas.renderMode = originalRenderMode;
+                targetCanvas.worldCamera = originalWorldCamera;
+                targetCanvas.planeDistance = originalPlaneDistance;
+                targetCanvas.targetDisplay = originalTargetDisplay;
                 captureCamera.targetTexture = null;
 
                 if (renderTexture.IsCreated())
@@ -365,16 +375,23 @@ namespace My.Scripts.Utils
             }
 
             string idxUser = UserDataManager.Instance.FindValue("IDX_USER");
-            string uid = UnityWebRequest.EscapeURL(UserDataManager.Instance.FindValue("UID_LEFT"));
-            string uid2 = UnityWebRequest.EscapeURL(UserDataManager.Instance.FindValue("UID_RIGHT"));
+            string uid;
+            if (NetworkManager.Instance.IsServer)
+            {
+                uid = UserDataManager.Instance.FindValue("UID_LEFT");
+            }
+            else
+            {
+                uid = UserDataManager.Instance.FindValue("UID_RIGHT");
+            }
+
 
             string code = UnityWebRequest.EscapeURL(ServerData.Instance.Code);
             int safeUploadCount = Mathf.Max(1, requestCount);
             string selectedEndpoint = useSecondaryUrl && !string.IsNullOrWhiteSpace(uploadUrl2) ? uploadUrl2 : uploadUrl;
-            string selectedUid = useSecondaryUrl ? uid2 : uid;
 
             // 파라미터 type=png, count 사용
-            string requestUrl = $"{selectedEndpoint}?idx_user={idxUser}&uid={selectedUid}&code={code}&type=png&count={safeUploadCount}";
+            string requestUrl = $"{selectedEndpoint}?idx_user={idxUser}&uid={uid}&code={code}&type=png";
 
             Debug.Log("UploadImageRequest URL: " + requestUrl);
 
