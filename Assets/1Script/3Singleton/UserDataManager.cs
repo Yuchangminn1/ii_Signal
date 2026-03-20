@@ -587,18 +587,27 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
             TestKey();
         }
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             TestKey2();
         }
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             TestKey3();
         }
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            TestKey4();
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            TestKey5();
+        }
+
     }
     public void Reset()
     {
@@ -628,17 +637,30 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     {
         Reset();
         IsTestData = true;
-        StartCoroutine(RequestInitializeUserDataTest("2E6997F2F8"));
+        StartCoroutine(RequestInitializeUserDataTest("6F06496CBB"));
         //SetPlayers("길동");
     }
     public void TestKey3()
     {
         Reset();
         IsTestData = true;
-        StartCoroutine(RequestInitializeUserDataTest("4C74356A06"));
+        StartCoroutine(RequestInitializeUserDataTest("710AE1CE10"));
         //SetPlayers("길동");
     }
-
+    public void TestKey4()
+    {
+        Reset();
+        IsTestData = true;
+        StartCoroutine(RequestInitializeUserDataTest("F1701367EE"));
+        //SetPlayers("길동");
+    }
+    public void TestKey5()
+    {
+        Reset();
+        IsTestData = true;
+        StartCoroutine(RequestInitializeUserDataTest("56731063CB"));
+        //SetPlayers("길동");
+    }
     public void SetCartridge(string _an)
     {
         contentCodes = _an.Split(',');

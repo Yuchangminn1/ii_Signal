@@ -94,7 +94,6 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
             Debug.Log("Game Not Started Yet");
             return;
         }
-        Debug.Log("Attempting to play sound: " + effectSoundNum.ToString());
 
         _soundStartTimes[(int)(EffectSoundNum.MorseResetSound)] = Time.time;
 
@@ -116,7 +115,6 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
             Debug.Log("Dash 너무 짧은 시간에 false");
             return;
         }
-        Debug.Log("Attempting to stop sound: " + effectSoundNum.ToString());
 
         if (audioSources[(int)effectSoundNum] != null)
         {

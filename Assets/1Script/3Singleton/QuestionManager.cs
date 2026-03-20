@@ -133,6 +133,14 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
         // 카트리지 전환 시 전체 복사를 피해서 GC/CPU 부담을 줄인다.
         questionInfos = items;
+        foreach (var item in questionInfos)
+        {
+            if (item == null)
+            {
+                Debug.LogWarning("질문 데이터 중에 null 항목이 있습니다.");
+            }
+            Debug.Log($"질문: {item.Question}, 선택지: {string.Join(", ", item.Selection)}, 모스 패턴: {string.Join(", ", item.MorsePattern)}");
+        }
 
         Debug.Log($"질문 데이터 교체 적용 완료: {questionInfos.Count}");
     }
