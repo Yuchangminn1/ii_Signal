@@ -108,6 +108,7 @@
     <Compile Include="Assets\1Script\PageController.cs" />
     <Compile Include="Assets\1Script\ResultSelector.cs" />
     <Compile Include="Assets\1Script\StampCountText.cs" />
+    <Compile Include="Assets\Scritps\Log\TimeStampLogHandler.cs" />
     <Compile Include="Assets\1Script\Tcp\NetworkManager.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
     <Compile Include="Assets\1Script\Tcp\MainThreadDispatcher.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Assets\1Script\GraphicMove.cs" />
     <Compile Include="Assets\1Script\RawImageFaderGroup.cs" />
     <Compile Include="Assets\1Script\ResultSelectorText.cs" />
+    <Compile Include="Assets\Scritps\Log\InstallTimeStampLogger.cs" />
     <Compile Include="Assets\1Script\ResultStampContainer.cs" />
     <Compile Include="Assets\1Script\EnterCheck.cs" />
     <Compile Include="Assets\1Script\ResetUIOn.cs" />
