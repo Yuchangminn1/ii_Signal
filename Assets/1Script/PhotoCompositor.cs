@@ -378,11 +378,11 @@ namespace My.Scripts.Utils
             string uid;
             if (NetworkManager.Instance.IsServer)
             {
-                uid = UserDataManager.Instance.FindValue("UID_LEFT");
+                uid = UserDataManager.Instance.FindValue("UID_RIGHT");
             }
             else
             {
-                uid = UserDataManager.Instance.FindValue("UID_RIGHT");
+                uid = UserDataManager.Instance.FindValue("UID_LEFT");
             }
 
 

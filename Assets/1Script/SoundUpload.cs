@@ -307,10 +307,10 @@ public class SoundUpload : MonoBehaviour
 
         string idxUser = UserDataManager.Instance.FindValue("IDX_USER");
 
-        string uid = UserDataManager.Instance.FindValue("UID_LEFT");
+        string uid = UserDataManager.Instance.FindValue("UID_RIGHT");
         if (NetworkManager.Instance.IsServer == false)
         {
-            uid = UserDataManager.Instance.FindValue("UID_RIGHT");
+            uid = UserDataManager.Instance.FindValue("UID_LEFT");
         }
         string code = ServerData.Instance.Code;
         string requestUrl = $"{uploadUrl}?idx_user={idxUser}&uid={uid}&code={code}&type={uploadType}";
