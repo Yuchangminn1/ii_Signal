@@ -123,7 +123,7 @@ public class Morse_Guide : MonoBehaviour
             yield return CoroutineReturnManager.GetWaitForSeconds(_graphicDelay);
 
             Debug.Log("MorseIndexCheckCoroutine / 트리거");
-            SequenceScript.TriggerFroceOn();
+            SequenceScript.TriggerForceOn();
         }
         if (_currentIndex < _morseColoringImages.Length && _morseInput.Count > 0)
         {

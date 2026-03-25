@@ -201,7 +201,7 @@ public class Arduino_MorseKey : MonoBehaviour
                         ResetUIOn?.ResetBarUpdate(0f);
                     }
                 }
-                if (PageController.Instance.CurrentPage == 4 || PageController.Instance.CurrentPage == 5 || PageController.Instance.CurrentPage == 6)
+                if (PageController.Instance.CurrentPage == 4 || PageController.Instance.CurrentPage == 6 || PageController.Instance.CurrentPage == 7)
                 {
 
 

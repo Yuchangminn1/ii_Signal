@@ -270,7 +270,7 @@ public class MorseSetup : MonoBehaviour
 
     public void Reset()
     {
-        Debug.Log("Reset");
+        Debug.Log("MorseSetup : Reset");
 
     }
 

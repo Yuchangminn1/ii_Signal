@@ -10,7 +10,7 @@ public class NextGuider : MonoBehaviour
 
     Text text;
 
-    string lastText = "모든 체험이 완료되었습니다.\n결과 출력 공간으로 이동해 주세요.";
+    string lastText = "모든 체험이 완료되었습니다.\n마음 아카이브 출력실로 이동해 주세요.";
     string nextText = "체험이 완료되었습니다.\n카드에 표시된 블록으로 이동해 주세요.";
 
     void Start()

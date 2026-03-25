@@ -152,6 +152,12 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                Debug.LogWarning("[TCP ReadData] 빈 데이터 수신");
+                return;
+            }
+
             bool isMorseData = false;
 
             if (data.Equals("Go", StringComparison.OrdinalIgnoreCase))
@@ -165,6 +171,8 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
 
             if (data.Equals("EReset", StringComparison.OrdinalIgnoreCase))
             {
+                Debug.Log("Received data: " + data);
+
                 try
                 {
                     if (UserDataManager.Instance.IsContentEnd)
@@ -178,6 +186,8 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             }
             else if (data.Equals("Reset", StringComparison.OrdinalIgnoreCase))
             {
+                Debug.Log("Received data: " + data);
+
                 try { NetworkManager.Instance.ResetRequested = true; }
                 catch (Exception e) { Debug.LogError($"[TCP ReadData] Reset 처리 에러: {e.Message}"); }
                 return;
@@ -187,9 +197,31 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                 try
                 {
                     Debug.Log("Stamp Count: " + data);
-                    UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece = int.Parse(data.Substring(1, 1));
-                    UserDataManager.Instance.GetPlayer(Direction.Right).AddPiece = UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece;
-                    Debug.Log("AddPiece Set: " + UserDataManager.Instance.GetPlayer(Direction.Left).AddPiece);
+
+                    if (!int.TryParse(data.Substring(1, 1), out int addPiece))
+                    {
+                        Debug.LogWarning($"[TCP ReadData] Stamp 데이터 파싱 실패: {data}");
+                        return;
+                    }
+
+                    UserDataManager userDataManager = UserDataManager.Instance;
+                    if (userDataManager == null)
+                    {
+                        Debug.LogWarning("[TCP ReadData] UserDataManager가 없어 Stamp 반영을 건너뜁니다.");
+                        return;
+                    }
+
+                    Player leftPlayer = userDataManager.GetPlayer(Direction.Left);
+                    Player rightPlayer = userDataManager.GetPlayer(Direction.Right);
+                    if (leftPlayer == null || rightPlayer == null)
+                    {
+                        Debug.LogWarning("[TCP ReadData] Player가 초기화되지 않아 Stamp 반영을 건너뜁니다.");
+                        return;
+                    }
+
+                    leftPlayer.AddPiece = addPiece;
+                    rightPlayer.AddPiece = addPiece;
+                    Debug.Log("AddPiece Set: " + addPiece);
                 }
                 catch (Exception e) { Debug.LogError($"[TCP ReadData] Stamp 처리 에러: {e.Message}"); }
                 return;

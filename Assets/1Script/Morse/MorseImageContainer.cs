@@ -26,6 +26,7 @@ public class MorseImageContainer : MonoBehaviour
 
 
     protected Arduino_MorseKey arduino_MorseKey;
+    Arduino_SelectButton _selectButton;
 
     public SequenceScript SequenceScript;
 
@@ -105,7 +106,7 @@ public class MorseImageContainer : MonoBehaviour
 
     virtual public void Reset()
     {
-        Debug.Log("Reset");
+        Debug.Log("MorseImageContainer : Reset");
 
         foreach (MorseInputImage mi in morseInputImages)
         {
@@ -200,7 +201,7 @@ public class MorseImageContainer : MonoBehaviour
         {
             string currentData = MorseTranslator.CurrentData;
             //TODO 선택한 정보 보내는  api + tcp로 상대 기기로 정보 보내기
-            if (PageController.Instance.CurrentPage == 5)
+            if (PageController.Instance.CurrentPage == 6)
             {
                 UserDataManager.Instance.GetPlayer().PassCode = currentData;
 
@@ -208,18 +209,16 @@ public class MorseImageContainer : MonoBehaviour
                 NetworkManager.Instance.SendData(sendMessage);
 
             }
-            else if (QuestionManager.Instance.CurrentIndex != 0)
-            {
-                NetworkManager.Instance.SendData(currentData);
-                UserDataManager.Instance.GetPlayer().MorseTotalData += currentData;
-                UserDataManager.Instance.GetPlayer().AnswerData.Enqueue(currentData);
-            }
+
+            NetworkManager.Instance.SendData(currentData);
+            UserDataManager.Instance.GetPlayer().MorseTotalData += currentData;
+            UserDataManager.Instance.GetPlayer().AnswerData.Enqueue(currentData);
 
 
             Debug.Log($"AnswerData 수  : {UserDataManager.Instance.GetPlayer().AnswerData.Count}");
             Debug.Log($"PartnerAnswerData 수  : {UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count}");
 
-            SequenceScript.TriggerFroceOn();
+            SequenceScript.TriggerForceOn();
             arduino_MorseKey.StopMorseCheck();
             isAnswer = false;
         }
@@ -231,7 +230,15 @@ public class MorseImageContainer : MonoBehaviour
 
         questionTextContainer = transform.parent.GetComponentInChildren<QuestionSelectTextContainer>();
 
-        FindAnyObjectByType<Arduino_SelectButton>()._onButtonPressed += SelectAnswer;
+        _selectButton = FindAnyObjectByType<Arduino_SelectButton>();
+        if (_selectButton != null)
+        {
+            _selectButton._onButtonPressed += SelectAnswer;
+        }
+        else
+        {
+            Debug.LogWarning("MorseImageContainer: Arduino_SelectButton을 찾지 못했습니다.");
+        }
 
         morseInputImages = GetComponentsInChildren<MorseInputImage>();
         if (morseInputImages.Length == 0)
@@ -241,6 +248,13 @@ public class MorseImageContainer : MonoBehaviour
 
         arduino_MorseKey = GetComponentInParent<Arduino_MorseKey>();
     }
+
+    void OnDestroy()
+    {
+        if (_selectButton != null)
+            _selectButton._onButtonPressed -= SelectAnswer;
+    }
+
     void OnDisable()
     {
 

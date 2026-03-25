@@ -40,6 +40,6 @@ public class PartnerDataChecker : MonoBehaviour
             Debug.Log($"상대방 답변 갯수 체크 : {answerCount} 목표 {QuestionManager.Instance.QuestionInfos.Count}");
             answerCount = UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count;
         }
-        sequenceScript?.TriggerFroceOn();
+        sequenceScript?.TriggerForceOn();
     }
 }

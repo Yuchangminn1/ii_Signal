@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class QuestionScript : MonoBehaviour
 {
 
-    TutorialPopup tutorialPopup;
 
     MorseImageContainer morseImageContainer;
 
@@ -45,7 +44,6 @@ public class QuestionScript : MonoBehaviour
         morseImageContainer = GetComponentInChildren<MorseImageContainer>();
         questionTextContainer = GetComponentInChildren<QuestionSelectTextContainer>();
 
-        tutorialPopup = GetComponentInChildren<TutorialPopup>();
         _resetContainerCanvasGroup = ResetContainer.GetComponent<CanvasGroup>();
     }
 
@@ -90,16 +88,6 @@ public class QuestionScript : MonoBehaviour
 
             yield break;
         }
-        if (QuestionManager.Instance.CurrentIndex == 0)
-        {
-            for (int i = 0; i < tutorialPopup.GetTextCount(); i++)
-            {
-                tutorialPopup.SetText(i);
-                yield return CoroutineReturnManager.GetWaitForSeconds(3f);
-            }
-
-        }
-
 
 
 

@@ -203,6 +203,8 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         }
     }
 
+    public string DebugUID = "";
+
     public bool IsTestData = false;
 
     bool _isUsingRoom = false;
@@ -587,26 +589,11 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             TestKey();
         }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            TestKey2();
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            TestKey3();
-        }
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            TestKey4();
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            TestKey5();
-        }
+
 
     }
     public void Reset()
@@ -635,9 +622,9 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     }
     public void TestKey2()
     {
-        Reset();
-        IsTestData = true;
-        StartCoroutine(RequestInitializeUserDataTest("6F06496CBB"));
+        // Reset();
+        // IsTestData = true;
+        // StartCoroutine(RequestInitializeUserDataTest(DebugUID));
         //SetPlayers("길동");
     }
     public void TestKey3()
@@ -733,6 +720,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
         player[0] = new Player(FindValue("RESERVATION_LAST_NAME_LEFT"), FindValue("RESERVATION_FIRST_NAME_LEFT"), Direction.Left, FindValue("COLOR_LEFT"), pieceCount, isLastContent);
         player[1] = new Player(FindValue("RESERVATION_LAST_NAME_RIGHT"), FindValue("RESERVATION_FIRST_NAME_RIGHT"), Direction.Right, FindValue("COLOR_RIGHT"), pieceCount, isLastContent);
+        TCPAddPiece();
 
         QuestionManager.Instance.CurrentIndex = 0;
 
@@ -830,10 +818,10 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         {
             NetworkManager.Instance.SendData("EReset");
 
-            yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
+            yield return CoroutineReturnManager.GetWaitForSeconds(1.5f);
         }
         EndRequest();
-        yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
+        yield return CoroutineReturnManager.GetWaitForSeconds(1.5f);
 
 
 

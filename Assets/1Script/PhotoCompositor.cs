@@ -64,6 +64,10 @@ namespace My.Scripts.Utils
 
         public bool IsProcessing { get; private set; }
 
+        private RenderTexture _cachedRenderTex;
+        private Texture2D _cachedCanvasTex;
+        private Texture2D _cachedScreenTex;
+
         [ContextMenu("Execute Composite Now")]
         public void DebugProcessAndSave()
         {
@@ -82,6 +86,13 @@ namespace My.Scripts.Utils
         public void UpdatePlayerImage()
         {
             ProcessAndSave(debugBaseName, false);
+        }
+
+        private void OnDestroy()
+        {
+            if (_cachedRenderTex != null) { _cachedRenderTex.Release(); Destroy(_cachedRenderTex); }
+            if (_cachedCanvasTex != null) Destroy(_cachedCanvasTex);
+            if (_cachedScreenTex != null) Destroy(_cachedScreenTex);
         }
 
         /// <summary> 
@@ -192,7 +203,6 @@ namespace My.Scripts.Utils
                         }
                         finally
                         {
-                            if (canvasTexture) Destroy(canvasTexture);
                         }
                     }
 
@@ -209,12 +219,14 @@ namespace My.Scripts.Utils
                 }
                 else
                 {
-                    Texture2D screenshotTex = ScreenCapture.CaptureScreenshotAsTexture();
-                    if (!screenshotTex)
+                    if (_cachedScreenTex != null) Destroy(_cachedScreenTex);
+                    _cachedScreenTex = ScreenCapture.CaptureScreenshotAsTexture();
+                    if (!_cachedScreenTex)
                     {
                         Debug.LogError("[PhotoCompositor] 화면 캡처 실패");
                         yield break;
                     }
+                    Texture2D screenshotTex = _cachedScreenTex;
 
                     try
                     {
@@ -263,7 +275,6 @@ namespace My.Scripts.Utils
                     }
                     finally
                     {
-                        Destroy(screenshotTex);
                     }
                 }
             }
@@ -300,7 +311,12 @@ namespace My.Scripts.Utils
 
             int captureWidth = Mathf.Max(1, canvasCaptureResolution.x);
             int captureHeight = Mathf.Max(1, canvasCaptureResolution.y);
-            RenderTexture renderTexture = new RenderTexture(captureWidth, captureHeight, 24, RenderTextureFormat.ARGB32);
+            if (_cachedRenderTex == null || _cachedRenderTex.width != captureWidth || _cachedRenderTex.height != captureHeight)
+            {
+                if (_cachedRenderTex != null) { _cachedRenderTex.Release(); Destroy(_cachedRenderTex); }
+                _cachedRenderTex = new RenderTexture(captureWidth, captureHeight, 24, RenderTextureFormat.ARGB32);
+            }
+            RenderTexture renderTexture = _cachedRenderTex;
             GameObject cameraObject = new GameObject("PhotoCompositorCanvasCaptureCamera");
             cameraObject.hideFlags = HideFlags.HideAndDontSave;
 
@@ -338,7 +354,12 @@ namespace My.Scripts.Utils
                 captureCamera.Render();
 
                 RenderTexture.active = renderTexture;
-                Texture2D capturedTexture = new Texture2D(captureWidth, captureHeight, TextureFormat.RGBA32, false);
+                if (_cachedCanvasTex == null || _cachedCanvasTex.width != captureWidth || _cachedCanvasTex.height != captureHeight)
+                {
+                    if (_cachedCanvasTex != null) Destroy(_cachedCanvasTex);
+                    _cachedCanvasTex = new Texture2D(captureWidth, captureHeight, TextureFormat.RGBA32, false);
+                }
+                Texture2D capturedTexture = _cachedCanvasTex;
                 capturedTexture.ReadPixels(new Rect(0, 0, captureWidth, captureHeight), 0, 0);
                 capturedTexture.Apply();
                 return capturedTexture;
@@ -351,13 +372,6 @@ namespace My.Scripts.Utils
                 targetCanvas.planeDistance = originalPlaneDistance;
                 targetCanvas.targetDisplay = originalTargetDisplay;
                 captureCamera.targetTexture = null;
-
-                if (renderTexture.IsCreated())
-                {
-                    renderTexture.Release();
-                }
-
-                Destroy(renderTexture);
                 Destroy(cameraObject);
                 Canvas.ForceUpdateCanvases();
             }

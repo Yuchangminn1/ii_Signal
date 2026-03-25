@@ -48,6 +48,8 @@ public class NameText : MonoBehaviour
             return;
         }
 
+        Debug.Log($"NameText SetText 호출: textData='{textData}', originText='{originText}'");
+
         if (textData == "")
         {
             textData = originText;

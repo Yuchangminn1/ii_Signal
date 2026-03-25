@@ -1,14 +1,16 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO.Ports;
 using UnityEngine;
 
-public class Arduino : MonoBehaviour
+public class Arduino : MonoBehaviour, IJsonGenericTarget
 {
     protected Action<Arduino> _onArduinoStart;
 
 
     protected bool isStop = false;
+    JsonGenericUpData _genericData = new JsonGenericUpData();
 
 
     protected bool _isRunning = false;
@@ -16,34 +18,43 @@ public class Arduino : MonoBehaviour
     public string WaitResponse = "";
 
     public int PlayerIndex = 0;
-    public string[] SerialPortNames =
-    {
-        "COM101"
-    };
+    public string SerialPortName = "COM101";
+
     protected SerialPort stream;
+    protected Coroutine _readMessageCoroutine;
     protected virtual void Start()
     {
-        stream = FindDevicePort();
+        // = FindDevicePort();
     }
 
     virtual public void StartArduino()
     {
-        if (GameManager.Instance.IsStarted == false)
-            return;
+
         if (stream == null)
         {
             Debug.LogError("SerialPort가 초기화되지 않았습니다.");
+
             return;
         }
         try
         {
+            if (stream.ReadTimeout == SerialPort.InfiniteTimeout)
+                stream.ReadTimeout = 200;
+
+            if (stream.WriteTimeout == SerialPort.InfiniteTimeout)
+                stream.WriteTimeout = 200;
+
             if (!stream.IsOpen)
             {
                 stream.Open();
                 Debug.Log("시리얼 포트 열림: " + stream.PortName + " / " + PlayerIndex);
             }
+
+            if (_isRunning)
+                return;
+
             _isRunning = true;
-            StartCoroutine(ReadMessage());
+            _readMessageCoroutine = StartCoroutine(ReadMessage());
 
         }
         catch (Exception e)
@@ -117,14 +128,34 @@ public class Arduino : MonoBehaviour
     {
         _isRunning = false;
 
-        stream.Close();
-        Debug.Log("시리얼 포트 닫힘: " + stream.PortName);
+        if (_readMessageCoroutine != null)
+        {
+            StopCoroutine(_readMessageCoroutine);
+            _readMessageCoroutine = null;
+        }
+
+        if (stream == null)
+            return;
+
+        try
+        {
+            if (stream.IsOpen)
+                stream.Close();
+            Debug.Log("시리얼 포트 닫힘: " + stream.PortName);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("시리얼 포트 닫는 중 오류 발생: " + e.Message);
+        }
     }
     protected void OnApplicationQuit()
     {
-        if (stream == null)
-            return;
-        if (stream.IsOpen) stream.Close();
+        StopArduino();
+    }
+
+    protected void OnDisable()
+    {
+        StopArduino();
     }
     protected IEnumerator ReadMessage()
     {
@@ -132,6 +163,9 @@ public class Arduino : MonoBehaviour
 
         while (_isRunning)
         {
+            if (stream == null)
+                yield break;
+
             if (IsReadingMessage())
             {
                 if (stream.IsOpen && stream.BytesToRead > 0)
@@ -161,11 +195,23 @@ public class Arduino : MonoBehaviour
                     {
                         yield return CoroutineReturnManager.GetWaitForSeconds(1f);
                     }
-                    ReadMessageProcess(received);
+                    else
+                    {
+                        try
+                        {
+                            ReadMessageProcess(received);
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.LogError("ReadMessageProcess 처리 중 오류 발생: " + e.Message);
+                        }
+                    }
                 }
             }
             yield return CoroutineReturnManager.GetWaitForSeconds(0.15f);
         }
+
+        _readMessageCoroutine = null;
     }
 
     protected IEnumerator SendMessage()
@@ -214,5 +260,43 @@ public class Arduino : MonoBehaviour
     virtual public void ReadMessageProcess(string received)
     {
         ;
+    }
+
+    public void Initialize(JsonGenericUpData data)
+    {
+        if (data != null && data.stringParams != null
+            && data.stringParams.TryGetValue("ButtonPortName", out var savedPortName)
+            && string.IsNullOrWhiteSpace(savedPortName) == false)
+        {
+            SerialPortName = savedPortName;
+        }
+
+        if (string.IsNullOrWhiteSpace(SerialPortName))
+        {
+            Debug.LogError("ButtonPortName이 비어있어 Arduino 초기화를 중단합니다.");
+            return;
+        }
+
+        stream = new SerialPort(SerialPortName, 9600)
+        {
+            ReadTimeout = 200,
+            WriteTimeout = 200,
+            NewLine = "\n"
+        };
+
+        StartArduino();
+
+    }
+
+    public JsonGenericUpData Data()
+    {
+        _genericData.intParams = new Dictionary<string, int>();
+        _genericData.floatParams = new Dictionary<string, float>();
+        _genericData.boolParams = new Dictionary<string, bool>();
+        _genericData.stringParams = new Dictionary<string, string>();
+
+
+        _genericData.stringParams["ButtonPortName"] = SerialPortName;
+        return _genericData;
     }
 }

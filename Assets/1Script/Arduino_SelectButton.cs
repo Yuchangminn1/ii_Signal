@@ -19,10 +19,11 @@ public class Arduino_SelectButton : Arduino
 
     override public void ReadMessageProcess(string received)
     {
-        if (received == _onMessage)
+        if (!string.IsNullOrEmpty(received) && received.Contains("Btn"))
         {
             _onButtonPressed?.Invoke();
-            SoundManager.Instance.PlayEffectSound(EffectSoundNum.ArduinoButtonSound);
+            if (received.Contains("On"))
+                SoundManager.Instance.PlayEffectSound(EffectSoundNum.ArduinoButtonSound);
             Debug.Log($"버튼 눌림 : {ButtonDirection}");
             GameManager.Instance.GoToIdleCheck();
             NetworkManager.Instance.SendData($"B");
@@ -30,7 +31,7 @@ public class Arduino_SelectButton : Arduino
 
         else
         {
-            Debug.Log($"{received} ");
+            Debug.Log($"없음 {received} ");
         }
     }
     void Update()

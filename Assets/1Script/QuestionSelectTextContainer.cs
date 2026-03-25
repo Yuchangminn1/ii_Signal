@@ -69,14 +69,50 @@ public class QuestionSelectTextContainer : MonoBehaviour
 
     public void SaveAnswer()
     {
-        if (QuestionManager.Instance.CurrentIndex != 0)
+
+        int index = MorseTranslator.CurrentDataIndex;
+
+        if (index < 0 || index >= selectOptions.Length)
+            return;
+
+        var userDataManager = UserDataManager.Instance;
+        var questionManager = QuestionManager.Instance;
+        var pageController = PageController.Instance;
+
+        if (userDataManager == null || questionManager == null || pageController == null)
         {
-            int index = MorseTranslator.CurrentDataIndex;
-
-            StartCoroutine(UserDataManager.Instance.RequestUserDataUpdate(QuestionManager.Instance.CurrentIndex, index + 1, UserDataManager.Instance.GetPlayer().Direction));
-            ResultManager.Instance.Select(index);
-
+            Debug.LogError($"[{name}] SaveAnswer failed: manager instance is null.", this);
+            return;
         }
+
+        var player = userDataManager.GetPlayer();
+        if (player == null)
+        {
+            Debug.LogError($"[{name}] SaveAnswer failed: player is null.", this);
+            return;
+        }
+
+        try
+        {
+            StartCoroutine(userDataManager.RequestUserDataUpdate(questionManager.CurrentIndex + 1, index + 1, player.Direction));
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[{name}] SaveAnswer RequestUserDataUpdate failed: {ex}", this);
+        }
+
+        if (pageController.CurrentPage == 4)
+        {
+            try
+            {
+                ResultManager.Instance?.Select(index);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[{name}] SaveAnswer ResultManager.Select failed: {ex}", this);
+            }
+        }
+
 
 
     }

@@ -1,11 +1,6 @@
 {
   "QuestionManager": [
     {
-      "Question": "Q. Name님이 가장 좋아하는 계절은 무엇인가요?",
-      "Selection": ["봄", "여름", "가을", "겨울", "사계절"],
-      "MorsePattern": ["0010", "0100", "0110", "0101", "0001"]
-    },
-    {
       "Question": "Q1. 지금 이곳에서 우리는",
       "Selection": [
         "즐기고 있어",

@@ -109,6 +109,7 @@
     <Compile Include="Assets\1Script\ResultSelector.cs" />
     <Compile Include="Assets\1Script\StampCountText.cs" />
     <Compile Include="Assets\Scritps\Log\TimeStampLogHandler.cs" />
+    <Compile Include="Assets\1Script\ResultContainerDebug.cs" />
     <Compile Include="Assets\1Script\Tcp\NetworkManager.cs" />
     <Compile Include="Assets\Unity-Logs-Viewer\Reporter\ReporterGUI.cs" />
     <Compile Include="Assets\1Script\Tcp\MainThreadDispatcher.cs" />

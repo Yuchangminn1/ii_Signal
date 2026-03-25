@@ -102,7 +102,7 @@ public static class MorseTranslator
 
             index = System.Array.IndexOf(morsePatterns, morseData);
         }
-        else if (PageController.Instance.CurrentPage == 5)
+        else if (PageController.Instance.CurrentPage == 6)
         {
             morsePatterns = new string[]
               {
@@ -138,7 +138,7 @@ public static class MorseTranslator
             morsePatterns = QuestionManager.Instance.CurrentMorsePattern;
             index = System.Array.IndexOf(morsePatterns, morseData);
         }
-        else if (PageController.Instance.CurrentPage == 5)
+        else if (PageController.Instance.CurrentPage == 6)
         {
             morsePatterns = new string[]
               {

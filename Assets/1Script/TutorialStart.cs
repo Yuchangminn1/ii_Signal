@@ -23,10 +23,13 @@ public class TutorialStart : MonoBehaviour
 
     public void StartCheck()
     {
-        if (startcheckCoroutine == null)
+        if (startcheckCoroutine != null)
         {
-            startcheckCoroutine = StartCoroutine(StartTutorial());
+            StopCoroutine(startcheckCoroutine);
+            startcheckCoroutine = null;
         }
+
+        startcheckCoroutine = StartCoroutine(StartTutorial());
     }
 
     public void StopCheck()
@@ -48,11 +51,28 @@ public class TutorialStart : MonoBehaviour
 
         NetworkManager.Instance.SendData("Go");
 
+        int count = 0;
+
         while (NetworkManager.Instance.IsTutorialRead == false && gameObject.activeInHierarchy)
         {
             yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
             if (NetworkManager.Instance.IsServer == false)
                 NetworkManager.Instance.SendData("Go");
+
+            count++;
+
+            if (count > 10)
+            {
+                if (NetworkManager.Instance.IsServer == false)
+                    Debug.Log("C Go");
+                else
+                {
+                    Debug.Log("S Go");
+                }
+                count = 0;
+
+
+            }
         }
         if (NetworkManager.Instance.IsServer)
         {
@@ -70,7 +90,7 @@ public class TutorialStart : MonoBehaviour
                 NetworkManager.Instance.SendData("Go");
             }
         }
-        sequenceScript?.TriggerFroceOn();
+        sequenceScript?.TriggerForceOn();
 
         startcheckCoroutine = null;
     }

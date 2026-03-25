@@ -81,6 +81,20 @@ public abstract class SequenceScript : MonoBehaviour
         yield return waitNextDelay;
     }
 
+    void SafeInvoke(UnityEvent unityEvent, string eventName)
+    {
+        if (unityEvent == null) return;
+
+        try
+        {
+            unityEvent.Invoke();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[{name}] {eventName} invoke failed: {ex}", this);
+        }
+    }
+
 
 
     public IEnumerator StartSequence()
@@ -93,7 +107,7 @@ public abstract class SequenceScript : MonoBehaviour
         isTrigger = originTrigger;
         GameManager.Instance.GoToIdleCheck();
         //특정 트리거 필요하면 대기 
-        OnSequenceStart?.Invoke();
+        SafeInvoke(OnSequenceStart, nameof(OnSequenceStart));
 
 
         while (!isTrigger)
@@ -109,7 +123,7 @@ public abstract class SequenceScript : MonoBehaviour
         if (audioSource != null)
             audioSource.Play();
 
-        triggerCallback?.Invoke();
+        SafeInvoke(triggerCallback, nameof(triggerCallback));
 
         yield return coroutine = StartCoroutine(RunSequence());
 
@@ -131,7 +145,7 @@ public abstract class SequenceScript : MonoBehaviour
     // }
 
 
-    public void TriggerFroceOn()
+    public void TriggerForceOn()
     {
         isTrigger = true;
         isWaiting = true;
@@ -180,7 +194,7 @@ public abstract class SequenceScript : MonoBehaviour
         if (nextVedeoPlayer != null) nextVedeoPlayer.Prepare();
 
         isTrigger = originTrigger;
-        nextSequenceCallback?.Invoke();
+        SafeInvoke(nextSequenceCallback, nameof(nextSequenceCallback));
     }
 
     public void AddNextSequenceCallback(UnityAction action)

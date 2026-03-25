@@ -81,7 +81,7 @@ public class WaitCheck : MonoBehaviour
     IEnumerator ChangeZ()
     {
         yield return debugWait;
-        Player1_Trigger.TriggerFroceOn();
+        Player1_Trigger.TriggerForceOn();
         IsPlayer1On = !_isPlayer1On;
 
         FadeManager.Instance.TargetFade(Player1_ColorBall, 1f);
@@ -95,7 +95,7 @@ public class WaitCheck : MonoBehaviour
     {
         yield return debugWait;
 
-        Player2_Trigger.TriggerFroceOn();
+        Player2_Trigger.TriggerForceOn();
         IsPlayer2On = !_isPlayer2On;
 
         FadeManager.Instance.TargetFade(Player2_ColorBall, 1f);

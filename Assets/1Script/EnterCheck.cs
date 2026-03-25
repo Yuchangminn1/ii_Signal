@@ -62,7 +62,7 @@ public class EnterCheck : MonoBehaviour
 
             if (UserDataManager.Instance.IsUsingRoom)
             {
-                TagFirst.TriggerFroceOn();
+                TagFirst.TriggerForceOn();
             }
 
             if (UserDataManager.Instance.GetPlayer() != null)
@@ -84,7 +84,7 @@ public class EnterCheck : MonoBehaviour
 
 
         }
-        NextPageTrigger?.TriggerFroceOn();
+        NextPageTrigger?.TriggerForceOn();
 
         _checkCoroutine = null;
     }

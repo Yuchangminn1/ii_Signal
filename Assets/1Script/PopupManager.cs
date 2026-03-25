@@ -86,6 +86,8 @@ public class PopupManager : Singleton<PopupManager>
     {
         IsPopupOn = true;
 
+        Debug.Log("Popup Open");
+
         CurrentPopupType = PopupType.PleaseInput;
         SetPleaseInputText(CurrentPopupType);
         float startTime = Time.time;
@@ -109,6 +111,8 @@ public class PopupManager : Singleton<PopupManager>
 
         CurrentPopupType = PopupType.ResetNotice;
         SetPleaseInputText(CurrentPopupType);
+        Debug.Log("Popup Open2");
+
         if (CurrentPopupType != PopupType.None)
         {
             FadeManager.Instance.SetAlphaOne(_popupCanvasGroup);

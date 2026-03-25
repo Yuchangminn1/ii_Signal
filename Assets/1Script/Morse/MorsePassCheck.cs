@@ -51,7 +51,7 @@ public class MorsePassCheck : MonoBehaviour
 
     public void Reset()
     {
-        Debug.Log("Reset");
+        Debug.Log("MorsePassCheck : Reset");
     }
 
 
@@ -70,7 +70,7 @@ public class MorsePassCheck : MonoBehaviour
         if (_currentIndex == _morseColoringImages.Length)
         {
             Debug.Log("트리거");
-            SequenceScript.TriggerFroceOn();
+            SequenceScript.TriggerForceOn();
             arduino_MorseKey.StopMorseCheck();
         }
 

@@ -13,7 +13,7 @@
     "floatParams": {},
     "boolParams": { "isServer": false },
     "stringParams": {
-      "ipAddress": "192.168.0.50"
+      "ipAddress": "192.168.0.294"
     }
   },
 
@@ -24,6 +24,12 @@
     "stringParams": {}
   },
 
+  "Arduino_Button": {
+    "intParams": {},
+    "floatParams": {},
+    "boolParams": {},
+    "stringParams": { "ButtonPortName": "COM3" }
+  },
   "SoundManager": {
     "intParams": {},
     "floatParams": {

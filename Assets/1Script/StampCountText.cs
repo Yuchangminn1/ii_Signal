@@ -17,8 +17,10 @@ public class StampCountText : MonoBehaviour
 
     void OnEnable()
     {
+        if (_text == null)
+            _text = GetComponent<Text>();
         if (originText == "")
-            originText = GetComponent<Text>().text;
+            originText = _text.text;
 
 
     }

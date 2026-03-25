@@ -5,17 +5,61 @@ using UnityEngine;
 public class HeadSetCheck : MonoBehaviour
 {
     SequenceScript sequenceScript;
+    public Arduino_SelectButton _selectButton;
+
+    bool Ison = false;
+
     void Start()
     {
+
+    }
+
+    void OnEnable()
+
+    {
         sequenceScript = GetComponent<SequenceScript>();
-        FindObjectOfType<Arduino_SelectButton>()._onButtonPressed += CheckStart;
+
+        if (_selectButton != null)
+        {
+            _selectButton._onButtonPressed += CheckStart;
+        }
+        else
+        {
+            Debug.LogWarning("HeadSetCheck: Arduino_SelectButton을 찾지 못했습니다.");
+        }
+        Ison = false;
+    }
+
+    void OnDestroy()
+    {
+        if (_selectButton != null)
+            _selectButton._onButtonPressed -= CheckStart;
+    }
+
+    public void IsOn()
+    {
+        Ison = true;
+
     }
 
     public void CheckStart()
     {
-        if (gameObject.activeInHierarchy == false)
+        Debug.Log("CheckStart 호출됨");
+        if (Ison == false)
+        {
+            Debug.Log("Ison == false");
             return;
-        sequenceScript?.TriggerFroceOn();
+
+        }
+
+        if (gameObject.activeInHierarchy == false)
+        {
+            Debug.Log("gameObject.activeInHierarchy == false");
+            return;
+
+
+        }
+        sequenceScript?.TriggerForceOn();
 
     }
 

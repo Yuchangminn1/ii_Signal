@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-public class ResultContainer : MonoBehaviour
+public class ResultContainerDebug : MonoBehaviour
 {
     ResultSelector[] resultSelectors;
 
@@ -22,6 +21,30 @@ public class ResultContainer : MonoBehaviour
         nameText = GetComponentInChildren<NameText>();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Select(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Select(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Select(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Select(3);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Select(4);
+        }
+
+    }
 
     public void Select(int selectIndex)
     {
@@ -66,5 +89,4 @@ public class ResultContainer : MonoBehaviour
         nameText.SetText();
 
     }
-
 }

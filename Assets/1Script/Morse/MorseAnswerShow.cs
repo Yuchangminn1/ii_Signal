@@ -35,7 +35,9 @@ public class MorseAnswerShow : MonoBehaviour
 
     public IEnumerator MoveOrderCoroutine()
     {
-        Queue<string> temp = UserDataManager.Instance.GetPlayer().PartnerAnswerData;
+        Queue<string> temp = UserDataManager.Instance.GetPlayer().AnswerData;
+
+
 
         Debug.Log($"받은 모스 수 temp count : {temp.Count}");
 
@@ -79,7 +81,7 @@ public class MorseAnswerShow : MonoBehaviour
         }
 
         //TODO 엑션 추가 end 이벤트
-        sequenceScript?.TriggerFroceOn();
+        sequenceScript?.TriggerForceOn();
         moveOrderCoroutine = null;
     }
 

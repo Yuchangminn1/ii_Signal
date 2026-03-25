@@ -50,7 +50,7 @@ public class ResultStampContainer : MonoBehaviour
             answerStamps[i].SetCorrectStamp();
             yield return CoroutineReturnManager.GetWaitForSeconds(0.8f);
         }
-        sequenceScript?.TriggerFroceOn();
+        sequenceScript?.TriggerForceOn();
 
         StartCoroutine(UserDataManager.Instance.RequestPieceDataUpdate());
 
