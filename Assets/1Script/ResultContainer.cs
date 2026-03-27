@@ -36,11 +36,13 @@ public class ResultContainer : MonoBehaviour
         Debug.Log($"{name} 결과 UI  {QuestionManager.Instance.CurrentIndex}질문 답 {selectIndex + 1} 선택");
         if (currentDirection == Direction.Right)
         {
-            resultSelectors[debugIndex].SelectAnswer(selectIndex);
+            resultSelectors[UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count].SelectAnswer(selectIndex);
+            //resultSelectors[debugIndex].SelectAnswer(selectIndex);
         }
         else
         {
-            resultSelectors[debugIndex].SelectAnswer(selectIndex);
+            resultSelectors[QuestionManager.Instance.CurrentIndex].SelectAnswer(selectIndex);
+            //resultSelectors[debugIndex].SelectAnswer(selectIndex);
         }
         debugIndex++;
     }

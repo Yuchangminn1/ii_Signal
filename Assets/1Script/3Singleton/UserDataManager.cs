@@ -558,7 +558,10 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
                 if (onUserUIDSet != null) onUserUIDSet.Invoke();
             }
 
-            StartCoroutine(RequestCartridgeInfo());
+            //StartCoroutine(RequestCartridgeInfo());
+
+
+            SetCartridge(userDataCache["BLOCK_CODE"]);
 
 
             //SetPlayer
@@ -617,7 +620,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     {
         Reset();
         IsTestData = true;
-        StartCoroutine(RequestInitializeUserDataTest("2C39C73258"));
+        StartCoroutine(RequestInitializeUserDataTest("3BD7F1F091"));
         //SetPlayers("길동");
     }
     public void TestKey2()
