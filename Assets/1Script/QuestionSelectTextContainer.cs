@@ -101,17 +101,17 @@ public class QuestionSelectTextContainer : MonoBehaviour
             Debug.LogError($"[{name}] SaveAnswer RequestUserDataUpdate failed: {ex}", this);
         }
 
-        if (pageController.CurrentPage == 4)
+        // if (pageController.CurrentPage == 4)
+        // {
+        try
         {
-            try
-            {
-                ResultManager.Instance?.Select(index);
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError($"[{name}] SaveAnswer ResultManager.Select failed: {ex}", this);
-            }
+            ResultManager.Instance?.Select(index);
         }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[{name}] SaveAnswer ResultManager.Select failed: {ex}", this);
+        }
+        // }
 
 
 

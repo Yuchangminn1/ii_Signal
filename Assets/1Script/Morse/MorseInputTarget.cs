@@ -125,10 +125,10 @@ public class MorseInputTarget : MonoBehaviour
 
             if (CurrentMorseType == MorseType.Dot)
                 SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDotSound_1);
-            else if (CurrentMorseType == MorseType.Dash && PageController.Instance.CurrentPage == 6)
-            {
-                SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
-            }
+            // else if (CurrentMorseType == MorseType.Dash && PageController.Instance.CurrentPage == 6)
+            // {
+            //     SoundManager.Instance.PlayEffectSound(EffectSoundNum.MorseDashSound_1);
+            // }
             else if (CurrentMorseType == MorseType.Shadow)
             {
 

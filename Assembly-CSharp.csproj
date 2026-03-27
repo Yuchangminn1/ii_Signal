@@ -141,7 +141,6 @@
     <Compile Include="Assets\1Script\3Singleton\CoroutineRunner.cs" />
     <Compile Include="Assets\1Script\GraphicMove.cs" />
     <Compile Include="Assets\1Script\RawImageFaderGroup.cs" />
-    <Compile Include="Assets\1Script\ResultSelectorText.cs" />
     <Compile Include="Assets\Scritps\Log\InstallTimeStampLogger.cs" />
     <Compile Include="Assets\1Script\ResultStampContainer.cs" />
     <Compile Include="Assets\1Script\EnterCheck.cs" />
@@ -164,6 +163,7 @@
     <Compile Include="Assets\1Script\1Json\QuestionLoader.cs" />
     <Compile Include="Assets\1Script\2PageSequence\SetColorA.cs" />
     <Compile Include="Assets\1Script\1Json\VideoLoader.cs" />
+    <Compile Include="Assets\1Script\DebugResultContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

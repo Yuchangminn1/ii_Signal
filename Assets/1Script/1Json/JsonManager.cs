@@ -154,7 +154,7 @@ public class JsonManager : MonoBehaviour
         foreach (IQuestionTarget t in tempQuestionTargets)
         {
             _questionTargets.Add(t);
-            t.InitializeCartridges(allCartridges);
+            t.InitializeRelationships(allCartridges);
         }
         SetCartridge(_selectedQuestionCartridge);
 
@@ -171,7 +171,7 @@ public class JsonManager : MonoBehaviour
     public void SetCartridge(int value)
     {
         _selectedQuestionCartridge = value;
-        QuestionManager.Instance.SetCartridge(value);
+        QuestionManager.Instance.SetRelationship(value);
     }
 
 }

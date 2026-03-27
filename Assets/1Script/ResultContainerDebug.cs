@@ -25,28 +25,28 @@ public class ResultContainerDebug : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Select(0);
+            DebugSelect(0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            Select(1);
+            DebugSelect(1);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            Select(2);
+            DebugSelect(2);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            Select(3);
+            DebugSelect(3);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            Select(4);
+            DebugSelect(4);
         }
 
     }
 
-    public void Select(int selectIndex)
+    public void DebugSelect(int selectIndex)
     {
         if (UserDataManager.Instance.IsUser())
         {

@@ -7,6 +7,8 @@ public class ResultManager : Singleton<ResultManager>
 {
 
     public ResultContainer PlayerResultContainer;
+    public DebugResultContainer DebugPlayerResultContainer;
+
 
     public CanvasGroup ResultCanvasGroup;
 
@@ -27,6 +29,7 @@ public class ResultManager : Singleton<ResultManager>
     public void Reset()
     {
         PlayerResultContainer?.Reset();
+        DebugPlayerResultContainer?.Reset();
     }
 
 

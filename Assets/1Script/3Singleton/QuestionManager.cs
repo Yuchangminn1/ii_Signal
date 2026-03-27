@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,7 +31,11 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
     List<QuestionInfo> questionInfos = new List<QuestionInfo>(16);
     List<QuestionInfo>[] _cachedCartridges;
     QuestionInfo morsePass = new QuestionInfo();
-    int _cartridge = 1;
+
+    Action<List<QuestionInfo>> onQuestionChanged;
+    int _relationship = 1;
+
+
 
 
     int _currentIndex = 0;
@@ -41,6 +46,11 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
         set { _currentIndex = value; }
     }
 
+
+    public void AddOnQuestionChanged(Action<List<QuestionInfo>> action)
+    {
+        onQuestionChanged += action;
+    }
     public string[] CurrentSelection
     {
         get
@@ -110,7 +120,7 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
-            UpdateCartridge();
+            DebugUpdateRelationship();
         }
     }
 
@@ -143,6 +153,7 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
         }
 
         Debug.Log($"질문 데이터 교체 적용 완료: {questionInfos.Count}");
+        onQuestionChanged?.Invoke(questionInfos);
     }
 
     public List<QuestionInfo> Data()
@@ -150,52 +161,52 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
         return questionInfos;
     }
 
-    public int Cartridge
+    public int Relationship
     {
-        get { return _cartridge; }
+        get { return _relationship; }
     }
 
-    public void InitializeCartridges(List<QuestionInfo>[] cartridges)
+    public void InitializeRelationships(List<QuestionInfo>[] relationships)
     {
-        if (cartridges == null || cartridges.Length == 0)
+        if (relationships == null || relationships.Length == 0)
         {
             _cachedCartridges = null;
-            Debug.LogWarning("캐싱할 카트리지 데이터가 없습니다.");
+            Debug.LogWarning("캐싱할 관계 데이터가 없습니다.");
             return;
         }
 
-        _cachedCartridges = cartridges;
-        Debug.Log($"총 {_cachedCartridges.Length}개 카트리지 캐싱 완료");
+        _cachedCartridges = relationships;
+        Debug.Log($"총 {_cachedCartridges.Length}개 관계 데이터 캐싱 완료");
     }
 
-    public void UpdateCartridge()
+    public void DebugUpdateRelationship()
     {
         if (_cachedCartridges == null || _cachedCartridges.Length == 0)
         {
-            Debug.LogWarning("카트리지 데이터가 없습니다.");
+            Debug.LogWarning("관계 데이터가 없습니다.");
             return;
         }
-        _cartridge++;
-        if (_cartridge > _cachedCartridges.Length)
+        _relationship++;
+        if (_relationship > _cachedCartridges.Length)
         {
-            Debug.Log("모든 카트리지를 완료했습니다.");
-            _cartridge = 0;
+            Debug.Log("모든 관계 데이터를 완료했습니다.");
+            _relationship = 0;
         }
-        SetCartridge(_cartridge);
+        SetRelationship(_relationship);
     }
 
-    public void SetCartridge(int value)
+    public void SetRelationship(int value)
     {
         if (_cachedCartridges == null || _cachedCartridges.Length == 0) return;
 
         int index = Mathf.Clamp(value - 1, 0, _cachedCartridges.Length - 1);
         if (_cachedCartridges[index] == null)
         {
-            Debug.LogWarning($"카트리지 {index + 1} 데이터가 비어 있습니다.");
+            Debug.LogWarning($"관계 데이터 {index + 1}가 비어 있습니다.");
             return;
         }
 
-        _cartridge = index + 1;
+        _relationship = index + 1;
         Initialize(_cachedCartridges[index]);
     }
 
