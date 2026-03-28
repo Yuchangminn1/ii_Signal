@@ -109,6 +109,8 @@ public class Arduino_MorseKey : MonoBehaviour
 
     Coroutine _coloringWaitCoroutine = null;
 
+    bool isShadowDash = false;
+
 
     public ResetUIOn ResetUIOn;
     public string MorseData
@@ -127,6 +129,7 @@ public class Arduino_MorseKey : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
+                isShadowDash = false;
                 GameManager.Instance.GoToIdleCheck();
 
                 startTime = Time.time;
@@ -162,8 +165,9 @@ public class Arduino_MorseKey : MonoBehaviour
                 {
                     OverInputProcess();
                 }
-                if (Time.time - startTime >= MorseTranslator.MaxDotTime && Time.time - startTime < MorseTranslator.MaxDotTime + 0.1f)
+                if (Time.time - startTime >= MorseTranslator.MaxDotTime + 0.05f && isShadowDash == false)
                 {
+                    isShadowDash = true;
                     if (_inputCount < 4)
                     {
                         OnUpdateDashVar?.Invoke(Time.time - startTime);
