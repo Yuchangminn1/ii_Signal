@@ -21,6 +21,7 @@ public enum EffectSoundNum
     SignalSendSound,     // 전송음
     ArduinoButtonSound,     // 아두이노 버튼 사운드
     MorseResetSound,     // 모스 신호 초기화 사운드
+    WaitingSound
 
 }
 public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
@@ -39,7 +40,7 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
 
 
 
-    [Header("BGM = 0 \n SaveSound = 1 \n SoulPieceSound = 2 \n ConfirmSound = 3 \n PopupSound = 4 \n ActiveSound = 5 \n StepTextSound = 6 \n MorseDotSound_1 = 7 \n MorseDashSound_1 = 8 \n MorseDotSound_2 = 9 \n MorseDashSound_2 = 10 \n SignalReceiveSound = 11 \n SignalSendSound = 12 \n ArduinoButtonSound = 13 \n MorseResetSound = 14")]
+    [Header("BGM = 0 \n SaveSound = 1 \n SoulPieceSound = 2 \n ConfirmSound = 3 \n PopupSound = 4 \n ActiveSound = 5 \n StepTextSound = 6 \n MorseDotSound_1 = 7 \n MorseDashSound_1 = 8 \n MorseDotSound_2 = 9 \n MorseDashSound_2 = 10 \n SignalReceiveSound = 11 \n SignalSendSound = 12 \n ArduinoButtonSound = 13 \n MorseResetSound = 14 \n WaitingSound = 15")]
     public bool headerYoung = false; //헤더용 
 
 
@@ -74,6 +75,28 @@ public class SoundManager : Singleton<SoundManager>, IJsonGenericTarget
         }
 
         audioSources[(int)(EffectSoundNum.MorseResetSound)].Play();
+
+    }
+
+    public void PlayerWaitingSound()
+    {
+        if (audioSources == null || audioSources[(int)(EffectSoundNum.WaitingSound)] == null || audioSources[(int)(EffectSoundNum.WaitingSound)].isPlaying)
+        {
+            return;
+        }
+
+        audioSources[(int)(EffectSoundNum.WaitingSound)].Play();
+
+    }
+
+    public void StopWaitingSound()
+    {
+        if (audioSources == null || audioSources[(int)(EffectSoundNum.WaitingSound)] == null || !audioSources[(int)(EffectSoundNum.WaitingSound)].isPlaying)
+        {
+            return;
+        }
+
+        audioSources[(int)(EffectSoundNum.WaitingSound)].Stop();
 
     }
     public void StopLoopSound()

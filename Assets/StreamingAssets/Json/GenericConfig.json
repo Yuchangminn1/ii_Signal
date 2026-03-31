@@ -48,7 +48,8 @@
       "SignalReceiveSound": 1.0,
       "SignalSendSound": 1.0,
       "ArduinoButtonSound": 1.0,
-      "MorseResetSound": 1.0
+      "MorseResetSound": 1.0,
+      "WaitingSound": 1.0
     },
     "boolParams": {},
     "stringParams": {}

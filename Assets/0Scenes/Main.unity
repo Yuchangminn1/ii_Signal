@@ -2627,10 +2627,10 @@ MonoBehaviour:
   OnSequenceStart:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: NameText, Assembly-CSharp
-        m_MethodName: SetText
-        m_Mode: 5
+      - m_Target: {fileID: 854565818}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: StopWaitingSound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -5472,87 +5472,6 @@ MonoBehaviour:
   - {fileID: 312458514}
   FadeOutCanvasGroups: []
   CustomFadeDuration: -1
---- !u!1 &275561169
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 275561170}
-  - component: {fileID: 275561171}
-  m_Layer: 0
-  m_Name: Trigger8
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &275561170
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 275561169}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1249969074}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &275561171
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 275561169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01ca2ab1f3b85e843aff91333114bb74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
-  nextVedeoPlayer: {fileID: 0}
-  OnSequenceStart:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1263260877}
-        m_TargetAssemblyTypeName: ChangeText, Assembly-CSharp
-        m_MethodName: SetText
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  triggerCallback:
-    m_PersistentCalls:
-      m_Calls: []
-  nextSequenceCallback:
-    m_PersistentCalls:
-      m_Calls: []
-  isSubPageSequence: 0
-  isTrigger: 1
-  originTrigger: 0
-  nextDelayTime: 2
-  CutINGraphics:
-  - {fileID: 1263260875}
-  CutOutGraphics: []
-  CutInCanvasGroups: []
-  CutOutCanvasGroups: []
-  FadeInGraphics: []
-  FadeOutGraphics: []
-  FadeInCanvasGroups: []
-  FadeOutCanvasGroups: []
-  CustomFadeDuration: -1
 --- !u!1 &276097664
 GameObject:
   m_ObjectHideFlags: 0
@@ -8058,7 +7977,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB9C8\uC74C \uC2E0\uD638\uB97C \uC7AC\uC0DD"
+  m_Text: "\uC804\uCCB4 \uC2E0\uD638\uB97C \uC7AC\uC0DD"
 --- !u!222 &419012663
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15818,8 +15737,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Name\uB2D8\uC758 \uC624\uB298 \uAE30\uBD84\uC744 \uB9C8\uC74C \uC2E0\uD638\uAE30\uB85C
-    \uC785\uB825\uD574 \uC8FC\uC138\uC694."
+  m_Text: "\uC2E0\uD638\uB97C \uB2E4 \uB4E4\uC73C\uC168\uB2E4\uBA74, \r\n\uC774\uC81C
+    \uC624\uB298 \uAE30\uBD84\uC744 \uBD80\uD638\uB85C \uC124\uC815\uD574 \uBCFC\uAE4C\uC694?"
 --- !u!222 &749210218
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -16576,7 +16495,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB2F5\uBCC0\uC774 \uC800\uC7A5\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
+  m_Text: "\uC124\uC815\uC774 \uC800\uC7A5\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
 --- !u!222 &794757909
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17864,6 +17783,7 @@ Transform:
   - {fileID: 2109597044}
   - {fileID: 1613520258}
   - {fileID: 1641655528}
+  - {fileID: 1654359234}
   m_Father: {fileID: 1572174865}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &854565818
@@ -17915,7 +17835,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -285, y: 187}
+  m_AnchoredPosition: {x: 0, y: 193}
   m_SizeDelta: {x: 1920, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &863732268
@@ -17951,7 +17871,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Name\uB2D8\uC758 \uB9C8\uC74C \uC2E0\uD638\uB97C"
+  m_Text: "\uC124\uC815 \uB41C Name\uB2D8\uC758 \uB9C8\uC74C \uC2E0\uD638\uB97C"
 --- !u!222 &863732269
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19173,11 +19093,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1772811943}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 916, y: 187}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 124}
   m_SizeDelta: {x: 1920, y: 400}
-  m_Pivot: {x: 0, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &888946814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19230,13 +19150,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 5
     m_MaxSize: 55
-    m_Alignment: 3
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "PartnerName\uB2D8 \uC2A4\uD1A0\uB9AC\uC9C0\uB85C \uC804\uC1A1 \uC911\uC785\uB2C8\uB2E4."
+  m_Text: "PartnerName\uB2D8 \uC2A4\uD1A0\uB9AC\uC9C0\uB85C \uC804\uC1A1 \uD569\uB2C8\uB2E4."
 --- !u!222 &888946817
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -22310,7 +22230,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_SizeDelta: {x: 1921, y: 1081}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &996360067
 MonoBehaviour:
@@ -23973,7 +23893,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Name\uB2D8\uC774 \uC624\uB298 \uAE30\uB85D\uD55C"
+  m_Text: "Name\uB2D8\uC774 \uC624\uB298 \uC785\uB825\uD55C"
 --- !u!222 &1044393445
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -27324,7 +27244,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: a657f8691f63e2a4082fe68d263080d8, type: 3}
+    m_Font: {fileID: 12800000, guid: 53a79b87e5cc35c4c9c51591a333c214, type: 3}
     m_FontSize: 55
     m_FontStyle: 0
     m_BestFit: 0
@@ -27462,7 +27382,6 @@ Transform:
   - {fileID: 1117531569}
   - {fileID: 1694714595}
   - {fileID: 1375593876}
-  - {fileID: 275561170}
   - {fileID: 695418382}
   m_Father: {fileID: 569320697}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -30225,7 +30144,7 @@ MonoBehaviour:
   isSubPageSequence: 0
   isTrigger: 1
   originTrigger: 0
-  nextDelayTime: -1
+  nextDelayTime: 2
   CutINGraphics: []
   CutOutGraphics:
   - {fileID: 1263260875}
@@ -33439,7 +33358,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uB2F5\uBCC0\uC744"
+  m_Text: "\uC124\uC815\uC744"
 --- !u!222 &1485554336
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -37309,6 +37228,134 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1643941115}
   m_CullTransparentMesh: 1
+--- !u!1 &1654359233
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1654359234}
+  - component: {fileID: 1654359235}
+  m_Layer: 0
+  m_Name: WaitingSound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1654359234
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654359233}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 854565817}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1654359235
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654359233}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 8271d6b9c67b50f44ad6d1e33ac1ffab, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1660140300
 GameObject:
   m_ObjectHideFlags: 0
@@ -44340,6 +44387,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 854565818}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlayerWaitingSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   triggerCallback:
     m_PersistentCalls:
       m_Calls: []
@@ -44798,7 +44857,19 @@ MonoBehaviour:
   nextVedeoPlayer: {fileID: 0}
   OnSequenceStart:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 854565818}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: StopWaitingSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   triggerCallback:
     m_PersistentCalls:
       m_Calls: []
