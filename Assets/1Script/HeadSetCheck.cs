@@ -11,12 +11,6 @@ public class HeadSetCheck : MonoBehaviour
 
     void Start()
     {
-
-    }
-
-    void OnEnable()
-
-    {
         sequenceScript = GetComponent<SequenceScript>();
 
         if (_selectButton != null)
@@ -30,8 +24,15 @@ public class HeadSetCheck : MonoBehaviour
         Ison = false;
     }
 
+    // void OnEnable()
+
+    // {
+
+    // }
+
     void OnDestroy()
     {
+
         if (_selectButton != null)
             _selectButton._onButtonPressed -= CheckStart;
     }
@@ -44,21 +45,19 @@ public class HeadSetCheck : MonoBehaviour
 
     public void CheckStart()
     {
+        if (gameObject.activeInHierarchy == false)
+        {
+            Debug.Log("gameObject.activeInHierarchy == false");
+            return;
+        }
         Debug.Log("CheckStart 호출됨");
         if (Ison == false)
         {
             Debug.Log("Ison == false");
             return;
-
         }
 
-        if (gameObject.activeInHierarchy == false)
-        {
-            Debug.Log("gameObject.activeInHierarchy == false");
-            return;
 
-
-        }
         sequenceScript?.TriggerForceOn();
 
     }
