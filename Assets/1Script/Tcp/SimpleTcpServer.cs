@@ -162,6 +162,10 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
         _isConnected = false;
         CloseClientConnection();
         CloseListener();
+        if (tcpListenerThread != null && tcpListenerThread.IsAlive)
+        {
+            tcpListenerThread.Join(1000); // Wait up to 1 second
+        }
     }
 
     private void CloseClientConnection()
