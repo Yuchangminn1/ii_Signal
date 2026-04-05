@@ -20,7 +20,7 @@ public abstract class JsonLoaderBase<DataType, TargetType> : IJsonLoader
 
     // 등록된 오브젝트 (예: Text, Image, Audio 등)
     protected readonly Dictionary<string, TargetType> _target = new Dictionary<string, TargetType>();
-
+    private const int JsonLoadTimeoutSeconds = 10;
     protected JsonLoaderBase(string jsonPath)
     {
         JsonPath = jsonPath;
@@ -68,7 +68,7 @@ public abstract class JsonLoaderBase<DataType, TargetType> : IJsonLoader
 
         using (var request = UnityWebRequest.Get(path))
         {
-            request.timeout = 10;
+            request.timeout = JsonLoadTimeoutSeconds;
             yield return request.SendWebRequest();
 
             if (request.result == UnityWebRequest.Result.Success)

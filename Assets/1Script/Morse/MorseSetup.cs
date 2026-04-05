@@ -96,8 +96,21 @@ public class MorseSetup : MonoBehaviour
 
     public void StopCheck()
     {
-        arduino_MorseKey.IsAccuracyRateCheck = false;
-        arduino_MorseKey.OnAccuracyCheckAction -= AccuracyCheck;
+
+        StopHintSoundCoroutine();
+
+    }
+
+    private void StopHintSoundCoroutine()
+    {
+        if (arduino_MorseKey != null)
+        {
+            arduino_MorseKey.IsAccuracyRateCheck = false;
+            arduino_MorseKey.OnAccuracyCheckAction -= AccuracyCheck;
+        }
+
+
+
         if (_hindSoundCoroutine != null)
         {
             StopCoroutine(_hindSoundCoroutine);
@@ -113,8 +126,6 @@ public class MorseSetup : MonoBehaviour
             arduino_MorseKey.OnReset -= Reset;
             arduino_MorseKey.StopMorseCheck();
         }
-
-
     }
 
     IEnumerator PlayMorseHintSoundCorotuine()
@@ -161,19 +172,7 @@ public class MorseSetup : MonoBehaviour
 
     void OnDisable()
     {
-        if (_hindSoundCoroutine != null)
-        {
-            StopCoroutine(_hindSoundCoroutine);
-            _hindSoundCoroutine = null;
-        }
-
-        SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
-        SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
-
-        if (arduino_MorseKey != null)
-        {
-            arduino_MorseKey.StopMorseCheck();
-        }
+        StopHintSoundCoroutine();
 
     }
 

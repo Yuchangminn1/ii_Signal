@@ -35,13 +35,23 @@ public class MorseAnswerContainer : MonoBehaviour
             _rectTransform.localPosition = Vector3.one * 1600f;
     }
 
+
     void OnDisable()
     {
         if (moveCoroutine != null)
+        {
             Debug.LogWarning($"[{name}] OnDisable - 이동 중 비활성화됨");
-        moveCoroutine = null;
-        playSoundCoroutine = null;
+
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
+        if (playSoundCoroutine != null)
+        {
+            StopCoroutine(playSoundCoroutine);
+            playSoundCoroutine = null;
+        }
     }
+
 
     public void SetMorse(string morseAnswer)
     {

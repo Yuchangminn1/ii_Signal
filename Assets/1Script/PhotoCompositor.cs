@@ -148,67 +148,62 @@ namespace My.Scripts.Utils
                             continue;
                         }
 
-                        Texture2D canvasTexture = null;
-
-                        try
+                        Texture2D canvasTexture = CaptureCanvasToTexture(targetCanvas);
+                        if (!canvasTexture)
                         {
-                            canvasTexture = CaptureCanvasToTexture(targetCanvas);
-                            if (!canvasTexture)
-                            {
-                                Debug.LogWarning($"[PhotoCompositor] 캔버스 캡처 실패: {targetCanvas.name}");
-                                continue;
-                            }
-
-                            Task<byte[]> encodeTask = EncodeTextureToPngAsync(canvasTexture);
-                            yield return new WaitUntil(() => encodeTask.IsCompleted);
-
-                            if (encodeTask.IsFaulted)
-                            {
-                                Debug.LogError($"[PhotoCompositor] PNG 인코딩 예외: {encodeTask.Exception?.GetBaseException().Message}");
-                                continue;
-                            }
-
-                            byte[] pngBytes = encodeTask.Result;
-                            if (pngBytes == null || pngBytes.Length == 0)
-                            {
-                                Debug.LogError($"[PhotoCompositor] PNG 인코딩 실패: {targetCanvas.name}");
-                                continue;
-                            }
-
-                            savedCanvasCount++;
-                            string suffix = $"{outputFileName}_{savedCanvasCount}";
-                            string finalFileName = $"{sanitizedName}_{suffix}.png";
-                            string finalFilePath = Path.Combine(rootPath, finalFileName);
-
-                            Task writeTask = File.WriteAllBytesAsync(finalFilePath, pngBytes);
-                            yield return new WaitUntil(() => writeTask.IsCompleted);
-
-                            if (writeTask.IsFaulted)
-                            {
-                                Debug.LogError($"[PhotoCompositor] 파일 저장 예외: {writeTask.Exception?.GetBaseException().Message}");
-                                continue;
-                            }
-
-                            pngBytes = null;
-
-                            if (!isDebug)
-                            {
-                                bool useSecondaryUrl = savedCanvasCount > 1;
-                                Task uploadTask = UploadImageAsync(finalFilePath, nextUploadCount, useSecondaryUrl);
-                                yield return new WaitUntil(() => uploadTask.IsCompleted);
-
-                                if (uploadTask.IsFaulted)
-                                {
-                                    Debug.LogError($"[PhotoCompositor] 업로드 예외: {uploadTask.Exception?.GetBaseException().Message}");
-                                }
-                            }
-
-                            nextUploadCount++;
-                            yield return null;
+                            Debug.LogWarning($"[PhotoCompositor] 캔버스 캡처 실패: {targetCanvas.name}");
+                            continue;
                         }
-                        finally
+
+                        Task<byte[]> encodeTask = EncodeTextureToPngAsync(canvasTexture);
+                        yield return new WaitUntil(() => encodeTask.IsCompleted);
+
+                        if (encodeTask.IsFaulted)
                         {
+                            Debug.LogError($"[PhotoCompositor] PNG 인코딩 예외: {encodeTask.Exception?.GetBaseException().Message}");
+                            continue;
                         }
+
+                        byte[] pngBytes = encodeTask.Result;
+                        if (pngBytes == null || pngBytes.Length == 0)
+                        {
+                            Debug.LogError($"[PhotoCompositor] PNG 인코딩 실패: {targetCanvas.name}");
+                            continue;
+                        }
+
+                        // savedCanvasCount++;
+                        // string suffix = $"{outputFileName}_{savedCanvasCount}";
+
+                        int canvasIndex = savedCanvasCount + 1;
+                        string suffix = $"{outputFileName}_{canvasIndex}";
+                        string finalFileName = $"{sanitizedName}_{suffix}.png";
+                        string finalFilePath = Path.Combine(rootPath, finalFileName);
+
+                        Task writeTask = File.WriteAllBytesAsync(finalFilePath, pngBytes);
+                        yield return new WaitUntil(() => writeTask.IsCompleted);
+
+                        if (writeTask.IsFaulted)
+                        {
+                            Debug.LogError($"[PhotoCompositor] 파일 저장 예외: {writeTask.Exception?.GetBaseException().Message}");
+                            continue;
+                        }
+                        savedCanvasCount = canvasIndex;
+                        pngBytes = null;
+
+                        if (!isDebug)
+                        {
+                            bool useSecondaryUrl = savedCanvasCount > 1;
+                            Task uploadTask = UploadImageAsync(finalFilePath, nextUploadCount, useSecondaryUrl);
+                            yield return new WaitUntil(() => uploadTask.IsCompleted);
+
+                            if (uploadTask.IsFaulted)
+                            {
+                                Debug.LogError($"[PhotoCompositor] 업로드 예외: {uploadTask.Exception?.GetBaseException().Message}");
+                            }
+                        }
+
+                        nextUploadCount++;
+                        yield return null;
                     }
 
                     if (savedCanvasCount == 0)

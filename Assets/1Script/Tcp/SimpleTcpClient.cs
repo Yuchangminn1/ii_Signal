@@ -175,6 +175,11 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
         _isRunning = false;
         _isConnected = false;
         CloseSocketConnection();
+
+        if (clientReceiveThread != null && clientReceiveThread.IsAlive)
+        {
+            clientReceiveThread.Join(1000); // Wait up to 1 second
+        }
     }
 
     private void CloseSocketConnection()
