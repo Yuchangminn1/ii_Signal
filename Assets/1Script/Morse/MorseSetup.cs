@@ -96,8 +96,7 @@ public class MorseSetup : MonoBehaviour
 
     public void StopCheck()
     {
-        arduino_MorseKey.IsAccuracyRateCheck = false;
-        arduino_MorseKey.OnAccuracyCheckAction -= AccuracyCheck;
+
         StopHintSoundCoroutine();
 
     }
