@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TutorialStart : MonoBehaviour
 {
+    const float tutorialSyncTimeout = 20f;
+
     SequenceScript sequenceScript;
 
     Coroutine startcheckCoroutine = null;
@@ -52,10 +54,19 @@ public class TutorialStart : MonoBehaviour
         NetworkManager.Instance.SendData("Go");
 
         int count = 0;
+        float tutorialSyncStartTime = Time.time;
 
         while (NetworkManager.Instance.IsTutorialRead == false && gameObject.activeInHierarchy)
         {
             yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
+
+            if (Time.time - tutorialSyncStartTime >= tutorialSyncTimeout)
+            {
+                Debug.LogWarning($"Tutorial sync timed out after {tutorialSyncTimeout} seconds.");
+                startcheckCoroutine = null;
+                yield break;
+            }
+
             if (NetworkManager.Instance.IsServer == false)
                 NetworkManager.Instance.SendData("Go");
 
