@@ -13,6 +13,7 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
     private Thread tcpListenerThread;
     private TcpClient connectedTcpClient;
     private bool _isConnected = false;
+    private volatile bool _isRunning = false;
 
     public bool IsConnected => _isConnected && connectedTcpClient != null && connectedTcpClient.Connected;
 
@@ -27,6 +28,7 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
         MainThreadDispatcher.EnsureCreated();
 
         // Start TcpServer background thread
+        _isRunning = true;
         tcpListenerThread = new Thread(new ThreadStart(ListenForIncommingRequests));
         tcpListenerThread.IsBackground = true;
         tcpListenerThread.Start();
@@ -48,9 +50,14 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
             tcpListener.Start();
             Debug.Log("Server is listening on all network interfaces");
 
-            while (true)
+            while (_isRunning)
             {
                 connectedTcpClient = tcpListener.AcceptTcpClient();
+                if (!_isRunning)
+                {
+                    break;
+                }
+
                 _isConnected = true;
 
                 // NetworkManager에 연결 성공 알림
@@ -68,16 +75,19 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
                 {
                     using (System.IO.StreamReader reader = new System.IO.StreamReader(stream, Encoding.UTF8))
                     {
-                        while (true)
+                        while (_isRunning)
                         {
                             string clientMessage = reader.ReadLine();
                             if (clientMessage == null)
                             {
                                 _isConnected = false;
-                                MainThreadDispatcher.RunOnMainThread(() =>
+                                if (_isRunning)
                                 {
-                                    NetworkManager.Instance.SetConnectionLost();
-                                });
+                                    MainThreadDispatcher.RunOnMainThread(() =>
+                                    {
+                                        NetworkManager.Instance.SetConnectionLost();
+                                    });
+                                }
                                 break;
                             }
                             ReadData(clientMessage);
@@ -87,18 +97,32 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
                 catch (Exception e)
                 {
                     _isConnected = false;
-                    MainThreadDispatcher.RunOnMainThread(() =>
+                    if (_isRunning)
                     {
-                        NetworkManager.Instance.SetConnectionLost();
-                    });
-                    Debug.Log("Client disconnected or error: " + e.Message);
+                        MainThreadDispatcher.RunOnMainThread(() =>
+                        {
+                            NetworkManager.Instance.SetConnectionLost();
+                        });
+                        Debug.Log("Client disconnected or error: " + e.Message);
+                    }
                 }
+
+                CloseClientConnection();
             }
 
         }
         catch (SocketException socketException)
         {
-            Debug.Log("SocketException " + socketException.ToString());
+            if (_isRunning)
+            {
+                Debug.Log("SocketException " + socketException.ToString());
+            }
+        }
+        finally
+        {
+            CloseClientConnection();
+            CloseListener();
+            tcpListenerThread = null;
         }
     }
 
@@ -130,6 +154,71 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
     public void SendData(string data)
     {
         SendMessageToClient(data);
+    }
+
+    public void StopServer()
+    {
+        _isRunning = false;
+        _isConnected = false;
+        CloseClientConnection();
+        CloseListener();
+    }
+
+    private void CloseClientConnection()
+    {
+        if (connectedTcpClient == null)
+        {
+            return;
+        }
+
+        try
+        {
+            connectedTcpClient.Close();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Close client exception: " + e.Message);
+        }
+        finally
+        {
+            connectedTcpClient = null;
+        }
+    }
+
+    private void CloseListener()
+    {
+        if (tcpListener == null)
+        {
+            return;
+        }
+
+        try
+        {
+            tcpListener.Stop();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Close listener exception: " + e.Message);
+        }
+        finally
+        {
+            tcpListener = null;
+        }
+    }
+
+    private void OnDisable()
+    {
+        StopServer();
+    }
+
+    private void OnDestroy()
+    {
+        StopServer();
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopServer();
     }
 
     public void ReadData(string data)

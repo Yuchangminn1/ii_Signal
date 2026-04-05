@@ -816,9 +816,17 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
     public IEnumerator EndWaitCoroutine()
     {
+        const float endWaitTimeout = 30f;
+        float endWaitStartTime = Time.time;
 
         while (IsContentEnd == false)
         {
+            if (Time.time - endWaitStartTime >= endWaitTimeout)
+            {
+                Debug.LogWarning($"EndWait timed out after {endWaitTimeout} seconds. Continuing with reset.");
+                break;
+            }
+
             NetworkManager.Instance.SendData("EReset");
 
             yield return CoroutineReturnManager.GetWaitForSeconds(1.5f);
