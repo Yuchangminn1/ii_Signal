@@ -171,8 +171,11 @@ namespace My.Scripts.Utils
                             continue;
                         }
 
-                        savedCanvasCount++;
-                        string suffix = $"{outputFileName}_{savedCanvasCount}";
+                        // savedCanvasCount++;
+                        // string suffix = $"{outputFileName}_{savedCanvasCount}";
+
+                        int canvasIndex = savedCanvasCount + 1;
+                        string suffix = $"{outputFileName}_{canvasIndex}";
                         string finalFileName = $"{sanitizedName}_{suffix}.png";
                         string finalFilePath = Path.Combine(rootPath, finalFileName);
 
@@ -184,7 +187,7 @@ namespace My.Scripts.Utils
                             Debug.LogError($"[PhotoCompositor] 파일 저장 예외: {writeTask.Exception?.GetBaseException().Message}");
                             continue;
                         }
-
+                        savedCanvasCount = canvasIndex;
                         pngBytes = null;
 
                         if (!isDebug)

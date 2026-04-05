@@ -104,6 +104,14 @@ public class MorseSetup : MonoBehaviour
 
     private void StopHintSoundCoroutine()
     {
+        if (arduino_MorseKey != null)
+        {
+            arduino_MorseKey.IsAccuracyRateCheck = false;
+            arduino_MorseKey.OnAccuracyCheckAction -= AccuracyCheck;
+        }
+
+
+
         if (_hindSoundCoroutine != null)
         {
             StopCoroutine(_hindSoundCoroutine);
