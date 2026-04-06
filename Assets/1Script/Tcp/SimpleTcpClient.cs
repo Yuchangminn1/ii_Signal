@@ -97,7 +97,11 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                             break;
                         }
 
-                        ReadData(serverMessage);
+                        string receivedMessage = serverMessage;
+                        MainThreadDispatcher.RunOnMainThread(() =>
+                        {
+                            ReadData(receivedMessage);
+                        });
 
                     }
                 }
@@ -228,8 +232,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                 return;
             }
 
-            bool isMorseData = false;
-
             if (data.Equals("Go", StringComparison.OrdinalIgnoreCase))
             {
                 NetworkManager.Instance.IsTutorialRead = true;
@@ -301,16 +303,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                 try
                 {
                     Debug.Log("data.Length == 4 Received Data: " + data);
-                    isMorseData = true;
-
-                    foreach (char c in data)
-                    {
-                        if (c != '0' && c != '1')
-                        {
-                            isMorseData = false;
-                            break;
-                        }
-                    }
                     UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
                 }
                 catch (Exception e) { Debug.LogError($"[TCP ReadData] 4자리 데이터 처리 에러: {e.Message}"); }
@@ -327,16 +319,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                         Debug.Log("PassCode Data Received: " + data);
                         UserDataManager.Instance.GetPlayer().PartnerPassCode = data;
                         Debug.Log("PassCode Set: " + UserDataManager.Instance.GetPlayer().PartnerPassCode);
-                        isMorseData = true;
-
-                        foreach (char c in data)
-                        {
-                            if (c != '0' && c != '1')
-                            {
-                                isMorseData = false;
-                                break;
-                            }
-                        }
                     }
                 }
                 catch (Exception e) { Debug.LogError($"[TCP ReadData] 5자리 데이터 처리 에러: {e.Message}"); }

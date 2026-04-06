@@ -90,7 +90,11 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
                                 }
                                 break;
                             }
-                            ReadData(clientMessage);
+                            string receivedMessage = clientMessage;
+                            MainThreadDispatcher.RunOnMainThread(() =>
+                            {
+                                ReadData(receivedMessage);
+                            });
                         }
                     }
                 }
