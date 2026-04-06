@@ -226,6 +226,11 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     {
         try
         {
+            if (NetworkManager.Instance.TryHandleSyncMessage(data))
+            {
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(data))
             {
                 Debug.LogWarning("[TCP ReadData] 빈 데이터 수신");

@@ -5,6 +5,7 @@ using UnityEngine;
 public class TutorialStart : MonoBehaviour
 {
     const float tutorialSyncTimeout = 20f;
+    const int maxTutorialSyncRetries = 3;
 
     SequenceScript sequenceScript;
 
@@ -54,6 +55,7 @@ public class TutorialStart : MonoBehaviour
         NetworkManager.Instance.SendData("Go");
 
         int count = 0;
+        int retryCount = 0;
         float tutorialSyncStartTime = Time.time;
 
         while (NetworkManager.Instance.IsTutorialRead == false && gameObject.activeInHierarchy)
@@ -62,9 +64,23 @@ public class TutorialStart : MonoBehaviour
 
             if (Time.time - tutorialSyncStartTime >= tutorialSyncTimeout)
             {
-                Debug.LogWarning($"Tutorial sync timed out after {tutorialSyncTimeout} seconds.");
-                startcheckCoroutine = null;
-                yield break;
+                retryCount++;
+                Debug.LogWarning($"Tutorial sync timed out after {tutorialSyncTimeout} seconds. retry={retryCount}");
+
+                if (retryCount > maxTutorialSyncRetries)
+                {
+                    Debug.LogWarning("Tutorial sync retries exceeded. Forcing local continue.");
+                    break;
+                }
+
+                if (NetworkManager.Instance.IsConnected)
+                {
+                    NetworkManager.Instance.RequestStateSync();
+                    NetworkManager.Instance.SendData("Go");
+                }
+
+                tutorialSyncStartTime = Time.time;
+                continue;
             }
 
             if (NetworkManager.Instance.IsServer == false)

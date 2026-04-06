@@ -233,6 +233,11 @@ public class SimpleTcpServer : MonoBehaviour, ITCP
     {
         try
         {
+            if (NetworkManager.Instance.TryHandleSyncMessage(data))
+            {
+                return;
+            }
+
             bool isMorseData = false;
 
             if (data.Equals("Go", StringComparison.OrdinalIgnoreCase))
