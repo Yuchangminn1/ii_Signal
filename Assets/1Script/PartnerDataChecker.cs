@@ -5,6 +5,8 @@ public class PartnerDataChecker : MonoBehaviour
 {
     SequenceScript sequenceScript;
 
+    Coroutine checkCoroutine = null;
+
     void Start()
     {
         sequenceScript = GetComponent<SequenceScript>();
@@ -19,14 +21,22 @@ public class PartnerDataChecker : MonoBehaviour
     }
     void OnDisable()
     {
-        StopCoroutine(CheckCoroutine());
+        if (checkCoroutine != null)
+        {
+            StopCoroutine(checkCoroutine);
+            checkCoroutine = null;
+        }
     }
 
     public void ArrivePartnerDataCheck()
     {
-        StartCoroutine(CheckCoroutine());
+        if (checkCoroutine == null)
+        {
+            checkCoroutine = StartCoroutine(CheckCoroutine());
+        }
     }
-    // 코루틴 0.5~ 1초 사이로 체크해서 시퀀스 스크립트 넘기는거 작성
+
+
     IEnumerator CheckCoroutine()
     {
         yield return CoroutineReturnManager.GetWaitForSeconds(2f);
@@ -35,11 +45,15 @@ public class PartnerDataChecker : MonoBehaviour
         while (UserDataManager.Instance.IsUser() && UserDataManager.Instance.GetPlayer().PartnerPassCode == "")
         {
             if (UserDataManager.Instance.IsUser() == false)
+            {
+                checkCoroutine = null;
                 yield break;
+            }
             yield return CoroutineReturnManager.GetWaitForSeconds(1f);
             Debug.Log($"상대방 답변 갯수 체크 : {answerCount} 목표 {QuestionManager.Instance.QuestionInfos.Count}");
             answerCount = UserDataManager.Instance.GetPlayer().PartnerAnswerData.Count;
         }
         sequenceScript?.TriggerForceOn();
+        checkCoroutine = null;
     }
 }

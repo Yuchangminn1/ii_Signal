@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using Newtonsoft.Json; // ← 반드시 using 추가
 
 public interface IJsonLoader
@@ -18,7 +20,7 @@ public abstract class JsonLoaderBase<DataType, TargetType> : IJsonLoader
 
     // 등록된 오브젝트 (예: Text, Image, Audio 등)
     protected readonly Dictionary<string, TargetType> _target = new Dictionary<string, TargetType>();
-
+    private const int JsonLoadTimeoutSeconds = 10;
     protected JsonLoaderBase(string jsonPath)
     {
         JsonPath = jsonPath;
@@ -27,6 +29,16 @@ public abstract class JsonLoaderBase<DataType, TargetType> : IJsonLoader
     public void Load()
     {
         data = LoadData();
+    }
+
+    public IEnumerator LoadCoroutine()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        yield return LoadDataCoroutine();
+#else
+        Load();
+        yield break;
+#endif
     }
 
     public virtual void SetJsonPath(string jsonPath)
@@ -39,24 +51,6 @@ public abstract class JsonLoaderBase<DataType, TargetType> : IJsonLoader
     {
         string path = Path.Combine(Application.streamingAssetsPath, JsonPath);
 
-#if UNITY_ANDROID && !UNITY_EDITOR
-        using (var request = UnityEngine.Networking.UnityWebRequest.Get(path))
-        {
-            request.SendWebRequest();
-            while (!request.isDone) { }
-
-            if (request.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
-            {
-                string json = request.downloadHandler.text;
-                return JsonConvert.DeserializeObject<Dictionary<string, DataType>>(json);
-            }
-            else
-            {
-                Debug.LogError($"Failed to load JSON from {path}: {request.error}");
-                return new Dictionary<string, DataType>();
-            }
-        }
-#else
         if (!File.Exists(path))
         {
             Debug.LogError($"Json file not found: {path}");
@@ -64,8 +58,41 @@ public abstract class JsonLoaderBase<DataType, TargetType> : IJsonLoader
         }
 
         string json = File.ReadAllText(path);
-        return JsonConvert.DeserializeObject<Dictionary<string, DataType>>(json);
+        return DeserializeData(json, path);
+    }
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+    private IEnumerator LoadDataCoroutine()
+    {
+        string path = Path.Combine(Application.streamingAssetsPath, JsonPath);
+
+        using (var request = UnityWebRequest.Get(path))
+        {
+            request.timeout = JsonLoadTimeoutSeconds;
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                data = DeserializeData(request.downloadHandler.text, path);
+                yield break;
+            }
+
+            Debug.LogError($"Failed to load JSON from {path}: {request.error}");
+            data = new Dictionary<string, DataType>();
+        }
+    }
 #endif
+
+    private Dictionary<string, DataType> DeserializeData(string json, string path)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            Debug.LogWarning($"Json file is empty: {path}");
+            return new Dictionary<string, DataType>();
+        }
+
+        var loadedData = JsonConvert.DeserializeObject<Dictionary<string, DataType>>(json);
+        return loadedData ?? new Dictionary<string, DataType>();
     }
 
     public void Register(string name, TargetType obj)

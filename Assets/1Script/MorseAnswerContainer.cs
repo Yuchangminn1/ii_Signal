@@ -35,6 +35,24 @@ public class MorseAnswerContainer : MonoBehaviour
             _rectTransform.localPosition = Vector3.one * 1600f;
     }
 
+
+    void OnDisable()
+    {
+        if (moveCoroutine != null)
+        {
+            Debug.LogWarning($"[{name}] OnDisable - 이동 중 비활성화됨");
+
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
+        if (playSoundCoroutine != null)
+        {
+            StopCoroutine(playSoundCoroutine);
+            playSoundCoroutine = null;
+        }
+    }
+
+
     public void SetMorse(string morseAnswer)
     {
         for (int i = 0; i < morseAnswer.Length; i++)
@@ -144,13 +162,14 @@ public class MorseAnswerContainer : MonoBehaviour
     }
     IEnumerator MoveStartCoroutine(Vector2 endPos, float moveSpeed)
     {
+        Debug.Log($"[{name}] 이동시작 x:{_rectTransform.localPosition.x:F0}");
         while (_rectTransform.localPosition.x > endPos.x)
         {
             yield return CoroutineReturnManager.WaitForFixedUpdate;
             _rectTransform.localPosition += Vector3.left * Time.deltaTime * moveSpeed;
         }
         _rectTransform.localPosition = endPos;
-        Debug.Log("이동완료");
+        Debug.Log($"[{name}] 이동완료");
         moveCoroutine = null;
     }
 

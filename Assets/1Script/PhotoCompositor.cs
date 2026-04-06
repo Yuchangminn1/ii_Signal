@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.Networking;
 
 namespace My.Scripts.Utils
@@ -48,6 +49,8 @@ namespace My.Scripts.Utils
 
         Vector2Int canvasCaptureResolution = new Vector2Int(2250, 4000);
 
+        [SerializeField] private bool releaseCachedTexturesAfterRun = true;
+
         [Header("API Retry Settings")]
         [SerializeField] private int maxRetries = 10;
         [SerializeField] private float retryDelay = 1.0f;
@@ -90,9 +93,7 @@ namespace My.Scripts.Utils
 
         private void OnDestroy()
         {
-            if (_cachedRenderTex != null) { _cachedRenderTex.Release(); Destroy(_cachedRenderTex); }
-            if (_cachedCanvasTex != null) Destroy(_cachedCanvasTex);
-            if (_cachedScreenTex != null) Destroy(_cachedScreenTex);
+            ReleaseCachedTextures();
         }
 
         /// <summary> 
@@ -147,63 +148,62 @@ namespace My.Scripts.Utils
                             continue;
                         }
 
-                        Texture2D canvasTexture = null;
-
-                        try
+                        Texture2D canvasTexture = CaptureCanvasToTexture(targetCanvas);
+                        if (!canvasTexture)
                         {
-                            canvasTexture = CaptureCanvasToTexture(targetCanvas);
-                            if (!canvasTexture)
-                            {
-                                Debug.LogWarning($"[PhotoCompositor] 캔버스 캡처 실패: {targetCanvas.name}");
-                                continue;
-                            }
-
-                            Task<byte[]> encodeTask = EncodeTextureToPngAsync(canvasTexture);
-                            yield return new WaitUntil(() => encodeTask.IsCompleted);
-
-                            if (encodeTask.IsFaulted)
-                            {
-                                Debug.LogError($"[PhotoCompositor] PNG 인코딩 예외: {encodeTask.Exception?.GetBaseException().Message}");
-                                continue;
-                            }
-
-                            byte[] pngBytes = encodeTask.Result;
-                            if (pngBytes == null || pngBytes.Length == 0)
-                            {
-                                Debug.LogError($"[PhotoCompositor] PNG 인코딩 실패: {targetCanvas.name}");
-                                continue;
-                            }
-
-                            savedCanvasCount++;
-                            string suffix = $"{outputFileName}_{savedCanvasCount}";
-                            string finalFileName = $"{sanitizedName}_{suffix}.png";
-
-                            Task writeTask = File.WriteAllBytesAsync(Path.Combine(rootPath, finalFileName), pngBytes);
-                            yield return new WaitUntil(() => writeTask.IsCompleted);
-
-                            if (writeTask.IsFaulted)
-                            {
-                                Debug.LogError($"[PhotoCompositor] 파일 저장 예외: {writeTask.Exception?.GetBaseException().Message}");
-                                continue;
-                            }
-
-                            if (!isDebug)
-                            {
-                                bool useSecondaryUrl = savedCanvasCount > 1;
-                                Task uploadTask = UploadImageAsync(pngBytes, finalFileName, nextUploadCount, useSecondaryUrl);
-                                yield return new WaitUntil(() => uploadTask.IsCompleted);
-
-                                if (uploadTask.IsFaulted)
-                                {
-                                    Debug.LogError($"[PhotoCompositor] 업로드 예외: {uploadTask.Exception?.GetBaseException().Message}");
-                                }
-                            }
-
-                            nextUploadCount++;
+                            Debug.LogWarning($"[PhotoCompositor] 캔버스 캡처 실패: {targetCanvas.name}");
+                            continue;
                         }
-                        finally
+
+                        Task<byte[]> encodeTask = EncodeTextureToPngAsync(canvasTexture);
+                        yield return new WaitUntil(() => encodeTask.IsCompleted);
+
+                        if (encodeTask.IsFaulted)
                         {
+                            Debug.LogError($"[PhotoCompositor] PNG 인코딩 예외: {encodeTask.Exception?.GetBaseException().Message}");
+                            continue;
                         }
+
+                        byte[] pngBytes = encodeTask.Result;
+                        if (pngBytes == null || pngBytes.Length == 0)
+                        {
+                            Debug.LogError($"[PhotoCompositor] PNG 인코딩 실패: {targetCanvas.name}");
+                            continue;
+                        }
+
+                        // savedCanvasCount++;
+                        // string suffix = $"{outputFileName}_{savedCanvasCount}";
+
+                        int canvasIndex = savedCanvasCount + 1;
+                        string suffix = $"{outputFileName}_{canvasIndex}";
+                        string finalFileName = $"{sanitizedName}_{suffix}.png";
+                        string finalFilePath = Path.Combine(rootPath, finalFileName);
+
+                        Task writeTask = File.WriteAllBytesAsync(finalFilePath, pngBytes);
+                        yield return new WaitUntil(() => writeTask.IsCompleted);
+
+                        if (writeTask.IsFaulted)
+                        {
+                            Debug.LogError($"[PhotoCompositor] 파일 저장 예외: {writeTask.Exception?.GetBaseException().Message}");
+                            continue;
+                        }
+                        savedCanvasCount = canvasIndex;
+                        pngBytes = null;
+
+                        if (!isDebug)
+                        {
+                            bool useSecondaryUrl = savedCanvasCount > 1;
+                            Task uploadTask = UploadImageAsync(finalFilePath, nextUploadCount, useSecondaryUrl);
+                            yield return new WaitUntil(() => uploadTask.IsCompleted);
+
+                            if (uploadTask.IsFaulted)
+                            {
+                                Debug.LogError($"[PhotoCompositor] 업로드 예외: {uploadTask.Exception?.GetBaseException().Message}");
+                            }
+                        }
+
+                        nextUploadCount++;
+                        yield return null;
                     }
 
                     if (savedCanvasCount == 0)
@@ -231,6 +231,8 @@ namespace My.Scripts.Utils
                     try
                     {
                         Task<byte[]> encodeTask = EncodeTextureToPngAsync(screenshotTex);
+                        _cachedScreenTex = null;
+                        Destroy(screenshotTex);
                         yield return new WaitUntil(() => encodeTask.IsCompleted);
 
                         if (encodeTask.IsFaulted)
@@ -248,8 +250,9 @@ namespace My.Scripts.Utils
                         }
 
                         string finalFileName = $"{sanitizedName}_{outputFileName}.png";
+                        string finalFilePath = Path.Combine(rootPath, finalFileName);
 
-                        Task writeTask = File.WriteAllBytesAsync(Path.Combine(rootPath, finalFileName), pngBytes);
+                        Task writeTask = File.WriteAllBytesAsync(finalFilePath, pngBytes);
                         yield return new WaitUntil(() => writeTask.IsCompleted);
 
                         if (writeTask.IsFaulted)
@@ -258,9 +261,11 @@ namespace My.Scripts.Utils
                             yield break;
                         }
 
+                        pngBytes = null;
+
                         if (!isDebug)
                         {
-                            Task uploadTask = UploadImageAsync(pngBytes, finalFileName, nextUploadCount, false);
+                            Task uploadTask = UploadImageAsync(finalFilePath, nextUploadCount, false);
                             yield return new WaitUntil(() => uploadTask.IsCompleted);
 
                             if (uploadTask.IsFaulted)
@@ -275,11 +280,21 @@ namespace My.Scripts.Utils
                     }
                     finally
                     {
+                        if (_cachedScreenTex != null)
+                        {
+                            Destroy(_cachedScreenTex);
+                            _cachedScreenTex = null;
+                        }
                     }
                 }
             }
             finally
             {
+                if (releaseCachedTexturesAfterRun)
+                {
+                    ReleaseCachedTextures();
+                }
+
                 IsProcessing = false;
             }
         }
@@ -289,7 +304,7 @@ namespace My.Scripts.Utils
             byte[] rawData = texture.GetRawTextureData();
             int texWidth = texture.width;
             int texHeight = texture.height;
-            UnityEngine.Experimental.Rendering.GraphicsFormat format = texture.graphicsFormat;
+            GraphicsFormat format = texture.graphicsFormat;
 
             return Task.Run(() =>
                 ImageConversion.EncodeArrayToPNG(rawData, format, (uint)texWidth, (uint)texHeight));
@@ -314,7 +329,7 @@ namespace My.Scripts.Utils
             if (_cachedRenderTex == null || _cachedRenderTex.width != captureWidth || _cachedRenderTex.height != captureHeight)
             {
                 if (_cachedRenderTex != null) { _cachedRenderTex.Release(); Destroy(_cachedRenderTex); }
-                _cachedRenderTex = new RenderTexture(captureWidth, captureHeight, 24, RenderTextureFormat.ARGB32);
+                _cachedRenderTex = new RenderTexture(captureWidth, captureHeight, 0, RenderTextureFormat.ARGB32);
             }
             RenderTexture renderTexture = _cachedRenderTex;
             GameObject cameraObject = new GameObject("PhotoCompositorCanvasCaptureCamera");
@@ -377,14 +392,42 @@ namespace My.Scripts.Utils
             }
         }
 
+        private void ReleaseCachedTextures()
+        {
+            if (_cachedRenderTex != null)
+            {
+                _cachedRenderTex.Release();
+                Destroy(_cachedRenderTex);
+                _cachedRenderTex = null;
+            }
+
+            if (_cachedCanvasTex != null)
+            {
+                Destroy(_cachedCanvasTex);
+                _cachedCanvasTex = null;
+            }
+
+            if (_cachedScreenTex != null)
+            {
+                Destroy(_cachedScreenTex);
+                _cachedScreenTex = null;
+            }
+        }
+
         /// <summary> 
         /// 서버 업로드를 Task 기반으로 처리합니다. 
         /// </summary>
-        private async Task UploadImageAsync(byte[] imageBytes, string fileName, int requestCount, bool useSecondaryUrl)
+        private async Task UploadImageAsync(string filePath, int requestCount, bool useSecondaryUrl)
         {
             if (UserDataManager.Instance.IsUser() == false)
             {
                 Debug.LogWarning("[PhotoCompositor] 업로드 실패: 사용자 정보가 없습니다.");
+                return;
+            }
+
+            if (File.Exists(filePath) == false)
+            {
+                Debug.LogError($"[PhotoCompositor] 업로드 실패: 파일을 찾을 수 없습니다. {filePath}");
                 return;
             }
 
@@ -414,8 +457,8 @@ namespace My.Scripts.Utils
             {
                 using (UnityWebRequest webRequest = new UnityWebRequest(requestUrl, UnityWebRequest.kHttpVerbPOST))
                 {
-                    webRequest.uploadHandler = new UploadHandlerRaw(imageBytes);
-                    webRequest.uploadHandler.contentType = "image/png";
+                    webRequest.uploadHandler = new UploadHandlerFile(filePath);
+                    webRequest.SetRequestHeader("Content-Type", "image/png");
                     webRequest.downloadHandler = new DownloadHandlerBuffer();
                     webRequest.timeout = 15;
 

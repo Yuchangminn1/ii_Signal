@@ -12,6 +12,7 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
     private TcpClient socketConnection;
     private Thread clientReceiveThread;
     private bool _isConnected = false;
+    private volatile bool _isRunning = false;
 
     string serverIp = "192.168.219.103";
     public string ServerIp { get => serverIp; set => serverIp = value; }
@@ -34,27 +35,36 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
 
     public void ConnectToTcpServer()
     {
+        if (_isRunning && clientReceiveThread != null && clientReceiveThread.IsAlive)
+        {
+            return;
+        }
+
         try
         {
             // MainThreadDispatcher 초기화
             MainThreadDispatcher.EnsureCreated();
 
+            _isRunning = true;
             clientReceiveThread = new Thread(new ThreadStart(ListenForData));
             clientReceiveThread.IsBackground = true;
             clientReceiveThread.Start();
         }
         catch (Exception e)
         {
+            _isRunning = false;
             Debug.Log("On client connect exception " + e);
         }
     }
 
     private void ListenForData()
     {
-        while (true) // 연결 재시도 루프
+        while (_isRunning) // 연결 재시도 루프
         {
             try
             {
+                CloseSocketConnection();
+
                 // 사용자의 ifconfig 정보(en0)에 따라 IP 주소를 192.0.0.2로 설정
                 socketConnection = new TcpClient(serverIp, 8052);
                 _isConnected = true;
@@ -70,7 +80,7 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                 using (NetworkStream stream = socketConnection.GetStream())
                 using (System.IO.StreamReader reader = new System.IO.StreamReader(stream, Encoding.UTF8))
                 {
-                    while (true)
+                    while (_isRunning)
                     {
                         // 데이터를 한 줄씩 읽어서 처리 (패킷 뭉침/잘림 방지)
                         string serverMessage = reader.ReadLine();
@@ -87,7 +97,11 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                             break;
                         }
 
-                        ReadData(serverMessage);
+                        string receivedMessage = serverMessage;
+                        MainThreadDispatcher.RunOnMainThread(() =>
+                        {
+                            ReadData(receivedMessage);
+                        });
 
                     }
                 }
@@ -95,25 +109,37 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
             catch (SocketException socketException)
             {
                 _isConnected = false;
-                MainThreadDispatcher.RunOnMainThread(() =>
+                if (_isRunning)
                 {
-                    NetworkManager.Instance.SetConnectionLost();
-                });
-                Debug.Log("Socket Exception - Retrying to connect to server... " + socketException.Message);
+                    MainThreadDispatcher.RunOnMainThread(() =>
+                    {
+                        NetworkManager.Instance.SetConnectionLost();
+                    });
+                    Debug.Log("Socket Exception - Retrying to connect to server... " + socketException.Message);
+                }
             }
             catch (Exception e)
             {
                 _isConnected = false;
-                MainThreadDispatcher.RunOnMainThread(() =>
+                if (_isRunning)
                 {
-                    NetworkManager.Instance.SetConnectionLost();
-                });
-                Debug.Log("Exception: " + e.Message);
+                    MainThreadDispatcher.RunOnMainThread(() =>
+                    {
+                        NetworkManager.Instance.SetConnectionLost();
+                    });
+                    Debug.Log("Exception: " + e.Message);
+                }
             }
 
             // 연결이 끊어지거나 실패하면 잠시 대기 후 재시도
-            Thread.Sleep(1000);
+            if (_isRunning)
+            {
+                Thread.Sleep(1000);
+            }
         }
+
+        CloseSocketConnection();
+        clientReceiveThread = null;
     }
 
     private void SendMessageToTcpServer(string clientMessage)
@@ -148,6 +174,54 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
         SendMessageToTcpServer(data);
     }
 
+    public void StopClient()
+    {
+        _isRunning = false;
+        _isConnected = false;
+        CloseSocketConnection();
+
+        if (clientReceiveThread != null && clientReceiveThread.IsAlive)
+        {
+            clientReceiveThread.Join(1000); // Wait up to 1 second
+        }
+    }
+
+    private void CloseSocketConnection()
+    {
+        if (socketConnection == null)
+        {
+            return;
+        }
+
+        try
+        {
+            socketConnection.Close();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning("Close socket exception: " + e.Message);
+        }
+        finally
+        {
+            socketConnection = null;
+        }
+    }
+
+    private void OnDisable()
+    {
+        StopClient();
+    }
+
+    private void OnDestroy()
+    {
+        StopClient();
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopClient();
+    }
+
     public void ReadData(string data)
     {
         try
@@ -157,8 +231,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                 Debug.LogWarning("[TCP ReadData] 빈 데이터 수신");
                 return;
             }
-
-            bool isMorseData = false;
 
             if (data.Equals("Go", StringComparison.OrdinalIgnoreCase))
             {
@@ -231,16 +303,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                 try
                 {
                     Debug.Log("data.Length == 4 Received Data: " + data);
-                    isMorseData = true;
-
-                    foreach (char c in data)
-                    {
-                        if (c != '0' && c != '1')
-                        {
-                            isMorseData = false;
-                            break;
-                        }
-                    }
                     UserDataManager.Instance.GetPlayer().PartnerAnswerData.Enqueue(data);
                 }
                 catch (Exception e) { Debug.LogError($"[TCP ReadData] 4자리 데이터 처리 에러: {e.Message}"); }
@@ -257,16 +319,6 @@ public class SimpleTcpClient : MonoBehaviour, ITCP
                         Debug.Log("PassCode Data Received: " + data);
                         UserDataManager.Instance.GetPlayer().PartnerPassCode = data;
                         Debug.Log("PassCode Set: " + UserDataManager.Instance.GetPlayer().PartnerPassCode);
-                        isMorseData = true;
-
-                        foreach (char c in data)
-                        {
-                            if (c != '0' && c != '1')
-                            {
-                                isMorseData = false;
-                                break;
-                            }
-                        }
                     }
                 }
                 catch (Exception e) { Debug.LogError($"[TCP ReadData] 5자리 데이터 처리 에러: {e.Message}"); }

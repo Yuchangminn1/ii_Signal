@@ -1,14 +1,15 @@
 using System.Collections;
-using System.Threading;
 using UnityEngine;
 
 public class PageController : Singleton<PageController>
 {
     [SerializeField] private int openingPage = 0;
+    const float resetUserTimeout = 30f;
 
     PlayerPageController[] playerControllers;
 
     Coroutine pageResetCoroutine = null;
+    Coroutine resetCheckCoroutine = null;
 
 
     override protected void Awake()
@@ -53,11 +54,20 @@ public class PageController : Singleton<PageController>
             if (NetworkManager.Instance.ResetRequested)
             {
                 int count = 0;
+                float resetStartTime = Time.time;
                 UserDataManager.Instance.ResetUserData();
 
                 while (UserDataManager.Instance.IsUser())
                 {
                     yield return CoroutineReturnManager.GetWaitForSeconds(0.1f);
+
+                    if (Time.time - resetStartTime >= resetUserTimeout)
+                    {
+                        Debug.LogWarning($"ResetCheck timeout after {resetUserTimeout} seconds. Forcing room clear.");
+                        UserDataManager.Instance.ClearRoom();
+                        break;
+                    }
+
                     if (count > 10)
                     {
                         UserDataManager.Instance.ClearRoom();
@@ -122,8 +132,17 @@ public class PageController : Singleton<PageController>
     {
         playerControllers = GetComponentsInChildren<PlayerPageController>();
 
-        StartCoroutine(ResetCheckCoroutine());
+        resetCheckCoroutine = StartCoroutine(ResetCheckCoroutine());
         GameManager.Instance?.AddProgramStart(StartPrograms());
+    }
+
+    void OnDisable()
+    {
+        if (resetCheckCoroutine != null)
+        {
+            StopCoroutine(resetCheckCoroutine);
+            resetCheckCoroutine = null;
+        }
     }
 
 

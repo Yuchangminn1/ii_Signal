@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -92,7 +93,7 @@ public class JsonManager : MonoBehaviour
 
     }
 
-    void Start()
+    IEnumerator Start()
     {
         // _textLoader.Load();
 
@@ -102,13 +103,13 @@ public class JsonManager : MonoBehaviour
 
         // _rawImageLoader.Load();
 
-        _genericLoader.Load();
+        yield return _genericLoader.LoadCoroutine();
 
         foreach (var questionLoader in _questionLoaders)
         {
-            questionLoader.Load();
+            yield return questionLoader.LoadCoroutine();
         }
-        _morsePass.Load();
+        yield return _morsePass.LoadCoroutine();
 
 
         // Text[] tempText = FindObjectsOfType<Text>();

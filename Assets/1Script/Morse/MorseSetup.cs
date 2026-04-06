@@ -96,16 +96,36 @@ public class MorseSetup : MonoBehaviour
 
     public void StopCheck()
     {
-        arduino_MorseKey.IsAccuracyRateCheck = false;
-        arduino_MorseKey.OnAccuracyCheckAction -= AccuracyCheck;
+
+        StopHintSoundCoroutine();
+
+    }
+
+    private void StopHintSoundCoroutine()
+    {
+        if (arduino_MorseKey != null)
+        {
+            arduino_MorseKey.IsAccuracyRateCheck = false;
+            arduino_MorseKey.OnAccuracyCheckAction -= AccuracyCheck;
+        }
+
+
+
+        if (_hindSoundCoroutine != null)
+        {
+            StopCoroutine(_hindSoundCoroutine);
+            _hindSoundCoroutine = null;
+        }
+
+        SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDotSound_1);
+        SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
+
         if (arduino_MorseKey != null)
         {
             //arduino_MorseKey.RemoveOnMorseInput(ColoringMorseImage);
             arduino_MorseKey.OnReset -= Reset;
             arduino_MorseKey.StopMorseCheck();
         }
-
-
     }
 
     IEnumerator PlayMorseHintSoundCorotuine()
@@ -119,7 +139,7 @@ public class MorseSetup : MonoBehaviour
         SoundManager.Instance.StopEffectSound(EffectSoundNum.MorseDashSound_1);
         yield return CoroutineReturnManager.GetWaitForSeconds(0.5f);
 
-        while (true)
+        while (enabled && gameObject.activeInHierarchy)
         {
             for (int i = 0; i < _morseData.Length; i++)
             {
@@ -152,11 +172,7 @@ public class MorseSetup : MonoBehaviour
 
     void OnDisable()
     {
-
-        if (arduino_MorseKey != null)
-        {
-            arduino_MorseKey.StopMorseCheck();
-        }
+        StopHintSoundCoroutine();
 
     }
 
