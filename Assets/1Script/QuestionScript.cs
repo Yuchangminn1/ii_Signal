@@ -106,7 +106,12 @@ public class QuestionScript : MonoBehaviour
         yield return delayWait;
         ResetContainer?.SetActive(true);
 
-        QuestionText.SetText(QuestionManager.Instance.QuestionInfos[QuestionManager.Instance.CurrentIndex].Question);
+        if (UserDataManager.Instance.CurrentDirection == Direction.Left)
+            QuestionText.SetText(QuestionManager.Instance.QuestionInfos[QuestionManager.Instance.CurrentIndex].QuestionL);
+        else
+        {
+            QuestionText.SetText(QuestionManager.Instance.QuestionInfos[QuestionManager.Instance.CurrentIndex].QuestionR);
+        }
         FadeManager.Instance.TargetFade(_resetContainerCanvasGroup, 1f, FadeManager.Instance.FadeDuration);
 
         yield return CoroutineReturnManager.GetWaitForSeconds(FadeManager.Instance.FadeDuration);

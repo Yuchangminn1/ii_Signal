@@ -5,12 +5,22 @@ using UnityEngine;
 
 public class QuestionInfo
 {
-    string _question;
-    public string Question
+    string _questionL;
+    public string QuestionL
     {
-        get { return _question; }
-        set { _question = value; }
+        get { return _questionL; }
+        set { _questionL = value; }
     }
+
+    string _questionR;
+
+    public string QuestionR
+    {
+        get { return _questionR; }
+        set { _questionR = value; }
+    }
+
+
     string[] _selection;
     public string[] Selection
     {
@@ -33,6 +43,12 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
     QuestionInfo morsePass = new QuestionInfo();
 
     Action<List<QuestionInfo>> onQuestionChanged;
+
+    Action onQuestionSetup;
+
+
+
+
     int _relationship = 1;
 
 
@@ -40,13 +56,26 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
     int _currentIndex = 0;
 
+    public QuestionInfo GetQuestionInfo(int index)
+    {
+        if (index < 0 || index >= questionInfos.Count)
+        {
+            Debug.LogWarning($"GetQuestionInfo: Index {index} is out of range.");
+            return null;
+        }
+        return questionInfos[index];
+    }
+
     public int CurrentIndex
     {
         get { return _currentIndex; }
         set { _currentIndex = value; }
     }
 
-
+    public void AddOnQuestionSetup(Action action)
+    {
+        onQuestionSetup += action;
+    }
     public void AddOnQuestionChanged(Action<List<QuestionInfo>> action)
     {
         onQuestionChanged += action;
@@ -94,7 +123,13 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
             {
                 return string.Empty;
             }
-            return questionInfos[_currentIndex].Question;
+            if (UserDataManager.Instance.CurrentDirection == Direction.Left)
+                return questionInfos[_currentIndex].QuestionL;
+            else
+            {
+                return questionInfos[_currentIndex].QuestionR;
+
+            }
         }
     }
 
@@ -122,6 +157,7 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
         {
             DebugUpdateRelationship();
         }
+
     }
 
 
@@ -149,11 +185,19 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
             {
                 Debug.LogWarning("질문 데이터 중에 null 항목이 있습니다.");
             }
-            Debug.Log($"질문: {item.Question}, 선택지: {string.Join(", ", item.Selection)}, 모스 패턴: {string.Join(", ", item.MorsePattern)}");
+
+            if (UserDataManager.Instance.CurrentDirection == Direction.Left)
+                Debug.Log($"질문L: {item.QuestionL} , 선택지: {string.Join(", ", item.Selection)}, 모스 패턴: {string.Join(", ", item.MorsePattern)}");
+            else
+            {
+                Debug.Log($"질문R: {item.QuestionR}, 선택지: {string.Join(", ", item.Selection)}, 모스 패턴: {string.Join(", ", item.MorsePattern)}");
+            }
         }
 
         Debug.Log($"질문 데이터 교체 적용 완료: {questionInfos.Count}");
         onQuestionChanged?.Invoke(questionInfos);
+
+        onQuestionSetup?.Invoke();
     }
 
     public List<QuestionInfo> Data()

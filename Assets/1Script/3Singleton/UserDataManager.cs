@@ -261,6 +261,15 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         }
         return userDataCache[_Key];
     }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TestKey();
+        }
+    }
+
+
     //http://192.168.0.252:8500/api/getUser.cfm?uid=2270AE4A-ABFC-E349-1A0A5A69999CC1A8
 
     // public IEnumerator RequestUserDataUpdate(int _question, string _value)
@@ -326,7 +335,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     public IEnumerator RequestCartridgeInfo()
     {
         if (userDataCache == null) yield break;
-        yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/getCartridgeContent.cfm?cartridge={userDataCache["CARTRIDGE"]}", SetCartridge);
+        yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/getCartridgeContent.cfm?cartridge={userDataCache["CARTRIDGE"]}", SetBlock);
     }
 
 
@@ -561,7 +570,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
             //StartCoroutine(RequestCartridgeInfo());
 
 
-            SetCartridge(userDataCache["BLOCK_CODE"]);
+            SetBlock(userDataCache["BLOCK_CODE"]);
 
 
             //SetPlayer
@@ -590,15 +599,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
             return -1;
         }
     }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TestKey();
-        }
 
-
-    }
     public void Reset()
     {
         IsTestData = false;
@@ -618,6 +619,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     }
     public void TestKey()
     {
+        Debug.Log("TestKey Pressed");
         Reset();
         IsTestData = true;
         StartCoroutine(RequestInitializeUserDataTest("2C39C73258"));
@@ -651,13 +653,13 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         StartCoroutine(RequestInitializeUserDataTest("56731063CB"));
         //SetPlayers("길동");
     }
-    public void SetCartridge(string _an)
+    public void SetBlock(string _an)
     {
         contentCodes = _an.Split(',');
         for (int i = 0; i < contentCodes.Length; i++)
             contentCodes[i] = contentCodes[i].Trim();
 
-        Debug.Log("CartridgeContent : " + string.Join(", ", contentCodes));
+        Debug.Log("BlockContent : " + string.Join(", ", contentCodes));
 
         SetPlayers();
     }
@@ -709,6 +711,11 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
         string relationValue = FindValue("RELATION");
 
+        string cartrigValue = FindValue("CARTRIDGE");
+
+
+
+
         Debug.Log($"SetPlayers: relationValue={relationValue}, pieceCount={pieceCount}, isLastContent={isLastContent}");
 
         int relation = 1;
@@ -716,6 +723,33 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         {
             int.TryParse(relationValue.Trim(), out relation);
         }
+
+
+        if (cartrigValue == "A")
+        {
+
+            Debug.Log("A 카트리지입니다.");
+            relation += 0;
+
+        }
+        else if (cartrigValue == "B")
+        {
+            Debug.Log("B 카트리지입니다.");
+            relation += 5;
+
+        }
+        else if (cartrigValue == "C")
+        {
+            Debug.Log("C 카트리지입니다.");
+            relation += 10;
+
+        }
+        else if (cartrigValue == "D")
+        {
+            Debug.Log("D 카트리지입니다.");
+            relation += 15;
+        }
+
 
         QuestionManager.Instance.SetRelationship(relation);
 

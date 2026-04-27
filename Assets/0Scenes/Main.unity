@@ -32640,6 +32640,7 @@ MonoBehaviour:
   uploadCount: 1
   uploadCanvases:
   - {fileID: 1252742356}
+  releaseCachedTexturesAfterRun: 1
   maxRetries: 10
   retryDelay: 1
   uploadUrl: http://192.168.0.252:8500/api/uploadFile.cfm
