@@ -1,8 +1,8 @@
 {
   "QuestionManager": [
     {
-      "QuestionL": "LQ1. 지금 이곳에서 우리는",
-      "QuestionR": "LQ1. 지금 이곳에서 우리는",
+      "QuestionL": "Q1. 지금 이곳에서 우리는",
+      "QuestionR": "Q1. 지금 이곳에서 우리는",
 
       "Selection": [
         "즐기고 있어",

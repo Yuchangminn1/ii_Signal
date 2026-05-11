@@ -265,7 +265,14 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
+            Debug.LogWarning("T Key Pressed");
             TestKey();
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            Debug.LogWarning("Y Key Pressed");
+
+            TestKey2();
         }
     }
 
@@ -627,9 +634,11 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     }
     public void TestKey2()
     {
-        // Reset();
-        // IsTestData = true;
-        // StartCoroutine(RequestInitializeUserDataTest(DebugUID));
+
+        Debug.Log("TestKey Pressed");
+        Reset();
+        IsTestData = true;
+        StartCoroutine(RequestInitializeUserDataTest("58F1E83169"));
         //SetPlayers("길동");
     }
     public void TestKey3()
@@ -723,6 +732,8 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         {
             int.TryParse(relationValue.Trim(), out relation);
         }
+
+        Debug.Log($"Parsed relation value: {relation} from relationValue: '{relationValue}'");
 
 
         if (cartrigValue == "A")

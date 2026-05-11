@@ -1,8 +1,8 @@
 {
   "QuestionManager": [
     {
-      "QuestionL": "LQ1. 우리가 처음 만난 날을 떠올리면",
-      "QuestionR": "LQ1. 우리가 처음 만난 날을 떠올리면",
+      "QuestionL": "Q1. 우리가 처음 만난 날을 떠올리면",
+      "QuestionR": "Q1. 우리가 처음 만난 날을 떠올리면",
 
       "Selection": [
         "설레고 따뜻해",
