@@ -233,6 +233,8 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
     const int contentNum = 4;
 
+    int[] transformCartridgeA = { 5, 4, 3, 2, 1 };
+
     public int ContentNum { get { return contentNum; } }
 
     public List<int[]> GoalIndexint = new List<int[]>();
@@ -243,6 +245,8 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
     public int[] stamp { get; private set; } = new int[contentNum];
 
     public int deviceNum = 1;
+
+    string cartrig = "";
 
 
     public bool IsLastContent = false;
@@ -299,7 +303,18 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         {
             side = "right";
         }
-        Debug.Log($"RequestUserDataUpdate: question={_question}, value={_value}, direction={direction}, contentCode={contentCode}");
+        if (cartrig == "B")
+        {
+            _value = transformCartridgeA[_value - 1];
+            Debug.Log("카트리지 B  질문 업데이트 요청: question=" + _question + ", value=" + _value + "변환값" + transformCartridgeA[_value - 1] + ", direction=" + direction);
+        }
+        else
+        {
+            Debug.Log("질문 업데이트 요청: question=" + _question + ", value=" + _value + ", direction=" + direction);
+
+        }
+
+        //Debug.Log($"RequestUserDataUpdate: question={_question}, value={_value}, direction={direction}, contentCode={contentCode}");
         yield return ServerData.Instance.RequestDataCoroutine($"http://192.168.0.252:8500/api/updateValue.cfm?idx_user={userDataCache["IDX_USER"]}&q_no={_question}&side={side}&code={contentCode}&value={_value}", Answer);
     }
 
@@ -761,6 +776,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
             relation += 15;
         }
 
+        cartrig = cartrigValue;
 
         QuestionManager.Instance.SetRelationship(relation);
 
