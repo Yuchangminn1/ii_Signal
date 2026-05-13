@@ -303,7 +303,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
         {
             side = "right";
         }
-        if (cartrig == "B")
+        if (_question < 16 && cartrig == "B")
         {
             _value = transformCartridgeA[_value - 1];
             Debug.Log("카트리지 B  질문 업데이트 요청: question=" + _question + ", value=" + _value + "변환값" + transformCartridgeA[_value - 1] + ", direction=" + direction);

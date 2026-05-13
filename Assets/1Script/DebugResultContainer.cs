@@ -34,6 +34,11 @@ public class DebugResultContainer : MonoBehaviour
             if (i < questionInfo.Count)
             {
                 resultSelectors[i].SetSelectionText(questionInfo[i].Selection);
+
+                if (NetworkManager.Instance.IsServer)
+                    resultSelectors[i].SetQuestionText(questionInfo[i].QuestionL);
+                else
+                    resultSelectors[i].SetQuestionText(questionInfo[i].QuestionR);
             }
             else
             {

@@ -56,6 +56,12 @@ public class ResultSelector : MonoBehaviour
 
     }
 
+    public void SetQuestionText(string question)
+    {
+        // if (QuestionText != null)
+        //     QuestionText.text = question.Replace("\r", " ").Replace("\n", " ");
+    }
+
 
     public virtual void Reset()
     {

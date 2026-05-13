@@ -28,11 +28,17 @@ public class ResultContainer : MonoBehaviour
         if (resultSelectors == null || resultSelectors.Length == 0)
             resultSelectors = GetComponentsInChildren<ResultSelector>();
 
+
         for (int i = 0; i < resultSelectors.Length; i++)
         {
             if (i < questionInfo.Count)
             {
                 resultSelectors[i].SetSelectionText(questionInfo[i].Selection);
+                if (NetworkManager.Instance.IsServer)
+                    resultSelectors[i].SetQuestionText(questionInfo[i].QuestionL);
+                else
+                    resultSelectors[i].SetQuestionText(questionInfo[i].QuestionR);
+
             }
             else
             {
