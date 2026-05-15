@@ -12,9 +12,6 @@ public class ResultContainer : MonoBehaviour
     public NameText nameText;
 
 
-
-
-
     void Start()
     {
         resultSelectors = GetComponentsInChildren<ResultSelector>();

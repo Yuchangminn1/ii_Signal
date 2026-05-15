@@ -11,12 +11,16 @@ public class ResultSelector : MonoBehaviour
 
     public GameObject DotImage;
 
+    public bool isLine = false; //<< 한줄에 다 쓸지 변수인데 이름을 뭐로하지 
+
 
 
     RawImage[] MorseDataImage;
     RawImage[] TextDataImage;
 
     Text[] TextDataText;
+
+
 
 
     RawImage[] DotImages;
@@ -50,7 +54,17 @@ public class ResultSelector : MonoBehaviour
             Text[] textComponents = TextBox.GetComponentsInChildren<Text>();
             for (int i = 0; i < selections.Length && i < textComponents.Length; i++)
             {
-                textComponents[i].text = selections[i].Replace("\r", " ").Replace("\n", " ");
+                if (isLine)
+                {
+                    textComponents[i].text = selections[i];
+
+                }
+                else
+                {
+                    textComponents[i].text = selections[i].Replace("\r", " ").Replace("\n", " ");
+
+                }
+
             }
         }
 
@@ -58,8 +72,9 @@ public class ResultSelector : MonoBehaviour
 
     public void SetQuestionText(string question)
     {
-        // if (QuestionText != null)
-        //     QuestionText.text = question.Replace("\r", " ").Replace("\n", " ");
+        question = question.Substring(4);
+        if (QuestionText != null)
+            QuestionText.text = question.Replace("\r", " ").Replace("\n", " ");
     }
 
 

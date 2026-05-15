@@ -230,7 +230,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -54.8, y: -2.8}
-  m_SizeDelta: {x: 366, y: 48}
+  m_SizeDelta: {x: 366, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &10427515
 MonoBehaviour:
@@ -515,6 +515,7 @@ MonoBehaviour:
   MorseData: {fileID: 1312940038}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &40456638
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +641,7 @@ MonoBehaviour:
   MorseData: {fileID: 211736894}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &43075065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1585,7 +1587,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -12038,7 +12040,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -14829,7 +14831,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -15134,6 +15136,7 @@ MonoBehaviour:
   MorseData: {fileID: 1546614238}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &735118234
 GameObject:
   m_ObjectHideFlags: 0
@@ -15526,6 +15529,7 @@ MonoBehaviour:
   MorseData: {fileID: 1832511785}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &746904775
 GameObject:
   m_ObjectHideFlags: 0
@@ -18144,7 +18148,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.5}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &867105980
@@ -18169,7 +18173,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -18432,7 +18436,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -916, y: -2.7998924}
-  m_SizeDelta: {x: 366, y: 48}
+  m_SizeDelta: {x: 366, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &874570820
 MonoBehaviour:
@@ -18882,6 +18886,7 @@ MonoBehaviour:
   MorseData: {fileID: 736931669}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &887016225
 GameObject:
   m_ObjectHideFlags: 0
@@ -19435,7 +19440,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -54.8, y: -2.8}
-  m_SizeDelta: {x: 366, y: 48}
+  m_SizeDelta: {x: 366, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &909125077
 MonoBehaviour:
@@ -20818,8 +20823,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 68.1, y: -15.4}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_AnchoredPosition: {x: 63, y: -15.4}
+  m_SizeDelta: {x: 250, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &953000901
 MonoBehaviour:
@@ -20845,10 +20850,10 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 3
-    m_MaxSize: 40
-    m_Alignment: 4
+    m_MaxSize: 30
+    m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -21608,6 +21613,7 @@ MonoBehaviour:
   MorseData: {fileID: 1862677019}
   TextBox: {fileID: 1936037684}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &976151697
 GameObject:
   m_ObjectHideFlags: 0
@@ -22071,8 +22077,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2323.2, y: 54.4}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_AnchoredPosition: {x: -2653, y: 54.4}
+  m_SizeDelta: {x: 920, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &989499274
 MonoBehaviour:
@@ -22098,10 +22104,10 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
     m_FontSize: 30
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 3
-    m_MaxSize: 40
-    m_Alignment: 4
+    m_MaxSize: 30
+    m_Alignment: 5
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -24330,6 +24336,7 @@ MonoBehaviour:
   MorseData: {fileID: 1911405679}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &1069541778
 GameObject:
   m_ObjectHideFlags: 0
@@ -25616,6 +25623,7 @@ MonoBehaviour:
   MorseData: {fileID: 356050138}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &1112631832
 GameObject:
   m_ObjectHideFlags: 0
@@ -26212,6 +26220,7 @@ MonoBehaviour:
   MorseData: {fileID: 501047706}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &1177901709
 GameObject:
   m_ObjectHideFlags: 0
@@ -27685,7 +27694,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 4.4}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1259316268
@@ -27710,7 +27719,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 36
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -27721,7 +27730,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uACE0\uB9C8\uC6CC, \uD56D\uC0C1 "
+  m_Text: "\uACE0\uB9C8\uC6CC, \uD56D\uC0C1"
 --- !u!222 &1259316269
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -29368,6 +29377,7 @@ MonoBehaviour:
   MorseData: {fileID: 968980415}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &1327320039
 GameObject:
   m_ObjectHideFlags: 0
@@ -30577,7 +30587,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -31864,7 +31874,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -916.0156, y: -2.7998924}
-  m_SizeDelta: {x: 366, y: 48}
+  m_SizeDelta: {x: 366, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1442313711
 MonoBehaviour:
@@ -33269,7 +33279,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -33645,6 +33655,7 @@ MonoBehaviour:
   MorseData: {fileID: 183516070}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &1493102453
 GameObject:
   m_ObjectHideFlags: 0
@@ -34869,7 +34880,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1552083765
@@ -34894,7 +34905,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -36510,6 +36521,7 @@ MonoBehaviour:
   MorseData: {fileID: 940818987}
   TextBox: {fileID: 63721644}
   DotImage: {fileID: 893931471}
+  isLine: 0
 --- !u!1 &1613520257
 GameObject:
   m_ObjectHideFlags: 0
@@ -37184,7 +37196,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1643941117
@@ -37209,7 +37221,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -38066,6 +38078,7 @@ MonoBehaviour:
   MorseData: {fileID: 1670303382}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &1690445411
 GameObject:
   m_ObjectHideFlags: 0
@@ -44468,7 +44481,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 3}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1934848824
@@ -44493,7 +44506,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 9b8c50c3f1088f0438dbb279f7b89adb, type: 3}
-    m_FontSize: 35
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -44504,7 +44517,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uC9C0\uAE08\uCC98\uB7FC, \uC6B0\uB9AC\uB2F5\uAC8C "
+  m_Text: "\uC9C0\uAE08\uCC98\uB7FC, \uC6B0\uB9AC\uB2F5\uAC8C \n\uC9C0\uAE08\uCC98\uB7FC,
+    \uC6B0\uB9AC\uB2F5\uAC8C "
 --- !u!222 &1934848825
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -44615,6 +44629,7 @@ MonoBehaviour:
   MorseData: {fileID: 1713819175}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &1943309613
 GameObject:
   m_ObjectHideFlags: 0
@@ -45734,6 +45749,7 @@ MonoBehaviour:
   MorseData: {fileID: 1627882461}
   TextBox: {fileID: 950625847}
   DotImage: {fileID: 968565925}
+  isLine: 1
 --- !u!1 &1979076808
 GameObject:
   m_ObjectHideFlags: 0
@@ -46833,6 +46849,7 @@ MonoBehaviour:
   MorseData: {fileID: 1356039967}
   TextBox: {fileID: 0}
   DotImage: {fileID: 0}
+  isLine: 0
 --- !u!1 &2016173314
 GameObject:
   m_ObjectHideFlags: 0
@@ -48228,7 +48245,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -54.8, y: -2.8}
-  m_SizeDelta: {x: 366, y: 48}
+  m_SizeDelta: {x: 366, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2082872871
 MonoBehaviour:

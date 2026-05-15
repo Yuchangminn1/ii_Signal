@@ -709,7 +709,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
             Debug.Log($"코드 {code}의 피스 {pieceValue}");
 
-            if (code == ServerData.Instance.Code)
+            if (code == ServerData.Instance.Code || code == "D1" || code == "D2" || code == "D3")
             {
                 continue;
             }
@@ -718,7 +718,7 @@ public class UserDataManager : MonoBehaviour, IJsonGenericTarget
 
         foreach (var code in contentCodes)
         {
-            if (code == ServerData.Instance.Code)
+            if (code == ServerData.Instance.Code || code == "D1" || code == "D2" || code == "D3")
             {
                 continue;
             }
