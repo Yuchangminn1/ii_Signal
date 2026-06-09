@@ -231,6 +231,8 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
             return;
         }
         _relationship++;
+
+
         if (_relationship > _cachedCartridges.Length)
         {
             Debug.Log("모든 관계 데이터를 완료했습니다.");
@@ -241,6 +243,19 @@ public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMor
 
     public void SetRelationship(int value)
     {
+        if (value < 6)
+        {
+            Debug.Log($"카트리지 A {value}");
+        }
+        else if (value < 11)
+        {
+            Debug.Log($"카트리지 B {value - 5}");
+        }
+        else
+        {
+            Debug.Log($"카트리지 C {value - 10}");
+        }
+        Debug.Log($"관계 데이터 변경 시도: {value}");
         if (_cachedCartridges == null || _cachedCartridges.Length == 0) return;
 
         int index = Mathf.Clamp(value - 1, 0, _cachedCartridges.Length - 1);
