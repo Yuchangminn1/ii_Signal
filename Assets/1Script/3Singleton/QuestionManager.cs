@@ -35,6 +35,8 @@ public class QuestionInfo
         get { return _morsePattern; }
         set { _morsePattern = value; }
     }
+
+
 }
 public class QuestionManager : Singleton<QuestionManager>, IQuestionTarget, IMorsePassTarget
 {

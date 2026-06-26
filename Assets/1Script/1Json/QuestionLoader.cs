@@ -6,6 +6,7 @@ public interface IQuestionTarget
     void Initialize(List<QuestionInfo> items);
     void InitializeRelationships(List<QuestionInfo>[] cartridges);
     List<QuestionInfo> Data();
+
 }
 
 // 이 로더는 StreamingAssets/Json/QuestionConfig.json 의

@@ -22,10 +22,14 @@ public class QuestionText : NameText
             return;
         }
 
+
         if (textData == "")
         {
             textData = originText;
         }
+
+        textData = textData.Replace("\n", " ");
+
         if (textData.Contains("PartnerFullName"))
         {
             _text.text = textData.Replace("PartnerFullName", UserDataManager.Instance.GetPartnerPlayer().LastName + UserDataManager.Instance.GetPartnerPlayer().FirstName);

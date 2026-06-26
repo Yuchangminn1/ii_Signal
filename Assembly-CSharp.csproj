@@ -503,14 +503,6 @@
       <HintPath>Library\PackageCache\com.unity.collections@1.2.4\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="DemiLib">
-      <HintPath>Assets\Plugins\Demigiant\DemiLib\Core\DemiLib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="DOTween">
-      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\jillejr.newtonsoft.json-for-unity@f2c6cb0981\Plugins\Newtonsoft.Json Editor\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
@@ -519,8 +511,16 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="DOTween">
+      <HintPath>Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DOTweenPro">
       <HintPath>Assets\Plugins\Demigiant\DOTweenPro\DOTweenPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DemiLib">
+      <HintPath>Assets\Plugins\Demigiant\DemiLib\Core\DemiLib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
